@@ -1,0 +1,103 @@
+@page "/interaction-with-googlers"
+@using System.ComponentModel.DataAnnotations
+@using Advocu
+@inject AdvocuApiClient AdvocuApiClient
+
+@using Advocu.WebApp.Extensions
+
+<h3>Report Interaction with Googlers Activity</h3>
+
+<EditForm Model="@request" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <InputText id="title" @bind-Value="request.Title" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputTextArea id="description" @bind-Value="request.Description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="timeSpent">Time Spent (minutes)</label>
+        <InputNumber id="timeSpent" @bind-Value="request.TimeSpent" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="format">Format</label>
+        <InputSelect id="format" @bind-Value="request.Format" class="form-control">
+            @foreach (AdvocuFormat format in Enum.GetValues(typeof(AdvocuFormat)))
+            {
+                <option value="@format">@format.GetDisplayName()</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="interactionType">Interaction Type</label>
+        <InputSelect id="interactionType" @bind-Value="request.InteractionType" class="form-control">
+            @foreach (AdvocuInteractionType type in Enum.GetValues(typeof(AdvocuInteractionType)))
+            {
+                <option value="@type">@type.GetDisplayName()</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="activityDate">Activity Date</label>
+        <InputDate id="activityDate" @bind-Value="activityDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="additionalLinks">Additional Links</label>
+        <InputText id="additionalLinks" @bind-Value="request.AdditionalLinks" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="tags">Tags</label>
+        <MultiSelect TItem="string" DataSource="@tags" @bind-SelectedItems="request.Tags" />
+    </div>
+
+    <div class="form-group">
+        <label for="additionalInfo">Additional Info</label>
+        <InputTextArea id="additionalInfo" @bind-Value="request.AdditionalInfo" class="form-control" />
+    </div>
+
+    <div class="form-group form-check">
+        <InputCheckbox id="private" @bind-Value="isPrivate" class="form-check-input" />
+        <label for="private" class="form-check-label">Private</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    [Inject] private AdvocuDataService AdvocuDataService { get; set; }
+    private CreateInteractionWithGooglersActivityRequest request = new() { Title = "", Description = "", AdditionalLinks = "" };
+    private DateTime activityDate = DateTime.Now;
+    private List<string> tags;
+    private bool isPrivate;
+
+    protected override void OnInitialized()
+    {
+        tags = AdvocuDataService.GetTags();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        request.ActivityDate = activityDate.ToString("yyyy-MM-dd");
+        request.Private = isPrivate;
+        try
+        {
+            var response = await AdvocuApiClient.PostInteractionWithGooglersActivityAsync(request);
+            Console.WriteLine("Activity reported successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reporting activity: {ex.Message}");
+        }
+    }
+}

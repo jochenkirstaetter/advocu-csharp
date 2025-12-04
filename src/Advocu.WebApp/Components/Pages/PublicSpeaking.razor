@@ -1,0 +1,120 @@
+@page "/public-speaking"
+@using System.ComponentModel.DataAnnotations
+@using Advocu
+@inject AdvocuApiClient AdvocuApiClient
+
+@using Advocu.WebApp.Extensions
+
+<h3>Report Public Speaking Activity</h3>
+
+<EditForm Model="@request" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <InputText id="title" @bind-Value="request.Title" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputTextArea id="description" @bind-Value="request.Description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="attendees">Attendees</label>
+        <InputNumber id="attendees" @bind-Value="request.Attendees" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="eventFormat">Event Format</label>
+        <InputSelect id="eventFormat" @bind-Value="request.EventFormat" class="form-control">
+            @foreach (AdvocuEventFormat format in Enum.GetValues(typeof(AdvocuEventFormat)))
+            {
+                <option value="@format">@format.GetDisplayName()</option>
+            }
+        </InputSelect>
+    </div>
+
+    @if (request.EventFormat == AdvocuEventFormat.InPerson || request.EventFormat == AdvocuEventFormat.Hybrid)
+    {
+        <div class="form-group">
+            <label for="country">Country</label>
+            <InputSelect id="country" @bind-Value="request.Country" class="form-control">
+                <option value="">Select Country</option>
+                @foreach (AdvocuCountry country in Enum.GetValues(typeof(AdvocuCountry)))
+                {
+                    <option value="@country">@country.GetDisplayName()</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="city">City</label>
+            <InputText id="city" @bind-Value="request.City" class="form-control" />
+        </div>
+    }
+
+    @if (request.EventFormat == AdvocuEventFormat.Hybrid)
+    {
+        <div class="form-group">
+            <label for="inPersonAttendees">In-Person Attendees</label>
+            <InputNumber id="inPersonAttendees" @bind-Value="request.InPersonAttendees" class="form-control" />
+        </div>
+    }
+
+    <div class="form-group">
+        <label for="activityDate">Activity Date</label>
+        <InputDate id="activityDate" @bind-Value="activityDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="activityUrl">Activity URL</label>
+        <InputText id="activityUrl" @bind-Value="request.ActivityUrl" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="tags">Tags</label>
+        <MultiSelect TItem="string" DataSource="@tags" @bind-SelectedItems="request.Tags" />
+    </div>
+
+    <div class="form-group">
+        <label for="additionalInfo">Additional Info</label>
+        <InputTextArea id="additionalInfo" @bind-Value="request.AdditionalInfo" class="form-control" />
+    </div>
+
+    <div class="form-group form-check">
+        <InputCheckbox id="private" @bind-Value="isPrivate" class="form-check-input" />
+        <label for="private" class="form-check-label">Private</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    [Inject] private AdvocuDataService AdvocuDataService { get; set; }
+    private CreatePublicSpeakingActivityRequest request = new() { Title = "", Description = "", ActivityUrl = "" };
+    private DateTime activityDate = DateTime.Now;
+    private List<string> tags;
+    private bool isPrivate;
+
+    protected override void OnInitialized()
+    {
+        tags = AdvocuDataService.GetTags();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        request.ActivityDate = activityDate.ToString("yyyy-MM-dd");
+        request.Private = isPrivate;
+        try
+        {
+            var response = await AdvocuApiClient.PostPublicSpeakingActivityAsync(request);
+            Console.WriteLine("Activity reported successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reporting activity: {ex.Message}");
+        }
+    }
+}

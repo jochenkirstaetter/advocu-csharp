@@ -1,0 +1,35 @@
+@typeparam TItem
+
+<div class="multiselect">
+    <div class="checkboxes">
+        @if (DataSource != null)
+        {
+            @foreach (var item in DataSource)
+            {
+                <label>
+                    <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="() => ToggleItem(item)" />
+                    @item
+                </label>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<TItem> DataSource { get; set; }
+    [Parameter] public List<TItem> SelectedItems { get; set; }
+    [Parameter] public EventCallback<List<TItem>> SelectedItemsChanged { get; set; }
+
+    private async Task ToggleItem(TItem item)
+    {
+        if (SelectedItems.Contains(item))
+        {
+            SelectedItems.Remove(item);
+        }
+        else
+        {
+            SelectedItems.Add(item);
+        }
+        await SelectedItemsChanged.InvokeAsync(SelectedItems);
+    }
+}

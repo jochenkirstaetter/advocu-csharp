@@ -1,0 +1,91 @@
+@page "/stories"
+@using System.ComponentModel.DataAnnotations
+@using Advocu
+@inject AdvocuApiClient AdvocuApiClient
+
+@using Advocu.WebApp.Extensions
+
+<h3>Report Stories Activity</h3>
+
+<EditForm Model="@request" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <InputText id="title" @bind-Value="request.Title" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputTextArea id="description" @bind-Value="request.Description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="impact">Impact</label>
+        <InputNumber id="impact" @bind-Value="request.Impact" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="whyIsSignificant">Why is it significant?</label>
+        <InputTextArea id="whyIsSignificant" @bind-Value="request.WhyIsSignificant" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="significanceType">Significance Type</label>
+        <InputSelect id="significanceType" @bind-Value="request.SignificanceType" class="form-control">
+            @foreach (AdvocuSignificanceType type in Enum.GetValues(typeof(AdvocuSignificanceType)))
+            {
+                <option value="@type">@type.GetDisplayName()</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="activityUrl">Activity URL</label>
+        <InputText id="activityUrl" @bind-Value="request.ActivityUrl" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="tags">Tags</label>
+        <MultiSelect TItem="string" DataSource="@tags" @bind-SelectedItems="request.Tags" />
+    </div>
+
+    <div class="form-group">
+        <label for="additionalInfo">Additional Info</label>
+        <InputTextArea id="additionalInfo" @bind-Value="request.AdditionalInfo" class="form-control" />
+    </div>
+
+    <div class="form-group form-check">
+        <InputCheckbox id="private" @bind-Value="isPrivate" class="form-check-input" />
+        <label for="private" class="form-check-label">Private</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    [Inject] private AdvocuDataService AdvocuDataService { get; set; }
+    private CreateStoriesActivityRequest request = new() { Title = "", Description = "", WhyIsSignificant = "", ActivityUrl = "" };
+    private List<string> tags;
+    private bool isPrivate;
+
+    protected override void OnInitialized()
+    {
+        tags = AdvocuDataService.GetTags();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        request.Private = isPrivate;
+        try
+        {
+            var response = await AdvocuApiClient.PostStoriesActivityAsync(request);
+            Console.WriteLine("Activity reported successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reporting activity: {ex.Message}");
+        }
+    }
+}
