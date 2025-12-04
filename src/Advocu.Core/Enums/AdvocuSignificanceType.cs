@@ -5,15 +5,15 @@ namespace Advocu;
 public enum AdvocuSignificanceType
 {
     [JsonStringEnumMemberName("Diversity & Inclusion")]
-    Diversity_Inclusion,
+    DiversityInclusion,
     [JsonStringEnumMemberName("Helping Business")]
-    Helping_Business,
+    HelpingBusiness,
     [JsonStringEnumMemberName("Social Impact")]
-    Social_Impact,
+    SocialImpact,
     [JsonStringEnumMemberName("Feedback to Google")]
-    Feedback_to_Google,
+    FeedbackToGoogle,
     [JsonStringEnumMemberName("Community Leading")]
-    Community_Leading,
+    CommunityLeading,
     [JsonStringEnumMemberName("Technology / Open source")]
-    Technology_Open_source
+    TechnologyOpenSource
 }

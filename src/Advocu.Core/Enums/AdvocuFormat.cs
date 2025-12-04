@@ -6,16 +6,16 @@ public enum AdvocuFormat
 {
     Survey,
     [JsonStringEnumMemberName("Video feedback")]
-    Video_feedback,
+    VideoFeedback,
     [JsonStringEnumMemberName("In-person feedback sessions")]
-    In_person_feedback_sessions,
+    InPersonFeedbackSessions,
     [JsonStringEnumMemberName("Online feedback sessions")]
-    Online_feedback_sessions,
+    OnlineFeedbackSessions,
     [JsonStringEnumMemberName("Feedback summits")]
-    Feedback_summits,
+    FeedbackSummits,
     [JsonStringEnumMemberName("User study / focus group")]
-    User_study_focus_group,
+    UserStudyFocusGroup,
     [JsonStringEnumMemberName("Feedback submissions")]
-    Feedback_submissions,
+    FeedbackSubmissions,
     Other
 }
