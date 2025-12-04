@@ -58,7 +58,7 @@
 
     <div class="form-group">
         <label for="tags">Tags</label>
-        <MultiSelect TItem="AdvocuTag" DataSource="@tags" @bind-SelectedItems="request.Tags" />
+        <MultiSelect TItem="AdvocuTag" DataSource="@tags" @bind-SelectedItems="request.Tags" LabelFunc="@(t => t.GetDisplayName())" />
     </div>
 
     <div class="form-group">

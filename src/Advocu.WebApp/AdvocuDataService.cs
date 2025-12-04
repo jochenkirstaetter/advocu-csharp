@@ -4,6 +4,6 @@ public class AdvocuDataService
 {
     public List<AdvocuTag> GetTags()
     {
-        return [];
+        return Enum.GetValues<AdvocuTag>().ToList();
     }
 }

@@ -8,7 +8,7 @@
             {
                 <label>
                     <input type="checkbox" checked="@SelectedItems.Contains(item)" @onchange="() => ToggleItem(item)" />
-                    @item
+                    @GetLabel(item)
                 </label>
             }
         }
@@ -19,6 +19,12 @@
     [Parameter] public List<TItem> DataSource { get; set; }
     [Parameter] public List<TItem> SelectedItems { get; set; }
     [Parameter] public EventCallback<List<TItem>> SelectedItemsChanged { get; set; }
+    [Parameter] public Func<TItem, string>? LabelFunc { get; set; }
+
+    private string GetLabel(TItem item)
+    {
+        return LabelFunc?.Invoke(item) ?? item?.ToString() ?? string.Empty;
+    }
 
     private async Task ToggleItem(TItem item)
     {
