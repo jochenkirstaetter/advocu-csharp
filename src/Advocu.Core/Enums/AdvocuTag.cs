@@ -7,115 +7,224 @@ namespace Advocu;
 
 public enum AdvocuTag
 {
-    AI,
+    [JsonStringEnumMemberName("AI")]
+    Ai,
     [JsonStringEnumMemberName("AI - AI Studio")]
-    AI_AI_Studio,
-    AI_Agent_Development_Kit_ADK,
-    AI_Agents,
-    AI_Colab,
-    AI_Gemini,
-    AI_Gemma,
-    AI_Generative_AI,
-    AI_JAX,
-    AI_Kaggle,
-    AI_Keras,
-    AI_LLM,
-    AI_LiteGTT,
-    AI_ML_Engineering_MLOps,
-    AI_MediaPipe,
-    AI_On_Device_AI,
-    AI_Responsible_AI,
-    AI_TPU,
-    AI_TensorFlow,
-    AI_Vertex_AI,
-    AI_Math_Clubs,
-    AI_Paper_Reading_Clubs,
-    AI_AR_VR,
+    AiAiStudio,
+    [JsonStringEnumMemberName("AI - Agent Development Kit (ADK)")]
+    AiAgentDevelopmentKitAdk,
+    [JsonStringEnumMemberName("AI - Agents")]
+    AiAgents,
+    [JsonStringEnumMemberName("AI - Colab")]
+    AiColab,
+    [JsonStringEnumMemberName("AI - Gemini")]
+    AiGemini,
+    [JsonStringEnumMemberName("AI - Gemma")]
+    AiGemma,
+    [JsonStringEnumMemberName("AI - Generative AI")]
+    AiGenerativeAi,
+    [JsonStringEnumMemberName("AI - JAX")]
+    AiJax,
+    [JsonStringEnumMemberName("AI - Kaggle")]
+    AiKaggle,
+    [JsonStringEnumMemberName("AI - Keras")]
+    AiKeras,
+    [JsonStringEnumMemberName("AI - LLM")]
+    AiLlm,
+    [JsonStringEnumMemberName("AI - LiteRT")]
+    AiLiteRt,
+    [JsonStringEnumMemberName("AI - ML Engineering (MLOps)")]
+    AiMlEngineeringMlOps,
+    [JsonStringEnumMemberName("AI - MediaPipe")]
+    AiMediaPipe,
+    [JsonStringEnumMemberName("AI - On Device AI")]
+    AiOnDeviceAi,
+    [JsonStringEnumMemberName("AI - Responsible AI")]
+    AiResponsibleAi,
+    [JsonStringEnumMemberName("AI - TPU")]
+    AiTpu,
+    [JsonStringEnumMemberName("AI - TensorFlow")]
+    AiTensorFlow,
+    [JsonStringEnumMemberName("AI - Vertex AI")]
+    AiVertexAi,
+    [JsonStringEnumMemberName("AI Math Clubs")]
+    AiMathClubs,
+    [JsonStringEnumMemberName("AI Paper Reading Clubs")]
+    AiPaperReadingClubs,
+    [JsonStringEnumMemberName("AR/VR")]
+    AiArVr,
+    [JsonStringEnumMemberName("Android")]
     Android,
-    Android_ArcCore,
-    Android_Android_Auto,
-    Android_Android_Dev_Tools,
-    Android_Android_Studio,
-    Android_Android_TV,
-    Android_App_Architecture_Arch_Components,
-    Android_App_Indexing,
-    Android_App_Performance,
-    Android_App_Quality,
-    Android_Camera,
-    Android_Composer,
-    Android_Form_Factors,
-    Android_Gemini_Nano,
-    Android_Jetpack,
-    Android_Jetpack_Compose,
-    Android_Kotlin,
-    Android_Material_Design,
-    Android_Media,
-    Android_Modern_Android_Development,
-    Android_Modern_UI,
-    Android_NDK,
-    Android_Passkeys,
-    Android_Performance,
-    Android_Vulkan,
-    Android_Wear_OS,
-    Android_Widgets,
-    Android_XR,
+    [JsonStringEnumMemberName("Android - ARCore")]
+    AndroidArCore,
+    [JsonStringEnumMemberName("Android - Android Auto")]
+    AndroidAndroidAuto,
+    [JsonStringEnumMemberName("Android - Android Dev Tools")]
+    AndroidAndroidDevTools,
+    [JsonStringEnumMemberName("Android - Android Studio")]
+    AndroidAndroidStudio,
+    [JsonStringEnumMemberName("Android - Android TV")]
+    AndroidAndroidTv,
+    [JsonStringEnumMemberName("Android - App Architecture & Arch Components")]
+    AndroidAppArchitectureArchComponents,
+    [JsonStringEnumMemberName("Android - App Indexing")]
+    AndroidAppIndexing,
+    [JsonStringEnumMemberName("Android - App Performance")]
+    AndroidAppPerformance,
+    [JsonStringEnumMemberName("Android - App Quality")]
+    AndroidAppQuality,
+    [JsonStringEnumMemberName("Android - Camera")]
+    AndroidCamera,
+    [JsonStringEnumMemberName("Android - Composer")]
+    AndroidComposer,
+    [JsonStringEnumMemberName("Android - Form Factors")]
+    AndroidFormFactors,
+    [JsonStringEnumMemberName("Android - Gemini Nano")]
+    AndroidGeminiNano,
+    [JsonStringEnumMemberName("Android - Jetpack")]
+    AndroidJetpack,
+    [JsonStringEnumMemberName("Android - Jetpack Compose")]
+    AndroidJetpackCompose,
+    [JsonStringEnumMemberName("Android - Kotlin")]
+    AndroidKotlin,
+    [JsonStringEnumMemberName("Android - Material Design")]
+    AndroidMaterialDesign,
+    [JsonStringEnumMemberName("Android - Media")]
+    AndroidMedia,
+    [JsonStringEnumMemberName("Android - Modern Android Development")]
+    AndroidModernAndroidDevelopment,
+    [JsonStringEnumMemberName("Android - Modern UI")]
+    AndroidModernUi,
+    [JsonStringEnumMemberName("Android - NDK")]
+    AndroidNdk,
+    [JsonStringEnumMemberName("Android - Passkeys")]
+    AndroidPasskeys,
+    [JsonStringEnumMemberName("Android - Performance")]
+    AndroidPerformance,
+    [JsonStringEnumMemberName("Android - Vulkan")]
+    AndroidVulkan,
+    [JsonStringEnumMemberName("Android - Wear OS")]
+    AndroidWearOs,
+    [JsonStringEnumMemberName("Android - Widgets")]
+    AndroidWidgets,
+    [JsonStringEnumMemberName("Android - XR")]
+    AndroidXr,
+    [JsonStringEnumMemberName("Angular")]
     Angular,
-    Build_with_AI,
-    Cloud_AI_Tools,
-    Cloud_AI_Gateways,
-    Cloud_App_Development,
-    Cloud_Compute_Networking_Storage,
-    Cloud_Data,
-    Cloud_Operations_Management,
-    Cloud_Security,
-    Cloud_Serverless_Containers,
-    Cloud_Study_Jam,
+    [JsonStringEnumMemberName("Build with AI")]
+    BuildWithAi,
+    [JsonStringEnumMemberName("Cloud - AI Tools")]
+    CloudAiTools,
+    [JsonStringEnumMemberName("Cloud - API Gateways")]
+    CloudAiGateways,
+    [JsonStringEnumMemberName("Cloud - App Development")]
+    CloudAppDevelopment,
+    [JsonStringEnumMemberName("Cloud - Compute, Networking, Storage")]
+    CloudComputeNetworkingStorage,
+    [JsonStringEnumMemberName("Cloud - Data")]
+    CloudData,
+    [JsonStringEnumMemberName("Cloud - Operations & Management")]
+    CloudOperationsManagement,
+    [JsonStringEnumMemberName("Cloud - Security")]
+    CloudSecurity,
+    [JsonStringEnumMemberName("Cloud - Serverless & Containers")]
+    CloudServerlessContainers,
+    [JsonStringEnumMemberName("Cloud Study Jam")]
+    CloudStudyJam,
+    [JsonStringEnumMemberName("Dart - Flutter")]
     Dart,
+    [JsonStringEnumMemberName("DevFest")]
     DevFest,
-    Diversity_Inclusion,
-    Earth_Engine,
-    Firebase_A_B_Testing,
-    Firebase_AI_Logic,
-    Firebase_AI_Monitoring,
-    Firebase_Analytics,
-    Firebase_App_Hosting,
-    Firebase_Authentication,
-    Firebase_Cloud_Messaging,
-    Firebase_Data_Connect,
-    Firebase_Firebase_Studio,
-    Firebase_Firestore,
-    Firebase_Genkit,
-    Firebase_Performance,
-    Firebase_Realtime_Database,
-    Firebase_Remote_Config,
-    Firebase_Test_Lab,
+    [JsonStringEnumMemberName("Diversity & Inclusion")]
+    DiversityInclusion,
+    [JsonStringEnumMemberName("Earth Engine")]
+    EarthEngine,
+    [JsonStringEnumMemberName("Firebase - A/B Testing")]
+    FirebaseABTesting,
+    [JsonStringEnumMemberName("Firebase - AI Logic")]
+    FirebaseAiLogic,
+    [JsonStringEnumMemberName("Firebase - AI Monitoring")]
+    FirebaseAiMonitoring,
+    [JsonStringEnumMemberName("Firebase - Analytics")]
+    FirebaseAnalytics,
+    [JsonStringEnumMemberName("Firebase - App Hosting")]
+    FirebaseAppHosting,
+    [JsonStringEnumMemberName("Firebase - Authentication")]
+    FirebaseAuthentication,
+    [JsonStringEnumMemberName("Firebase - Cloud Messaging")]
+    FirebaseCloudMessaging,
+    [JsonStringEnumMemberName("Firebase - Data Connect")]
+    FirebaseDataConnect,
+    [JsonStringEnumMemberName("Firebase - Firebase Studio")]
+    FirebaseFirebaseStudio,
+    [JsonStringEnumMemberName("Firebase - Firestore")]
+    FirebaseFirestore,
+    [JsonStringEnumMemberName("Firebase - Genkit")]
+    FirebaseGenkit,
+    [JsonStringEnumMemberName("Firebase - Performance")]
+    FirebasePerformance,
+    [JsonStringEnumMemberName("Firebase - Realtime Database")]
+    FirebaseRealtimeDatabase,
+    [JsonStringEnumMemberName("Firebase - Remote Config")]
+    FirebaseRemoteConfig,
+    [JsonStringEnumMemberName("Firebase - Test Lab")]
+    FirebaseTestLab,
+    [JsonStringEnumMemberName("Flutter")]
     Flutter,
+    [JsonStringEnumMemberName("Golang")]
     Golang,
-    Google_Cloud,
-    Google_I_O_Extended,
-    Google_Maps_Platform,
-    Google_Workspace,
+    [JsonStringEnumMemberName("Google Cloud")]
+    GoogleCloud,
+    [JsonStringEnumMemberName("Google I/O Extended")]
+    GoogleIOExtended,
+    [JsonStringEnumMemberName("Google Maps Platform")]
+    GoogleMapsPlatform,
+    [JsonStringEnumMemberName("Google Workspace")]
+    GoogleWorkspace,
+    [JsonStringEnumMemberName("Identity")]
     Identity,
-    Identity_Google_OAuth,
-    Identity_Sign_in_with_Google,
-    International_Women_s_Day,
-    ML_Study_Jams,
-    Open_Source,
+    [JsonStringEnumMemberName("Identity - Google OAuth")]
+    IdentityGoogleOAuth,
+    [JsonStringEnumMemberName("Identity - Sign in with Google")]
+    IdentitySignInWithGoogle,
+    [JsonStringEnumMemberName("International Women's Day")]
+    InternationalWomenSDay,
+    [JsonStringEnumMemberName("ML Study Jams")]
+    MlStudyJams,
+    [JsonStringEnumMemberName("Open Source")]
+    OpenSource,
+    [JsonStringEnumMemberName("Payments")]
     Payments,
-    Payments_Google_Pay,
-    Payments_Google_Wallet,
-    Road_to_Google_Developers_Certification,
-    UX_UI_Design,
-    Web_AI,
-    Web_AI_for_Web_Developers,
-    Web_Browser_Extensions,
-    Web_CSS_UI,
-    Web_DevTools_Browser_Automation,
-    Web_Fugu_PWAs_APIs,
-    Web_Identity,
-    Web_Performance,
-    Workspace_Add_Ons,
-    Workspace_AppSheet,
-    Workspace_Google_Apps_Script,
-    Workspace_Google_Workspace_REST_APIs
+    [JsonStringEnumMemberName("Payments - Google Pay")]
+    PaymentsGooglePay,
+    [JsonStringEnumMemberName("Payments - Google Wallet")]
+    PaymentsGoogleWallet,
+    [JsonStringEnumMemberName("Road to Google Developers Certification")]
+    RoadToGoogleDevelopersCertification,
+    [JsonStringEnumMemberName("UX / UI Design")]
+    UxUiDesign,
+    [JsonStringEnumMemberName("Web - AI")]
+    WebAi,
+    [JsonStringEnumMemberName("Web - AI for Web Developers")]
+    WebAiForWebDevelopers,
+    [JsonStringEnumMemberName("Web - Browser Extensions")]
+    WebBrowserExtensions,
+    [JsonStringEnumMemberName("Web - CSS & UI")]
+    WebCssUi,
+    [JsonStringEnumMemberName("Web - DevTools & Browser Automation")]
+    WebDevToolsBrowserAutomation,
+    [JsonStringEnumMemberName("Web - Fugu/PWA APIs")]
+    WebFuguPwAsApIs,
+    [JsonStringEnumMemberName("Web - Identity")]
+    WebIdentity,
+    [JsonStringEnumMemberName("Web - Performance")]
+    WebPerformance,
+    [JsonStringEnumMemberName("Workspace - Add Ons")]
+    WorkspaceAddOns,
+    [JsonStringEnumMemberName("Workspace - AppSheet")]
+    WorkspaceAppSheet,
+    [JsonStringEnumMemberName("Workspace - Google Apps Script")]
+    WorkspaceGoogleAppsScript,
+    [JsonStringEnumMemberName("Workspace - Google Workspace (REST) APIs")]
+    WorkspaceGoogleWorkspaceRestApIs
 }
