@@ -70,7 +70,7 @@
 
     <div class="form-group">
         <label for="tags">Tags</label>
-        <MultiSelect TItem="string" DataSource="@tags" @bind-SelectedItems="request.Tags" />
+        <MultiSelect TItem="AdvocuTag" DataSource="@tags" @bind-SelectedItems="request.Tags" />
     </div>
 
     <div class="form-group">
@@ -90,7 +90,7 @@
     [Inject] private AdvocuDataService AdvocuDataService { get; set; }
     private CreateMentoringActivityRequest request = new() { Title = "", Description = "", ActivityUrl = "" };
     private DateTime activityDate = DateTime.Now;
-    private List<string> tags;
+    private List<AdvocuTag> tags;
     private bool isPrivate;
 
     protected override void OnInitialized()
