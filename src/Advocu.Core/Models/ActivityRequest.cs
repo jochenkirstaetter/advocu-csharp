@@ -16,7 +16,7 @@ public abstract class ActivityRequest
 
     [JsonPropertyName("tags")]
     [MinLength(0)] // min items 0
-    public List<string> Tags { get; set; } = new List<string>();
+    public List<AdvocuTag> Tags { get; set; } = [];
 
     [MaxLength(2000)]
     [JsonPropertyName("additionalInfo")]

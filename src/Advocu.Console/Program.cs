@@ -26,7 +26,10 @@ public class Program
                     ContentType = AdvocuActivityContentType.Articles,
                     Title = "How AI is Revolutionizing Software Development",
                     Description = "This article explores the transformative impact of artificial intelligence on modern software development practices, including AI-powered code generation, testing, and deployment. It delves into various tools and methodologies that are emerging in the AI-driven development landscape.",
-                    Tags = new List<string> { "AI", "Build with AI", "Google Cloud", "AI - Generative AI" },
+                    Tags =
+                    [
+                        AdvocuTag.BuildWithAi, AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.Ai
+                    ],
                     Readers = 500,
                     ActivityDate = DateTime.UtcNow.ToString("yyyy-MM-dd"), // Format date as required
                     ActivityUrl = "https://example.com/my-ai-article",
@@ -40,7 +43,11 @@ public class Program
                 {
                     Title = "Gemini CLI - your toolset to do magic!",
                     Description = "Delivered a remote talk on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
-                    Tags = new List<string> { "Build with AI", "DevFest", "AI - Gemini", "AI - Generative AI", "AI" },
+                    Tags =
+                    [
+                        AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini, AdvocuTag.AiGenerativeAi,
+                        AdvocuTag.Ai
+                    ],
                     Attendees = 50,
                     EventFormat = AdvocuEventFormat.Hybrid,
                     Country = AdvocuCountry.Uzbekistan,
@@ -56,7 +63,11 @@ public class Program
                 {
                     Title = "Gemini CLI - your toolset to do magic!",
                     Description = "Delivered a workshop on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
-                    Tags = new List<string> { "Build with AI", "DevFest", "AI - Gemini", "AI - Generative AI", "AI" },
+                    Tags =
+                    [
+                        AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini, AdvocuTag.AiGenerativeAi,
+                        AdvocuTag.Ai
+                    ],
                     Attendees = 150,
                     EventFormat = AdvocuEventFormat.Virtual,
                     Country = AdvocuCountry.Uzbekistan,
@@ -72,7 +83,7 @@ public class Program
                 {
                     Title = "",
                     Description = "",
-                    Tags = new List<string> {},
+                    Tags = [],
                     Attendees = 1,
                     EventFormat = AdvocuEventFormat.Virtual,
                     ActivityDate = "2025-12-31",
@@ -89,7 +100,7 @@ public class Program
                     Description = "",
                     ContentType = AdvocuActivityContentType.EarlyAccessProgram,
                     ProductDescription = "",
-                    Tags = new List<string> {},
+                    Tags = [],
                     TimeSpent = 30,
                     ActivityDate = "2025-12-31",
                     AdditionalInfo = "",
@@ -103,7 +114,7 @@ public class Program
                     // Title = "Gemini 3 Feedback Roundtable - EMEA/AMER",
                     // Tags = new List<string> { "AI", "AI - AI Studio", "AI - Gemini", "AI - Generative AI", "AI - Vertex AI" },
                     Title = "Global Cloud GDE Hangout (Monthly)",
-                    Tags = new List<string> { "Cloud - Data", "Google Cloud" },
+                    Tags = [AdvocuTag.CloudData, AdvocuTag.GoogleCloud],
                     // Title = "Cloud GDE Infra Hangout",
                     // Tags = new List<string> { "Cloud - Compute, Networking, Storage", "Google Cloud" },
                     // Title = "SIG Keras Community Meeting",
@@ -128,7 +139,7 @@ public class Program
                     Description = "",
                     WhyIsSignificant = "",
                     SignificanceType = AdvocuSignificanceType.TechnologyOpenSource,
-                    Tags = new List<string> {},
+                    Tags = [],
                     Impact = 100,
                     AdditionalInfo = "",
                     Private = false
