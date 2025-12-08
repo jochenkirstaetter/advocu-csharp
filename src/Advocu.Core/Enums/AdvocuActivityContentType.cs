@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Advocu;
 
+[JsonConverter(typeof(JsonStringEnumConverter<AdvocuActivityContentType>))]
 public enum AdvocuActivityContentType
 {
     Articles,

@@ -4,7 +4,7 @@ namespace Advocu;
 // 
 // // Note: The 'Tags' enum will be hard to maintain as an enum due to its size and dynamic nature.
 // Consider using a string array or a dedicated class for handling tags.  If you still need an enum:
-
+[JsonConverter(typeof(JsonStringEnumConverter<AdvocuTag>))]
 public enum AdvocuTag
 {
     [JsonStringEnumMemberName("AI")]
@@ -139,6 +139,8 @@ public enum AdvocuTag
     DiversityInclusion,
     [JsonStringEnumMemberName("Earth Engine")]
     EarthEngine,
+    [JsonStringEnumMemberName("Firebase")]
+    Firebase,
     [JsonStringEnumMemberName("Firebase - A/B Testing")]
     FirebaseABTesting,
     [JsonStringEnumMemberName("Firebase - AI Logic")]

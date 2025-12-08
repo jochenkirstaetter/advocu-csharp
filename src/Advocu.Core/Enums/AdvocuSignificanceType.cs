@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Advocu;
 
+[JsonConverter(typeof(JsonStringEnumConverter<AdvocuSignificanceType>))]
 public enum AdvocuSignificanceType
 {
     [JsonStringEnumMemberName("Diversity & Inclusion")]

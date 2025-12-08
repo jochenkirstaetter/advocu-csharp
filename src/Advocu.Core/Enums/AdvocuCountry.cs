@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Advocu;
 
+[JsonConverter(typeof(JsonStringEnumConverter<AdvocuCountry>))]
 public enum AdvocuCountry
 {
     Afghanistan,
