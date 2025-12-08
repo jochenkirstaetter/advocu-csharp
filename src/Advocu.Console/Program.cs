@@ -81,14 +81,14 @@ public class Program
                 Console.WriteLine("\n--- Posting Mentoring Activity Draft ---");
                 var mentoringRequest = new CreateMentoringActivityRequest()
                 {
-                    Title = "",
-                    Description = "",
-                    Tags = [],
+                    Title = "GDE Academy EMEA",
+                    Description = "1:1 mentoring session with ",
+                    Tags = [AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.AiKeras, AdvocuTag.AiVertexAi, AdvocuTag.Ai],
                     Attendees = 1,
                     EventFormat = AdvocuEventFormat.Virtual,
-                    ActivityDate = "2025-12-31",
-                    ActivityUrl = "",
-                    AdditionalInfo = "",
+                    ActivityDate = "2025-11-24",
+                    ActivityUrl = "https://startup.google.com/programs/accelerator/africa/",
+                    AdditionalInfo = "The GDE Academy EMEA is a focused, 6-week program designed to fast-track a developer's journey toward becoming a Google Developers Expert (GDE). It offers personalized coaching and mentorship from existing GDEs and Googlers to help participants build their technical skills and community presence in the Europe, Middle East, and Africa (EMEA) region",
                     Private = false
                 };
                 // response = await client.PostMentoringActivityAsync(mentoringRequest);
