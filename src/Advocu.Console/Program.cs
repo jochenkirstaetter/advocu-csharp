@@ -8,6 +8,8 @@ namespace Advocu;
 
 public class Program
 {
+    private const string ApiBaseUrl = "https://api.advocu.com/personal-api/v1/gde/";
+
     public static async Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
@@ -17,7 +19,7 @@ public class Program
             var services = scope.ServiceProvider;
             try
             {
-                var client = services.GetRequiredService<Advocu.AdvocuApiClient>();
+                var client = services.GetRequiredService<AdvocuApiClient>();
                 ActivityResponse response = new ActivityResponse { Id = "0" };
 
                 Console.WriteLine("\n--- Posting Content Creation Activity Draft ---");
@@ -25,7 +27,8 @@ public class Program
                 {
                     ContentType = AdvocuActivityContentType.Articles,
                     Title = "How AI is Revolutionizing Software Development",
-                    Description = "This article explores the transformative impact of artificial intelligence on modern software development practices, including AI-powered code generation, testing, and deployment. It delves into various tools and methodologies that are emerging in the AI-driven development landscape.",
+                    Description =
+                        "This article explores the transformative impact of artificial intelligence on modern software development practices, including AI-powered code generation, testing, and deployment. It delves into various tools and methodologies that are emerging in the AI-driven development landscape.",
                     Tags =
                     [
                         AdvocuTag.BuildWithAi, AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.Ai
@@ -37,12 +40,13 @@ public class Program
                     Private = false
                 };
                 // response = await client.PostContentCreationActivityAsync(request);
-                
+
                 Console.WriteLine("\n--- Posting Public Speaking Activity Draft ---");
                 var publicSpeakingRequest = new CreatePublicSpeakingActivityRequest
                 {
                     Title = "Gemini CLI - your toolset to do magic!",
-                    Description = "Delivered a remote talk on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
+                    Description =
+                        "Delivered a remote talk on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
                     Tags =
                     [
                         AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini, AdvocuTag.AiGenerativeAi,
@@ -52,7 +56,8 @@ public class Program
                     EventFormat = AdvocuEventFormat.Hybrid,
                     Country = AdvocuCountry.Uzbekistan,
                     ActivityDate = "2025-11-29",
-                    ActivityUrl = "https://gdg.community.dev/events/details/google-gdg-qarshi-presents-devfest-kashkadarya-2025-gdg-karshi/cohost-gdg-qarshi",
+                    ActivityUrl =
+                        "https://gdg.community.dev/events/details/google-gdg-qarshi-presents-devfest-kashkadarya-2025-gdg-karshi/cohost-gdg-qarshi",
                     AdditionalInfo = "",
                     Private = false
                 };
@@ -62,7 +67,8 @@ public class Program
                 var workshopRequest = new CreateWorkshopActivityRequest()
                 {
                     Title = "Gemini CLI - your toolset to do magic!",
-                    Description = "Delivered a workshop on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
+                    Description =
+                        "Delivered a workshop on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
                     Tags =
                     [
                         AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini, AdvocuTag.AiGenerativeAi,
@@ -72,27 +78,33 @@ public class Program
                     EventFormat = AdvocuEventFormat.Virtual,
                     Country = AdvocuCountry.Uzbekistan,
                     ActivityDate = "2025-11-29",
-                    ActivityUrl = "https://gdg.community.dev/events/details/google-gdg-qarshi-presents-devfest-kashkadarya-2025-gdg-karshi/cohost-gdg-qarshi",
+                    ActivityUrl =
+                        "https://gdg.community.dev/events/details/google-gdg-qarshi-presents-devfest-kashkadarya-2025-gdg-karshi/cohost-gdg-qarshi",
                     AdditionalInfo = "",
                     Private = false
                 };
                 // response = await client.PostWorkshopActivityAsync(workshopRequest);
-                
+
                 Console.WriteLine("\n--- Posting Mentoring Activity Draft ---");
                 var mentoringRequest = new CreateMentoringActivityRequest()
                 {
                     Title = "GDE Academy EMEA",
                     Description = "1:1 mentoring session with ",
-                    Tags = [AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.AiKeras, AdvocuTag.AiVertexAi, AdvocuTag.Ai],
+                    Tags =
+                    [
+                        AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.AiKeras, AdvocuTag.AiVertexAi,
+                        AdvocuTag.Ai
+                    ],
                     Attendees = 1,
                     EventFormat = AdvocuEventFormat.Virtual,
                     ActivityDate = "2025-11-24",
                     ActivityUrl = "https://startup.google.com/programs/accelerator/africa/",
-                    AdditionalInfo = "The GDE Academy EMEA is a focused, 6-week program designed to fast-track a developer's journey toward becoming a Google Developers Expert (GDE). It offers personalized coaching and mentorship from existing GDEs and Googlers to help participants build their technical skills and community presence in the Europe, Middle East, and Africa (EMEA) region",
+                    AdditionalInfo =
+                        "The GDE Academy EMEA is a focused, 6-week program designed to fast-track a developer's journey toward becoming a Google Developers Expert (GDE). It offers personalized coaching and mentorship from existing GDEs and Googlers to help participants build their technical skills and community presence in the Europe, Middle East, and Africa (EMEA) region",
                     Private = false
                 };
                 // response = await client.PostMentoringActivityAsync(mentoringRequest);
-                    
+
                 Console.WriteLine("\n--- Posting Product Feedback Given Activity Draft ---");
                 var productFeedbackRequest = new CreateProductFeedbackActivityRequest()
                 {
@@ -107,7 +119,7 @@ public class Program
                     Private = false
                 };
                 // response = await client.PostProductFeedbackActivityAsync(productFeedbackRequest);
-                
+
                 Console.WriteLine("\n--- Posting Interaction with Googlers Activity Draft ---");
                 var interactionRequest = new CreateInteractionWithGooglersActivityRequest()
                 {
@@ -131,7 +143,7 @@ public class Program
                     Private = false
                 };
                 // response = await client.PostInteractionWithGooglersActivityAsync(interactionRequest);
-                
+
                 Console.WriteLine("\n--- Posting Stories Activity Draft ---");
                 var storiesRequest = new CreateStoriesActivityRequest()
                 {
@@ -175,7 +187,7 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 config.AddJsonFile("appsettings.user.json", optional: true, reloadOnChange: true);
                 config.AddEnvironmentVariables();
                 // In production, consider using User Secrets or Azure Key Vault for sensitive data
@@ -189,28 +201,38 @@ public class Program
                 services.AddHttpClient();
 
                 // Register your Advocu Client
-                services.AddScoped<Advocu.AdvocuApiClient>(serviceProvider =>
+                services.AddScoped<AdvocuApiClient>(serviceProvider =>
                 {
+                    var baseUri = new Uri(ApiBaseUrl);
+                    string? accessToken = null;
                     var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
-                    var httpClient = httpClientFactory.CreateClient("AdvocuApi"); // Use a named client for specific configurations
+                    var httpClient =
+                        httpClientFactory.CreateClient("AdvocuApi"); // Use a named client for specific configurations
 
                     // Retrieve API settings
-                    var apiSettings = hostContext.Configuration.GetSection("AdvocuApiSettings").Get<AdvocuApiSettings>();
-                    if (apiSettings == null || string.IsNullOrEmpty(apiSettings.AccessToken))
+                    var apiSettings = hostContext.Configuration.GetSection("AdvocuApiSettings")
+                        .Get<AdvocuApiSettings>();
+                    if (!string.IsNullOrEmpty(apiSettings?.AccessToken))
+                    {
+                        accessToken = apiSettings.AccessToken;
+                    }
+                    accessToken ??= Environment.GetEnvironmentVariable("ADVOCU_ACCESS_TOKEN");
+
+                    if (!string.IsNullOrEmpty(accessToken))
                     {
                         throw new InvalidOperationException("Advocu API settings or AccessToken not configured.");
                     }
 
-                    if (!string.IsNullOrEmpty(apiSettings.BaseUrl))
+                    if (!string.IsNullOrEmpty(apiSettings?.BaseUrl))
                     {
                         var uriBuilder = new UriBuilder(new Uri(apiSettings.BaseUrl));
                         uriBuilder.Path = string.Concat(uriBuilder.Path.Replace("//", "/").TrimEnd('/'), '/');
-                        httpClient.BaseAddress = uriBuilder.Uri;
+                        baseUri = uriBuilder.Uri;
                     }
-                    
-                    return new Advocu.AdvocuApiClient(httpClient, apiSettings.AccessToken);
-                });
 
-                // You can add other services here if needed
+                    httpClient.BaseAddress = baseUri;
+
+                    return new AdvocuApiClient(httpClient, accessToken!);
+                });
             });
 }
