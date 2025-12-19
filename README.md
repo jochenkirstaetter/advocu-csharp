@@ -1,5 +1,7 @@
 # Advocu C#
 
+An Advocu client for .NET
+
 👋 Hello Google Developer Experts! 
 
 Reporting your awesome community work shouldn't be a chore. Whether you want to integrate reporting directly into your own .NET applications or prefer a quick command-line tool to submit your activities, we've got you covered. This library provides a friendly C# client for the Advocu Personal API and a powerful CLI tool to streamline your GDE reporting activities.

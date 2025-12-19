@@ -12,11 +12,20 @@ internal static class Program
 
     public static async Task<int> Main(string[] args)
     {
+        if (args.Length == 0 || args.Contains("-h") || args.Contains("--help"))
+        {
+            AnsiConsole.MarkupLine("[bold deepskyblue1]Advocu C#[/]");
+            AnsiConsole.MarkupLine("[italic]An Advocu client for .NET[/]");
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("Reporting your awesome community work shouldn't be a chore. Whether you want to integrate reporting directly into your own .NET applications or prefer a quick command-line tool to submit your activities, we've got you covered. This library provides a friendly C# client for the Advocu Personal API and a powerful CLI tool to streamline your GDE reporting activities.");
+            AnsiConsole.WriteLine();
+        }
+
         var services = new ServiceCollection();
         ConfigureServices(services);
 
         var registrar = new TypeRegistrar(services);
-        var app = new CommandApp<DefaultCommand>(registrar);
+        var app = new CommandApp(registrar);
 
         app.Configure(config =>
         {
