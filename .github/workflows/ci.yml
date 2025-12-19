@@ -1,0 +1,72 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Package Version (e.g. 1.0.1)'
+        required: true
+        default: '1.0.1'
+        type: string
+
+jobs:
+  build-and-deploy:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        dotnet-version: ['10.x']
+    runs-on: ${{ matrix.os }}
+    permissions:
+      packages: write
+      contents: read
+    
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      NUGET_XMLDOC_MODE: skip
+
+    steps:
+    - name: enable windows longpaths
+      run: |
+        git config --global core.longpaths true
+
+    - name: Check-out latest sources 
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: Restore dependencies
+      run: dotnet restore Advocu.slnx
+
+    - name: Build
+      run: dotnet build Advocu.slnx --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test Advocu.slnx --configuration Release --no-build --verbosity normal
+
+    - name: Pack
+      if: matrix.os == 'ubuntu-latest' && github.event_name != 'workflow_dispatch'
+      run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --no-build --output nupkgs
+
+    - name: Pack (Manual)
+      if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch'
+      run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --output nupkgs /p:Version=${{ github.event.inputs.version }}
+
+    - name: Push to NuGet.org
+      if: matrix.os == 'ubuntu-latest' && (github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
+      run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+
+    - name: Push to GitHub Packages
+      if: matrix.os == 'ubuntu-latest' && (github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
+      run: dotnet nuget push "nupkgs/*.nupkg" --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
