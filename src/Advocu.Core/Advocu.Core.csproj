@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="\" />
-    <None Include="../../Advocu-Csharp.png" Pack="true" PackagePath="\" />
+    <None Include="../../assets/Advocu-Csharp.png" Pack="true" PackagePath="\" />
   </ItemGroup>
   
   <ItemGroup>
