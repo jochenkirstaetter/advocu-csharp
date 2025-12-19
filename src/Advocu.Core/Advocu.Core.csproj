@@ -10,7 +10,7 @@
     <PackageId>Advocu</PackageId>
 		<Title>Advocu</Title>
 		<Product>Advocu</Product>
-		<Description>Advocu Client for .NET</Description>
+		<Description>Advocu C# - A client for .NET</Description>
 		<PackageTags>Advocu GDE</PackageTags>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
