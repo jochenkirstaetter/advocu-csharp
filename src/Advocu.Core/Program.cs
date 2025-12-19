@@ -1,8 +1,8 @@
+using Advocu.NuGet.Commands;
+using Advocu.NuGet.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Advocu.NuGet.Commands;
-using Advocu.NuGet.Settings;
 using System.Reflection;
 
 namespace Advocu.NuGet;
@@ -13,7 +13,12 @@ internal static class Program
 
     public static async Task<int> Main(string[] args)
     {
-        if (args.Length == 0 || args.Contains("-h") || args.Contains("--help"))
+        if (args.Length == 0)
+        {
+            args = ["--help"];
+        }
+
+        if (args.Contains("-h") || args.Contains("--help"))
         {
             var versionString = Assembly.GetEntryAssembly()?
                                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
@@ -31,7 +36,7 @@ internal static class Program
         ConfigureServices(services);
 
         var registrar = new TypeRegistrar(services);
-        var app = new CommandApp(registrar);
+        var app = new CommandApp<RootCommand>(registrar);
 
         app.Configure(config =>
         {
