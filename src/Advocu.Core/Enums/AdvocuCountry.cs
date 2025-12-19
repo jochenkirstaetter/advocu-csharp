@@ -1,7 +1,12 @@
 using System.Text.Json.Serialization;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace Advocu;
 
+/// <summary>
+/// Specifies the country for an activity.
+/// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter<AdvocuCountry>))]
 public enum AdvocuCountry
 {

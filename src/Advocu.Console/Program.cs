@@ -216,11 +216,11 @@ public class Program
                     {
                         accessToken = apiSettings.AccessToken;
                     }
-                    accessToken ??= Environment.GetEnvironmentVariable("ADVOCU_ACCESS_TOKEN");
+                    accessToken ??= Environment.GetEnvironmentVariable("ADVOCU_API_TOKEN");
 
                     if (!string.IsNullOrEmpty(accessToken))
                     {
-                        throw new InvalidOperationException("Advocu API settings or AccessToken not configured.");
+                        throw new InvalidOperationException("Advocu API settings or access token not configured.");
                     }
 
                     if (!string.IsNullOrEmpty(apiSettings?.BaseUrl))

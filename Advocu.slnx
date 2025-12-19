@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/Advocu.Console/Advocu.Console.csproj" />
+
     <Project Path="src/Advocu.Core/Advocu.Core.csproj" />
-    <Project Path="src/Advocu.WebApp/Advocu.WebApp.csproj" />
+
   </Folder>
 </Solution>

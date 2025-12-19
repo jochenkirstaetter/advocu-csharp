@@ -1,9 +1,14 @@
 using System.Text.Json.Serialization;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace Advocu;
 // 
 // // Note: The 'Tags' enum will be hard to maintain as an enum due to its size and dynamic nature.
 // Consider using a string array or a dedicated class for handling tags.  If you still need an enum:
+/// <summary>
+/// Specifies the tags associated with an activity.
+/// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter<AdvocuTag>))]
 public enum AdvocuTag
 {

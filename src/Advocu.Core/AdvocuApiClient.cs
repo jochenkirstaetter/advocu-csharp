@@ -5,6 +5,9 @@ using System.Text.Json;
 
 namespace Advocu
 { 
+    /// <summary>
+    /// Client for interacting with the Advocu API.
+    /// </summary>
     public class AdvocuApiClient
     {
         private readonly HttpClient _httpClient;
@@ -12,6 +15,11 @@ namespace Advocu
         // Base URL from the image
         private const string BaseUrl = "https://api.advocu.com/personal-api/v1/gde/";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdvocuApiClient"/> class.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for requests.</param>
+        /// <param name="accessToken">The access token for authentication.</param>
         public AdvocuApiClient(HttpClient httpClient, string accessToken)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
