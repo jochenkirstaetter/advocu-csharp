@@ -3,6 +3,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using Advocu.NuGet.Commands;
 using Advocu.NuGet.Settings;
+using System.Reflection;
 
 namespace Advocu.NuGet;
 
@@ -14,7 +15,12 @@ internal static class Program
     {
         if (args.Length == 0 || args.Contains("-h") || args.Contains("--help"))
         {
-            AnsiConsole.MarkupLine("[bold deepskyblue1]Advocu C#[/]");
+            var versionString = Assembly.GetEntryAssembly()?
+                                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+                                .InformationalVersion
+                                .ToString();
+            
+            AnsiConsole.MarkupLine($"[bold deepskyblue1]Advocu C#[/] - v{versionString}");
             AnsiConsole.MarkupLine("[italic]An Advocu client for .NET[/]");
             AnsiConsole.WriteLine();
             AnsiConsole.MarkupLine("Reporting your awesome community work shouldn't be a chore. Whether you want to integrate reporting directly into your own .NET applications or prefer a quick command-line tool to submit your activities, we've got you covered. This library provides a friendly C# client for the Advocu Personal API and a powerful CLI tool to streamline your GDE reporting activities.");
