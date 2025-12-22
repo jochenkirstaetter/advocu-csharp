@@ -1,0 +1,42 @@
+name: Package Feedback
+description: Let us know which package is bothering you.
+labels: [nuget]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Mistakes can happen... we are all humans and things could have been overlooked.
+        Tell us what you've noticed today. We appreciate your feedback!
+  - type: input
+    id: version
+    attributes:
+      label: Package Version(s)
+      description: List the version(s) you have struggle with. Use `comma` to separate.
+      placeholder: 2.8.15, 2.9.0
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - Mac
+        - Linux
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: A clear and concise description of the bug.
+      description: What's bothering you? Please be informative and add some detailed code snippets that we could use to create test cases or a sample application to replicate the issue.
+      placeholder: Description
+    validations:
+      required: true
+  - type: textarea
+    id: expectation
+    attributes:
+      label: What did you expect?
+      description: Give us a clear and concise description of what you expected to happen. Inspire us to solve your problem.
+    validations:
+      required: true
