@@ -23,7 +23,7 @@ namespace Advocu
         /// </summary>
         [Required]
         [JsonPropertyName("eventFormat")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter<AdvocuEventFormat>))]
         public AdvocuEventFormat EventFormat { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Advocu
         /// </summary>
         // Accepted if eventFormat has value In-Person or Hybrid
         [JsonPropertyName("country")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter<AdvocuCountry>))]
         public AdvocuCountry? Country { get; set; } // Nullable as it's conditional
 
         /// <summary>

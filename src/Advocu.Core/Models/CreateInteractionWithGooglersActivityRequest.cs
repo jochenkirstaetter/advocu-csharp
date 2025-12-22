@@ -23,7 +23,7 @@ namespace Advocu
         /// </summary>
         [Required]
         [JsonPropertyName("format")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter<AdvocuFormat>))]
         public AdvocuFormat Format { get; set; } // Uses the existing Format enum
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Advocu
         /// </summary>
         [Required]
         [JsonPropertyName("interactionType")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter<AdvocuInteractionType>))]
         public AdvocuInteractionType InteractionType { get; set; } // Uses the existing InteractionType enum
 
         /// <summary>

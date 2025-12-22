@@ -30,7 +30,7 @@ namespace Advocu
         /// </summary>
         [Required]
         [JsonPropertyName("significanceType")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [JsonConverter(typeof(JsonStringEnumConverter<AdvocuSignificanceType>))]
         public AdvocuSignificanceType SignificanceType { get; set; } // Uses the existing SignificanceType enum
 
         /// <summary>

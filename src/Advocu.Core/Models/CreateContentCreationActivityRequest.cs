@@ -23,7 +23,7 @@ namespace Advocu
         /// </summary>
         [Required]
         [JsonPropertyName("contentType")]
-        [JsonConverter(typeof(JsonStringEnumConverter))] // Serializes enum as string
+        [JsonConverter(typeof(JsonStringEnumConverter<AdvocuActivityContentType>))] // Serializes enum as string
         public AdvocuActivityContentType ContentType { get; set; }
 
         /// <summary>
