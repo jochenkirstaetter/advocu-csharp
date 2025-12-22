@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>advocu</ToolCommandName>
+        <PackageId>Advocu-MCP</PackageId>
+        <Title>Advocu MCP</Title>
+        <Product>Advocu MCP</Product>
+        <Description>Draft your activities for the Advocu platform.</Description>
+        <PackageTags>Advocu GDE</PackageTags>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Authors>Jochen Kirstätter</Authors>
+        <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>Advocu-Csharp.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+        <PackageReleaseNotes>(Package release notes are in CHANGELOG.md)</PackageReleaseNotes>
+        <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../assets/Advocu-Csharp.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ContainerLabel Include="io.modelcontextprotocol.server.name" Value="io.github.jochenkirstaetter/advocumcp"/>
+        <ContainerLabel Include="io.modelcontextprotocol.server.description" Value="Draft your activities for the Advocu platform"/>
+        <ContainerLabel Include="io.modelcontextprotocol.server.version" Value="$(Version)"/>
+        <ContainerLabel Include="io.modelcontextprotocol.server.icon" Value="Advocu-Csharp.png"/>
+        <ContainerLabel Include="org.opencontainers.image.title" Value="Advocu MCP Server"/>
+        <ContainerLabel Include="org.opencontainers.image.description" Value="Draft your activities for the Advocu platform"/>
+        <ContainerLabel Include="org.opencontainers.image.source" Value="https://github.com/jochenkirstaetter/advocu-csharp"/>
+        <ContainerLabel Include="org.opencontainers.image.authors" Value="Jochen Kirstätter"/>
+        <ContainerLabel Include="org.opencontainers.image.vendor" Value="Jochen Kirstätter"/>
+        <ContainerLabel Include="org.opencontainers.image.licenses" Value="Apache-2.0"/>
+    </ItemGroup>
+
+<!--    <PropertyGroup>-->
+<!--        <EnableSdkContainerSupport>true</EnableSdkContainerSupport>-->
+<!--        <ContainerRepository>jochenkirstaetter/advocumcp</ContainerRepository>-->
+<!--        <ContainerFamily>alpine</ContainerFamily>-->
+<!--        <RuntimeIdentifiers>linux-x64;linux-arm64</RuntimeIdentifiers>-->
+<!--    </PropertyGroup>-->
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.1"/>
+        <PackageReference Include="ModelContextProtocol" Version="0.5.0-preview.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Advocu.Mcp.Shared\Advocu.Mcp.Shared.csproj" />
+    </ItemGroup>
+
+</Project>

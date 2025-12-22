@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Advocu.Core/Advocu.Core.csproj" />
+    <Project Path="src/Advocu.McpServer/Advocu.McpServer.csproj" />
+    <Project Path="src/Advocu.Mcp.Shared/Advocu.Mcp.Shared.csproj" />
+    <Project Path="src/Advocu.Mcp.SSE/Advocu.Mcp.SSE.csproj" />
+  </Folder>
+</Solution>

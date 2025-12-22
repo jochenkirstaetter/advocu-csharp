@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <InvariantGlobalization>true</InvariantGlobalization>
+<!--        <PublishAot>true</PublishAot>-->
+        <Description>Draft your activities for the Advocu platform.</Description>
+        <Authors>Jochen Kirstätter</Authors>
+        <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
+<!--        <PackageReadmeFile>README.md</PackageReadmeFile>-->
+        <PackageIcon>Advocu-Csharp.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../../assets/Advocu-Csharp.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ContainerLabel Include="io.modelcontextprotocol.server.name" Value="io.github.jochenkirstaetter/advocumcp"/>
+        <ContainerLabel Include="io.modelcontextprotocol.server.description" Value="Draft your activities for the Advocu platform"/>
+        <ContainerLabel Include="io.modelcontextprotocol.server.version" Value="$(Version)"/>
+        <ContainerLabel Include="io.modelcontextprotocol.server.icon" Value="Advocu-Csharp.png"/>
+        <ContainerLabel Include="org.opencontainers.image.title" Value="Advocu MCP Server"/>
+        <ContainerLabel Include="org.opencontainers.image.description" Value="Draft your activities for the Advocu platform"/>
+        <ContainerLabel Include="org.opencontainers.image.source" Value="https://github.com/jochenkirstaetter/advocu-csharp"/>
+        <ContainerLabel Include="org.opencontainers.image.authors" Value="Jochen Kirstätter"/>
+        <ContainerLabel Include="org.opencontainers.image.vendor" Value="Jochen Kirstätter"/>
+        <ContainerLabel Include="org.opencontainers.image.licenses" Value="Apache-2.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ModelContextProtocol.AspNetCore" Version="0.5.0-preview.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Advocu.Mcp.Shared\Advocu.Mcp.Shared.csproj" />
+    </ItemGroup>
+
+</Project>

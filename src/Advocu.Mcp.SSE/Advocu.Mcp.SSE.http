@@ -1,0 +1,11 @@
+@Advocu.Mcp.SSE_HostAddress = http://localhost:5291
+
+GET {{Advocu.Mcp.SSE_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{Advocu.Mcp.SSE_HostAddress}}/todos/1
+Accept: application/json
+
+###
