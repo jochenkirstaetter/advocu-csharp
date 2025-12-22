@@ -18,6 +18,12 @@ Run the `dnx` command to use the Advocu CLI tool:
 dnx advocu -y
 ```
 
+Use double-dash `--` to pass arguments to the Advocu CLI tool:
+
+```bash
+dnx advocu -y -- content -t "Creating Advocu C# using Antigravity" -d "This blog article describes..."
+```
+
 ### CLI Tool
 Install the `advocu` global tool to use it from anywhere:
 
