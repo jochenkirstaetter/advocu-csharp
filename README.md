@@ -34,6 +34,38 @@ dotnet add package Advocu
 
 ---
 
+## 📚 Using the `Advocu` CLI Tool
+
+```
+Advocu C#
+An Advocu client for .NET
+
+Reporting your awesome community work shouldn't be a chore. Whether you want to integrate reporting directly into your own .NET applications or prefer a quick command-line tool to submit your activities, we've got you covered. This library provides a friendly C# client for the Advocu Personal API and a powerful CLI tool to streamline your GDE reporting activities.
+
+USAGE:
+    advocu [OPTIONS] [COMMAND]
+
+OPTIONS:
+    -h, --help                 Prints help information                                                
+    -a, --api-token <TOKEN>    The Advocu API Token. Defaults to ADVOCU_API_TOKEN environment variable
+    -u, --api-url <URL>        The Advocu API URL. Defaults to ADVOCU_URL environment variable        
+    -p, --private              Mark the activity as private                                           
+
+COMMANDS:
+    content        Creates a new Content Creation Activity draft         
+    public         Creates a new Public Speaking Activity draft          
+    workshop       Creates a new Workshop Activity draft                 
+    mentoring      Creates a new Mentoring Activity draft                
+    feedback       Creates a new Product Feedback Activity draft         
+    interaction    Creates a new Interaction with Googlers Activity draft
+    stories        Creates a new Stories Activity draft                  
+    list           Lists available options for enums 
+```
+
+Each command has their own help information and provides details regarding the activity details.
+
+---
+
 ## 💻 Using the `AdvocuApiClient`
 
 The `AdvocuApiClient` is the heart of the library, designed to make interacting with the Advocu API smooth and type-safe.
