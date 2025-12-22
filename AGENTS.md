@@ -25,17 +25,19 @@ To build and run this project, you will need the .NET SDK installed on your mach
 2.  **Build the solution or the project:**
 
     ```bash
-    dotnet build
+    dotnet build Advocu.slnx
     ```
 
+    Alternatively, build the specific project:
+
     ```bash
-    dotnet build src/Advocu.csproj
+    dotnet build src/Advocu.Core/Advocu.Core.csproj
     ```
 
 3.  **Run the project:**
 
     ```bash
-    dotnet run --project src/Advocu.csproj
+    dotnet run --project src/Advocu.Core/Advocu.Core.csproj
     ```
 
 ## Development Conventions
