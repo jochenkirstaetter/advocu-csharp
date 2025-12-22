@@ -1,50 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>advocu</ToolCommandName>
-    <PackageId>Advocu</PackageId>
-		<Title>Advocu</Title>
-		<Product>Advocu</Product>
-		<Description>Advocu C# - An Advocu client for .NET</Description>
-		<PackageTags>Advocu GDE</PackageTags>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Authors>Jochen Kirstätter</Authors>
-		<Copyright>Copyright (c) Jochen Kirstätter</Copyright>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageIcon>Advocu-Csharp.png</PackageIcon>
-		<PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-		<PackageReleaseNotes>(Package release notes are in CHANGELOG.md)</PackageReleaseNotes>
-		<Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>advocu</ToolCommandName>
+        <PackageId>Advocu</PackageId>
+        <Title>Advocu</Title>
+        <Product>Advocu</Product>
+        <Description>Advocu C# - An Advocu client for .NET</Description>
+        <PackageTags>Advocu GDE</PackageTags>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Authors>Jochen Kirstätter</Authors>
+        <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>Advocu-Csharp.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+        <PackageReleaseNotes>(Package release notes are in CHANGELOG.md)</PackageReleaseNotes>
+        <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="../../README.md" Pack="true" PackagePath="\" />
-    <None Include="../../assets/Advocu-Csharp.png" Pack="true" PackagePath="\" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="10.0.1" />
-    <PackageReference Include="Spectre.Console" Version="0.54.0" />
-    <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../assets/Advocu-Csharp.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
-	<Target Name="InjectPackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec" Condition="Exists('RELEASE_NOTES.md')">
-		<PropertyGroup>
-			<PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES.md"))</PackageReleaseNotes>
-		</PropertyGroup>
-	</Target>
+    <ItemGroup>
+        <PackageReference Include="System.Text.Json" Version="10.0.1"/>
+        <PackageReference Include="Spectre.Console" Version="0.54.0"/>
+        <PackageReference Include="Spectre.Console.Cli" Version="0.53.1"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1"/>
+    </ItemGroup>
+
+    <Target Name="InjectPackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec" Condition="Exists('RELEASE_NOTES.md')">
+        <PropertyGroup>
+            <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/RELEASE_NOTES.md"))</PackageReleaseNotes>
+        </PropertyGroup>
+    </Target>
 
 </Project>
