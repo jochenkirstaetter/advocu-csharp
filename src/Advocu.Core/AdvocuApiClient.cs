@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Advocu
 { 
@@ -11,6 +12,8 @@ namespace Advocu
     public class AdvocuApiClient
     {
         private readonly HttpClient _httpClient;
+        private readonly JsonSerializerOptions _jsonSerializerWriteOptions;
+        private readonly JsonSerializerOptions _jsonSerializerReadOptions;
 
         // Base URL from the image
         private const string BaseUrl = "https://api.advocu.com/personal-api/v1/gde/";
@@ -30,6 +33,19 @@ namespace Advocu
             // Set default headers for all requests from this client
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            _jsonSerializerWriteOptions = options ?? new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            _jsonSerializerReadOptions = options ?? new JsonSerializerOptions
+            {
+                AllowTrailingCommas = true,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
         }
 
         /// <summary>
@@ -158,11 +174,7 @@ namespace Advocu
         /// </summary>
         private async Task<TResponse> PostJsonAsync<TRequest, TResponse>(string endpoint, TRequest requestPayload)
         {
-            var jsonRequest = JsonSerializer.Serialize(requestPayload, new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+            var jsonRequest = JsonSerializer.Serialize(requestPayload, _jsonSerializerWriteOptions);
 
             var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
 
@@ -175,6 +187,7 @@ namespace Advocu
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
+                return JsonSerializer.Deserialize<TResponse>(jsonResponse, _jsonSerializerReadOptions)!;
             }
             else
             {
