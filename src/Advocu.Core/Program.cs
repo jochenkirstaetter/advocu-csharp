@@ -1,9 +1,8 @@
+using System.Reflection;
 using Advocu.NuGet.Commands;
-using Advocu.NuGet.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Reflection;
 
 namespace Advocu.NuGet;
 
@@ -65,7 +64,7 @@ internal static class Program
 
             config.AddBranch("list", list =>
             {
-                list.SetDescription("Lists available options for enums.");
+                list.SetDescription("Lists available options for enumerations.");
                 
                 list.AddCommand<ListTagsCommand>("tags")
                     .WithDescription("Lists available Tags.");
