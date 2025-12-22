@@ -8,11 +8,14 @@ Reporting your awesome community work shouldn't be a chore. Whether you want to 
 
 ## 🚀 Getting Started
 
-### Library
-Add the client library to your .NET project:
+Get your Advocu Personal API token from [Advocu](https://app.advocu.com/settings/integrations/personal-api) and store it in an environment variable `ADVOCU_API_TOKEN`. Alternatively, you can pass it as a command-line argument `--api-token` to the CLI tool.
+
+### Ad hoc without installation (.NET 10)
+
+Run the `dnx` command to use the Advocu CLI tool:
 
 ```bash
-dotnet add package Advocu
+dnx advocu -y
 ```
 
 ### CLI Tool
@@ -20,6 +23,13 @@ Install the `advocu` global tool to use it from anywhere:
 
 ```bash
 dotnet tool install --global Advocu
+```
+
+### Library
+Add the client library to your .NET project:
+
+```bash
+dotnet add package Advocu
 ```
 
 ---
