@@ -34,7 +34,7 @@ dotnet add package Advocu
 
 ---
 
-## 📚 Using the `Advocu` CLI Tool
+## 📚 Using the `advocu` CLI Tool
 
 ```
 Advocu C#
