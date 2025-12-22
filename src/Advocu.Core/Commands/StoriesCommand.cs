@@ -31,7 +31,7 @@ internal class StoriesCommand : ActivityCommand<StoriesSettings>
 
         try
         {
-            var response = await client.PostStoriesActivityAsync(request)
+            var response = await client.PostStoriesActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Stories Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");

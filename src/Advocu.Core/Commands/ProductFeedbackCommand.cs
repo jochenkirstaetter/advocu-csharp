@@ -32,7 +32,7 @@ internal class ProductFeedbackCommand : ActivityCommand<ProductFeedbackSettings>
 
         try
         {
-            var response = await client.PostProductFeedbackActivityAsync(request)
+            var response = await client.PostProductFeedbackActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Product Feedback Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");

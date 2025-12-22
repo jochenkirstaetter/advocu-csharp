@@ -32,7 +32,7 @@ internal class MentoringCommand : ActivityCommand<MentoringSettings>
 
         try
         {
-            var response = await client.PostMentoringActivityAsync(request)
+            var response = await client.PostMentoringActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Mentoring Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");

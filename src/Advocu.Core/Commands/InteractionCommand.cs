@@ -33,7 +33,7 @@ internal class InteractionCommand : ActivityCommand<InteractionSettings>
 
         try
         {
-            var response = await client.PostInteractionWithGooglersActivityAsync(request)
+            var response = await client.PostInteractionWithGooglersActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Interaction with Googlers Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");

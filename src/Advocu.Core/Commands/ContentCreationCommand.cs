@@ -32,7 +32,7 @@ internal class ContentCreationCommand : ActivityCommand<ContentCreationSettings>
 
         try
         {
-            var response = await client.PostContentCreationActivityAsync(request)
+            var response = await client.PostContentCreationActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Content Creation Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");

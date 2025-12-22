@@ -34,7 +34,7 @@ internal class PublicSpeakingCommand : ActivityCommand<PublicSpeakingSettings>
 
         try
         {
-            var response = await client.PostPublicSpeakingActivityAsync(request)
+            var response = await client.PostPublicSpeakingActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Public Speaking Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");

@@ -34,7 +34,7 @@ internal class WorkshopCommand : ActivityCommand<WorkshopSettings>
 
         try
         {
-            var response = await client.PostWorkshopActivityAsync(request)
+            var response = await client.PostWorkshopActivityAsync(request, cancellationToken)
                 .RunWithStatusAsync("Posting Workshop Activity...");
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity Draft Created. ID: [bold]{response.Id}[/]");
