@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Spectre.Console;
 
 namespace Advocu.NuGet.Settings;
@@ -25,41 +26,7 @@ internal sealed class TokenManager
     }
 
     /// <summary>
-    /// Retrieves the stored API token from the persistent file.
-    /// </summary>
-    /// <returns>The stored token, or null if not found or invalid.</returns>
-    public string? GetStoredToken()
-    {
-        if (!File.Exists(_tokenFilePath))
-        {
-            return null;
-        }
-
-        try
-        {
-            var json = File.ReadAllText(_tokenFilePath);
-            var data = JsonSerializer.Deserialize<TokenData>(json);
-            return data?.Token;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    /// <summary>
-    /// Saves the API token to persistent storage.
-    /// </summary>
-    /// <param name="token">The API token to save.</param>
-    public void SaveToken(string token)
-    {
-        var data = new TokenData { Token = token };
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(_tokenFilePath, json);
-    }
-    
-    /// <summary>
-    /// Resolves the API token using the priority order: Flag > Env Var > Stored File > Interactive Prompt.
+    /// Resolves the API token using the priority order: Flag > Env Var > .env files > Stored File > Interactive Prompt.
     /// </summary>
     /// <param name="flagToken">The token provided via command-line argument.</param>
     /// <returns>The resolved API token.</returns>
@@ -78,14 +45,21 @@ internal sealed class TokenManager
             return envToken;
         }
 
-        // 3. Stored File
+        // 3. .env File (local)
+        var dotEnvToken = GetTokenFromDotEnv();
+        if (!string.IsNullOrWhiteSpace(dotEnvToken))
+        {
+            return dotEnvToken;
+        }
+
+        // 4. Stored File
         var storedToken = GetStoredToken();
         if (!string.IsNullOrWhiteSpace(storedToken))
         {
             return storedToken;
         }
 
-        // 4. Prompt
+        // 5. Prompt
         AnsiConsole.MarkupLine("[yellow]No API Token found.[/]");
         var newToken = AnsiConsole.Prompt(
             new TextPrompt<string>("Please enter your [green]Advocu API Token[/]:")
@@ -100,8 +74,73 @@ internal sealed class TokenManager
         return newToken;
     }
 
+    private string? GetTokenFromDotEnv()
+    {
+        try 
+        {
+            var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            if (!File.Exists(envPath)) return null;
+
+            foreach (var line in File.ReadAllLines(envPath))
+            {
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
+
+                var parts = line.Split('=', 2);
+                if (parts.Length != 2) continue;
+
+                var key = parts[0].Trim();
+                var value = parts[1].Trim();
+
+                if (key.Equals("ADVOCU_API_TOKEN", StringComparison.OrdinalIgnoreCase))
+                {
+                    return value.Trim('"', '\'');
+                }
+            }
+        }
+        catch 
+        { 
+            // Ignore errors reading .env
+        }
+        return null;
+    }
+
     private class TokenData
     {
-        public string? Token { get; set; }
+        [JsonPropertyName("AdvocuApiToken")]
+        public string? AdvocuApiToken { get; set; }
+    }
+    
+    /// <summary>
+    /// Retrieves the stored API token from the persistent file.
+    /// </summary>
+    /// <returns>The stored token, or null if not found or invalid.</returns>
+    public string? GetStoredToken()
+    {
+        if (!File.Exists(_tokenFilePath))
+        {
+            return null;
+        }
+
+        try
+        {
+            var json = File.ReadAllText(_tokenFilePath);
+            var data = JsonSerializer.Deserialize<TokenData>(json);
+            return data?.AdvocuApiToken;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Saves the API token to persistent storage.
+    /// </summary>
+    /// <param name="token">The API token to save.</param>
+    public void SaveToken(string token)
+    {
+        var data = new TokenData { AdvocuApiToken = token };
+        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        File.WriteAllText(_tokenFilePath, json);
     }
 }
