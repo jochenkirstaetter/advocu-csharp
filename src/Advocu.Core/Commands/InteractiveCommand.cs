@@ -4,6 +4,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Advocu.NuGet.Mappers;
 
 namespace Advocu.NuGet.Commands;
 
@@ -12,11 +13,14 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
     private readonly DraftManager _draftManager;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public InteractiveCommand(DraftManager draftManager, IHttpClientFactory httpClientFactory, TokenManager tokenManager)
+    private readonly DraftMapper _draftMapper;
+
+    public InteractiveCommand(DraftManager draftManager, IHttpClientFactory httpClientFactory, TokenManager tokenManager, DraftMapper draftMapper)
     {
         _draftManager = draftManager;
         _httpClientFactory = httpClientFactory;
         _tokenManager = tokenManager;
+        _draftMapper = draftMapper;
     }
 
     // InteractiveCommand does not inherit from ActivityCommand, so it needs its own _tokenManager field and logic update.
@@ -142,50 +146,20 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         try
         {
             var client = CreateClient(settings);
-            // Map Draft to Request based on Type
-            // This mapping logic ideally belongs in a mapper, but doing it here for simplicity
-            object request = draft.ActivityType switch
-            {
-                "Content Creation" => new CreateContentCreationActivityRequest
-                {
-                    Title = draft.Title!,
-                    Description = draft.Description!,
-                    ActivityDate = draft.ActivityDate!.Value.ToString("yyyy-MM-dd"),
-                    ActivityUrl = draft.ActivityUrl,
-                    AdditionalInfo = draft.AdditionalInfo,
-                    Private = draft.Private ?? false,
-                    Tags = ParseTags(draft.Tags),
-                    ContentType = ParseEnum<AdvocuActivityContentType>(draft.ContentType!),
-                    Readers = draft.Readers ?? 0
-                },
-                "Public Speaking" => new CreatePublicSpeakingActivityRequest
-                {
-                    Title = draft.Title!,
-                    Description = draft.Description!,
-                    ActivityDate = draft.ActivityDate!.Value.ToString("yyyy-MM-dd"),
-                    ActivityUrl = draft.ActivityUrl!,
-                    AdditionalInfo = draft.AdditionalInfo,
-                    Private = draft.Private ?? false,
-                    Tags = ParseTags(draft.Tags),
-                    Country = ParseEnum<AdvocuCountry>(draft.Country!),
-                    City = draft.City,
-                    EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
-                    Attendees = draft.Attendees ?? 0
-                },
-                // ... Implement other mappings ...
-                _ => throw new NotImplementedException($"Submission for {draft.ActivityType} not implemented yet.")
-            };
-
-            // Using reflection to call the right method on client is one way, 
-            // or just switch again.
-            // Since client methods are strongly typed, switch is safer.
             
-            dynamic response = draft.ActivityType switch
+            // Map Draft to Request using Mapper
+            var request = _draftMapper.Map(draft);
+
+            dynamic response = request switch
             {
-                "Content Creation" => await client.PostContentCreationActivityAsync((CreateContentCreationActivityRequest)request, cancellationToken),
-                "Public Speaking" => await client.PostPublicSpeakingActivityAsync((CreatePublicSpeakingActivityRequest)request, cancellationToken),
-                // ... others
-                _ => throw new NotImplementedException()
+                CreateContentCreationActivityRequest r => await client.PostContentCreationActivityAsync(r, cancellationToken),
+                CreatePublicSpeakingActivityRequest r => await client.PostPublicSpeakingActivityAsync(r, cancellationToken),
+                CreateWorkshopActivityRequest r => await client.PostWorkshopActivityAsync(r, cancellationToken),
+                CreateMentoringActivityRequest r => await client.PostMentoringActivityAsync(r, cancellationToken),
+                CreateProductFeedbackActivityRequest r => await client.PostProductFeedbackActivityAsync(r, cancellationToken),
+                CreateInteractionWithGooglersActivityRequest r => await client.PostInteractionWithGooglersActivityAsync(r, cancellationToken),
+                CreateStoriesActivityRequest r => await client.PostStoriesActivityAsync(r, cancellationToken),
+                _ => throw new NotImplementedException($"Submission for {draft.ActivityType} not implemented yet.")
             };
 
             AnsiConsole.MarkupLine($"[green]Success![/] Activity submitted. ID: {response.Id}");
@@ -227,11 +201,73 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
     }
     
     // Stubs for other types to keep file size manageable and focus on Content/Public first as per plan verification
-    private Task CollectWorkshop(ActivityDraft draft) => Task.CompletedTask;
-    private Task CollectMentoring(ActivityDraft draft) => Task.CompletedTask;
-    private Task CollectProductFeedback(ActivityDraft draft) => Task.CompletedTask;
-    private Task CollectInteraction(ActivityDraft draft) => Task.CompletedTask;
-    private Task CollectStories(ActivityDraft draft) => Task.CompletedTask;
+    private Task CollectWorkshop(ActivityDraft draft)
+    {
+        draft.Country = AskEnum<AdvocuCountry>("Country", draft.Country);
+        _draftManager.SaveDraft(draft);
+        
+        draft.EventFormat = AskEnum<AdvocuEventFormat>("Event Format", draft.EventFormat);
+        _draftManager.SaveDraft(draft);
+        
+        draft.Attendees = AskInt("Attendees", draft.Attendees);
+        _draftManager.SaveDraft(draft);
+        return Task.CompletedTask;
+    }
+
+    private Task CollectMentoring(ActivityDraft draft)
+    {
+        draft.EventFormat = AskEnum<AdvocuEventFormat>("Event Format", draft.EventFormat);
+        _draftManager.SaveDraft(draft);
+
+        if (draft.EventFormat != "Virtual")
+        {
+            draft.Country = AskEnum<AdvocuCountry>("Country", draft.Country);
+            _draftManager.SaveDraft(draft);
+        }
+
+        draft.Mentees = AskInt("Mentees", draft.Mentees);
+        _draftManager.SaveDraft(draft);
+        return Task.CompletedTask;
+    }
+
+    private Task CollectProductFeedback(ActivityDraft draft)
+    {
+        draft.ContentType = AskEnum<AdvocuActivityContentType>("Content Type", draft.ContentType);
+        _draftManager.SaveDraft(draft);
+
+        draft.ProductTeam = Ask("Product Description / Team", draft.ProductTeam);
+        _draftManager.SaveDraft(draft);
+
+        draft.Hours = AskInt("Time Spent (minutes)", draft.Hours);
+        _draftManager.SaveDraft(draft);
+        return Task.CompletedTask;
+    }
+
+    private Task CollectInteraction(ActivityDraft draft)
+    {
+        draft.InteractionType = AskEnum<AdvocuInteractionType>("Interaction Type", draft.InteractionType);
+        _draftManager.SaveDraft(draft);
+
+        draft.EventFormat = AskEnum<AdvocuFormat>("Format", draft.EventFormat); // Utilizing EventFormat field for Format enum
+        _draftManager.SaveDraft(draft);
+
+        draft.Hours = AskInt("Time Spent (minutes)", draft.Hours);
+        _draftManager.SaveDraft(draft);
+        return Task.CompletedTask;
+    }
+
+    private Task CollectStories(ActivityDraft draft)
+    {
+        draft.StoryType = AskEnum<AdvocuSignificanceType>("Significance Type", draft.StoryType);
+        _draftManager.SaveDraft(draft);
+
+        draft.Significance = Ask("Why is it significant?", draft.Significance);
+        _draftManager.SaveDraft(draft);
+
+        draft.Attendees = AskInt("Impact (Number)", draft.Attendees); // Reusing Attendees for Impact
+        _draftManager.SaveDraft(draft);
+        return Task.CompletedTask;
+    }
 
     // Helpers
     private string Ask(string prompt, string? current, bool optional = false)
@@ -307,20 +343,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         return value.ToString();
     }
 
-    private T ParseEnum<T>(string displayName) where T : struct, Enum
-    {
-        // Reverse lookup
-        foreach (var value in Enum.GetValues<T>())
-        {
-            if (GetEnumDisplayName(value) == displayName) return value;
-        }
-        return Enum.Parse<T>(displayName); // Fallback
-    }
 
-    private List<AdvocuTag> ParseTags(List<string> tags)
-    {
-        return tags.Select(ParseEnum<AdvocuTag>).ToList();
-    }
 
     private AdvocuApiClient CreateClient(InteractiveSettings settings)
     {
