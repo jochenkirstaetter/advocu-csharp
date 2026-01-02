@@ -30,14 +30,16 @@ Or use the new interactive mode:
 dnx advocu -y -- interactive
 ```
 
-### CLI Tool
+### CLI Tool (.NET 10 and earlier)
+
 Install the `advocu` global tool to use it from anywhere:
 
 ```bash
 dotnet tool install --global Advocu
 ```
 
-### Library
+### Library (.NET 10 and earlier)
+
 Add the client library to your .NET project:
 
 ```bash
