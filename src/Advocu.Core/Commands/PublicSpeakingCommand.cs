@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class PublicSpeakingCommand : ActivityCommand<PublicSpeakingSettings>
+internal sealed class PublicSpeakingCommand : ActivityCommand<PublicSpeakingSettings>
 {
-    public PublicSpeakingCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public PublicSpeakingCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

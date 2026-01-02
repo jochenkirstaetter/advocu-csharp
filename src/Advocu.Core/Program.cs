@@ -60,7 +60,11 @@ internal static class Program
                 .WithDescription("Creates a new Interaction with Googlers Activity draft.");
 
             config.AddCommand<StoriesCommand>("stories")
+
                 .WithDescription("Creates a new Stories Activity draft.");
+
+            config.AddCommand<InteractiveCommand>("interactive")
+                .WithDescription("Starts an interactive session to create an activity draft.");
 
             config.AddBranch("list", list =>
             {
@@ -92,6 +96,8 @@ internal static class Program
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddHttpClient();
+        services.AddSingleton<Advocu.NuGet.Settings.DraftManager>();
+        services.AddSingleton<Advocu.NuGet.Settings.TokenManager>();
         services.AddScoped<AdvocuApiClient>(provider =>
         {
             var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();

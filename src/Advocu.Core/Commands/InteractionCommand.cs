@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class InteractionCommand : ActivityCommand<InteractionSettings>
+internal sealed class InteractionCommand : ActivityCommand<InteractionSettings>
 {
-    public InteractionCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public InteractionCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

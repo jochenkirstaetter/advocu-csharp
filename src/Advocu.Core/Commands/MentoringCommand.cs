@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class MentoringCommand : ActivityCommand<MentoringSettings>
+internal sealed class MentoringCommand : ActivityCommand<MentoringSettings>
 {
-    public MentoringCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public MentoringCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

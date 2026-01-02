@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class WorkshopCommand : ActivityCommand<WorkshopSettings>
+internal sealed class WorkshopCommand : ActivityCommand<WorkshopSettings>
 {
-    public WorkshopCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public WorkshopCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

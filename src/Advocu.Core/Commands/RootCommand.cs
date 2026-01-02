@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Advocu.NuGet.Commands;
 
-internal class RootCommand : AsyncCommand<AdvocuSettings>
+internal sealed class RootCommand : AsyncCommand<AdvocuSettings>
 {
     public Task<int> ExecuteAsync(CommandContext context, AdvocuSettings settings)
     {

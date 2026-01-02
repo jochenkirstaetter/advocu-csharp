@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class StoriesCommand : ActivityCommand<StoriesSettings>
+internal sealed class StoriesCommand : ActivityCommand<StoriesSettings>
 {
-    public StoriesCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public StoriesCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class ProductFeedbackCommand : ActivityCommand<ProductFeedbackSettings>
+internal sealed class ProductFeedbackCommand : ActivityCommand<ProductFeedbackSettings>
 {
-    public ProductFeedbackCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public ProductFeedbackCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

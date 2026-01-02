@@ -7,11 +7,11 @@ using System.Text.Json.Serialization;
 
 namespace Advocu.NuGet.Commands;
 
-internal class ListSettings : CommandSettings
+internal sealed class ListSettings : CommandSettings
 {
 }
 
-internal class ListTagsCommand : Command<ListSettings>
+internal sealed class ListTagsCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
@@ -19,7 +19,7 @@ internal class ListTagsCommand : Command<ListSettings>
     }
 }
 
-internal class ListContentTypesCommand : Command<ListSettings>
+internal sealed class ListContentTypesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
@@ -27,7 +27,7 @@ internal class ListContentTypesCommand : Command<ListSettings>
     }
 }
 
-internal class ListCountriesCommand : Command<ListSettings>
+internal sealed class ListCountriesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
@@ -35,7 +35,7 @@ internal class ListCountriesCommand : Command<ListSettings>
     }
 }
 
-internal class ListEventFormatsCommand : Command<ListSettings>
+internal sealed class ListEventFormatsCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
@@ -43,7 +43,7 @@ internal class ListEventFormatsCommand : Command<ListSettings>
     }
 }
 
-internal class ListInteractionTypesCommand : Command<ListSettings>
+internal sealed class ListInteractionTypesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
@@ -51,7 +51,7 @@ internal class ListInteractionTypesCommand : Command<ListSettings>
     }
 }
 
-internal class ListSignificanceTypesCommand : Command<ListSettings>
+internal sealed class ListSignificanceTypesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {

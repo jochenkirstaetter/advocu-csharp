@@ -9,15 +9,19 @@ namespace Advocu.NuGet.Commands;
 internal abstract class ActivityCommand<TSettings> : AsyncCommand<TSettings> where TSettings : AdvocuSettings
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly TokenManager _tokenManager;
 
-    protected ActivityCommand(IHttpClientFactory httpClientFactory)
+    protected ActivityCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager)
     {
         _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        _tokenManager = tokenManager ?? throw new ArgumentNullException(nameof(tokenManager));
     }
 
     protected AdvocuApiClient CreateClient(TSettings settings)
     {
-        var token = settings.GetAccessToken();
+        // Use TokenManager to resolve token (Flag > Env > File > Prompt)
+        var token = _tokenManager.ResolveToken(settings.ApiToken);
+        
         var client = _httpClientFactory.CreateClient("AdvocuApi");
         
         // Ensure base address is set (preferring settings override)

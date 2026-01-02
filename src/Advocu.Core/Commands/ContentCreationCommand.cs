@@ -5,9 +5,9 @@ using System.Net.Http;
 
 namespace Advocu.NuGet.Commands;
 
-internal class ContentCreationCommand : ActivityCommand<ContentCreationSettings>
+internal sealed class ContentCreationCommand : ActivityCommand<ContentCreationSettings>
 {
-    public ContentCreationCommand(IHttpClientFactory httpClientFactory) : base(httpClientFactory)
+    public ContentCreationCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 

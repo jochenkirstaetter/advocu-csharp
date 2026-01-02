@@ -18,10 +18,16 @@ Run the `dnx` command to use the Advocu CLI tool:
 dnx advocu -y
 ```
 
-Use double-dash `--` to pass arguments to the Advocu CLI tool:
+Or pass arguments directly using the double-dash `--`:
 
 ```bash
-dnx advocu -y -- content -t "Creating Advocu C# using Antigravity" -d "This blog article describes..."
+dnx advocu -y -- content -t "Creating Advocu C# using Antigravity"-d "This blog article describes..." ... 
+```
+
+Or use the new interactive mode:
+
+```bash
+dnx advocu -y -- interactive
 ```
 
 ### CLI Tool
@@ -58,6 +64,7 @@ OPTIONS:
     -p, --private              Mark the activity as private                                           
 
 COMMANDS:
+    interactive    Start the interactive wizard mode (New! ✨)
     content        Creates a new Content Creation Activity draft         
     public         Creates a new Public Speaking Activity draft          
     workshop       Creates a new Workshop Activity draft                 
@@ -139,9 +146,23 @@ Check out the `Advocu.Console` and `Advocu.WebApp` projects in this repository f
 Prefer the terminal? The `advocu` CLI allows you to draft activities without leaving your command line. Perfect for scripting or quick reports!
 
 ### Configuration
-You can pass your API token and URL via flags (`--api-token`, `-u`) or, for convenience, set them as environment variables:
-- `ADVOCU_API_TOKEN`
-- `ADVOCU_URL` (default: `https://api.advocu.com/personal-api/v1/gde/`)
+
+The CLI supports a robust token resolution strategy in the following order:
+1.  **Command Line Flag**: `--api-token <TOKEN>`
+2.  **Environment Variable**: `ADVOCU_API_TOKEN`
+3.  **Persisted File**: `~/.config/advocu/token.json` (Linux) or `%APPDATA%/advocu/token.json` (Windows)
+4.  **Interactive Prompt**: If no token is found, the CLI will prompt you securely and save it for future use.
+
+You can also set the API URL via `-u` or `ADVOCU_URL`.
+
+### Interactive Mode 🧙‍♂️
+The easiest way to use the CLI is the new interactive mode. It guides you through the creation process, supports rich selection menus, and **saves your progress** automatically so you can resume later.
+
+```bash
+advocu interactive
+```
+
+Prefer manual commands? No problem!
 
 ### Workshops 🎓
 Hosted a workshop? Draft it in seconds:
