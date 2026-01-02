@@ -61,16 +61,16 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         // Common Fields
         AnsiConsole.MarkupLine($"\n[bold]Details for {draft.ActivityType}[/]");
         
-        draft.Title = Ask("Title", draft.Title);
+        draft.Title = Ask("Title", draft.Title, minLength: 3);
         _draftManager.SaveDraft(draft);
 
-        draft.Description = Ask("Description", draft.Description);
+        draft.Description = Ask("Description", draft.Description, maxLength: 2000);
         _draftManager.SaveDraft(draft);
         
         draft.ActivityDate = AskDate("Activity Date", draft.ActivityDate);
         _draftManager.SaveDraft(draft);
         
-        draft.ActivityUrl = Ask("Activity URL", draft.ActivityUrl, optional: true);
+        draft.ActivityUrl = Ask("Activity URL", draft.ActivityUrl, optional: true, maxLength: 500);
         _draftManager.SaveDraft(draft);
         
         draft.Tags = AskMultiSelectEnum<AdvocuTag>("Tags", draft.Tags);
@@ -102,7 +102,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
                 break;
         }
 
-        draft.AdditionalInfo = Ask("Additional Info", draft.AdditionalInfo, optional: true);
+        draft.AdditionalInfo = Ask("Additional Info", draft.AdditionalInfo, optional: true, maxLength: 2000);
         draft.Private = AnsiConsole.Confirm("Is this private?", draft.Private ?? false);
         _draftManager.SaveDraft(draft);
 
@@ -179,7 +179,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         draft.ContentType = AskEnum<AdvocuActivityContentType>("Content Type", draft.ContentType);
         _draftManager.SaveDraft(draft);
         
-        draft.Readers = AskInt("Readers", draft.Readers);
+        draft.Readers = AskInt("Readers", draft.Readers, min: 0);
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
@@ -195,7 +195,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         draft.EventFormat = AskEnum<AdvocuEventFormat>("Event Format", draft.EventFormat);
         _draftManager.SaveDraft(draft);
         
-        draft.Attendees = AskInt("Attendees", draft.Attendees);
+        draft.Attendees = AskInt("Attendees", draft.Attendees, min: 0);
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
@@ -209,7 +209,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         draft.EventFormat = AskEnum<AdvocuEventFormat>("Event Format", draft.EventFormat);
         _draftManager.SaveDraft(draft);
         
-        draft.Attendees = AskInt("Attendees", draft.Attendees);
+        draft.Attendees = AskInt("Attendees", draft.Attendees, min: 0);
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
@@ -225,7 +225,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
             _draftManager.SaveDraft(draft);
         }
 
-        draft.Mentees = AskInt("Mentees", draft.Mentees);
+        draft.Mentees = AskInt("Mentees", draft.Mentees, min: 0);
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
@@ -235,10 +235,10 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         draft.ContentType = AskEnum<AdvocuActivityContentType>("Content Type", draft.ContentType);
         _draftManager.SaveDraft(draft);
 
-        draft.ProductTeam = Ask("Product Description / Team", draft.ProductTeam);
+        draft.ProductTeam = Ask("Product Description / Team", draft.ProductTeam, maxLength: 500); // Check length
         _draftManager.SaveDraft(draft);
 
-        draft.Hours = AskInt("Time Spent (minutes)", draft.Hours);
+        draft.Hours = AskInt("Time Spent (minutes)", draft.Hours, min: 1);
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
@@ -251,7 +251,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         draft.EventFormat = AskEnum<AdvocuFormat>("Format", draft.EventFormat); // Utilizing EventFormat field for Format enum
         _draftManager.SaveDraft(draft);
 
-        draft.Hours = AskInt("Time Spent (minutes)", draft.Hours);
+        draft.Hours = AskInt("Time Spent (minutes)", draft.Hours, min: 1);
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
@@ -261,36 +261,62 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         draft.StoryType = AskEnum<AdvocuSignificanceType>("Significance Type", draft.StoryType);
         _draftManager.SaveDraft(draft);
 
-        draft.Significance = Ask("Why is it significant?", draft.Significance);
+        draft.Significance = Ask("Why is it significant?", draft.Significance, maxLength: 2000);
         _draftManager.SaveDraft(draft);
 
-        draft.Attendees = AskInt("Impact (Number)", draft.Attendees); // Reusing Attendees for Impact
+        draft.Attendees = AskInt("Impact (Number)", draft.Attendees, min: 0); // Reusing Attendees for Impact
         _draftManager.SaveDraft(draft);
         return Task.CompletedTask;
     }
 
     // Helpers
-    private string Ask(string prompt, string? current, bool optional = false)
+    private string Ask(string prompt, string? current, bool optional = false, int minLength = 0, int maxLength = int.MaxValue)
     {
         var p = new TextPrompt<string>($"{prompt}:");
         if (current != null) p.DefaultValue(current);
         if (optional) p.AllowEmpty();
+        
+        p.Validate(input =>
+        {
+            if (!optional && string.IsNullOrWhiteSpace(input)) return ValidationResult.Error("Value is required.");
+            if (input.Length < minLength) return ValidationResult.Error($"Value must be at least {minLength} characters long.");
+            if (input.Length > maxLength) return ValidationResult.Error($"Value must be at most {maxLength} characters long.");
+            return ValidationResult.Success();
+        });
+
         return AnsiConsole.Prompt(p);
     }
 
     private DateTime? AskDate(string prompt, DateTime? current)
     {
-        var p = new TextPrompt<DateTime>($"{prompt}:");
-         // Spectre can parse dates, but format might need help. 
-         // For stricter control we could use Validation.
-        if (current.HasValue) p.DefaultValue(current.Value);
-        return AnsiConsole.Prompt(p);
+        var p = new TextPrompt<string>($"{prompt} [gray](yyyy-MM-dd)[/]:");
+        if (current.HasValue) p.DefaultValue(current.Value.ToString("yyyy-MM-dd"));
+        
+        p.Validate(input =>
+        {
+            if (DateTime.TryParseExact(input, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out _))
+            {
+                return ValidationResult.Success();
+            }
+            return ValidationResult.Error("Invalid date format. Please use yyyy-MM-dd.");
+        });
+
+        var result = AnsiConsole.Prompt(p);
+        return DateTime.ParseExact(result, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
     }
 
-    private int? AskInt(string prompt, int? current)
+    private int? AskInt(string prompt, int? current, int min = 0, int max = int.MaxValue)
     {
         var p = new TextPrompt<int>($"{prompt}:");
         if (current.HasValue) p.DefaultValue(current.Value);
+        
+        p.Validate(input =>
+        {
+            if (input < min) return ValidationResult.Error($"Value must be at least {min}.");
+            if (input > max) return ValidationResult.Error($"Value must be at most {max}.");
+            return ValidationResult.Success();
+        });
+
         return AnsiConsole.Prompt(p);
     }
 
