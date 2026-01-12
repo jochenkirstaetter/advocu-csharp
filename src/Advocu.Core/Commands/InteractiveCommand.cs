@@ -119,8 +119,46 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         AddRow(table, "Date", draft.ActivityDate?.ToString("yyyy-MM-dd"));
         AddRow(table, "Tags", string.Join(", ", draft.Tags));
         
-        // Add specific rows based on type (simplified for brevity, can expand)
         AddRow(table, "URL", draft.ActivityUrl);
+
+        switch (draft.ActivityType)
+        {
+            case "Content Creation":
+                AddRow(table, "Content Type", draft.ContentType);
+                AddRow(table, "Readers", draft.Readers?.ToString());
+                break;
+            case "Public Speaking":
+                AddRow(table, "Country", draft.Country);
+                AddRow(table, "City", draft.City);
+                AddRow(table, "Event Format", draft.EventFormat);
+                AddRow(table, "Attendees", draft.Attendees?.ToString());
+                break;
+            case "Workshop":
+                AddRow(table, "Country", draft.Country);
+                AddRow(table, "Event Format", draft.EventFormat);
+                AddRow(table, "Attendees", draft.Attendees?.ToString());
+                break;
+            case "Mentoring":
+                AddRow(table, "Event Format", draft.EventFormat);
+                AddRow(table, "Country", draft.Country);
+                AddRow(table, "Mentees", draft.Mentees?.ToString());
+                break;
+            case "Product Feedback":
+                AddRow(table, "Content Type", draft.ContentType);
+                AddRow(table, "Product Team", draft.ProductTeam);
+                AddRow(table, "Time Spent (min)", draft.Hours?.ToString());
+                break;
+            case "Interaction":
+                AddRow(table, "Interaction Type", draft.InteractionType);
+                AddRow(table, "Format", draft.EventFormat);
+                AddRow(table, "Time Spent (min)", draft.Hours?.ToString());
+                break;
+            case "Stories":
+                AddRow(table, "Significance Type", draft.StoryType);
+                AddRow(table, "Why Significant", draft.Significance);
+                AddRow(table, "Impact", draft.Attendees?.ToString());
+                break;
+        }
 
         AnsiConsole.Write(table);
 
