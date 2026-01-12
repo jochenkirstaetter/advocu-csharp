@@ -33,7 +33,10 @@ internal abstract class ActivityCommand<TSettings> : AsyncCommand<TSettings> whe
 
     protected List<AdvocuTag> ParseTags(string[] tags)
     {
-        return tags.Select(Parsing.AdvocuEnumParser.Parse<AdvocuTag>).ToList();
+        return tags
+            .SelectMany(t => t.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+            .Select(Parsing.AdvocuEnumParser.Parse<AdvocuTag>)
+            .ToList();
     }
 
     protected void ValidateRequest(object request)
