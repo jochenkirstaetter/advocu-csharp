@@ -1,8 +1,8 @@
+using Advocu.Core.Parsing;
 using System.ComponentModel;
 using Spectre.Console.Cli;
-using Advocu;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class StoriesSettings : AdvocuSettings
 {
@@ -25,7 +25,7 @@ internal class StoriesSettings : AdvocuSettings
     [CommandOption("--significance-type <TYPE>")]
     [Description("Significance type.")]
     [DefaultValue(AdvocuSignificanceType.TechnologyOpenSource)]
-    [TypeConverter(typeof(Advocu.NuGet.Parsing.AdvocuEnumConverter<AdvocuSignificanceType>))]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuSignificanceType>))]
     public AdvocuSignificanceType SignificanceType { get; set; }
 
     [CommandOption("--impact <COUNT>")]

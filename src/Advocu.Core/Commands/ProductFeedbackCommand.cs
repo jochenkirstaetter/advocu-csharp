@@ -1,9 +1,8 @@
-using Advocu.NuGet.Settings;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Net.Http;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class ProductFeedbackCommand : ActivityCommand<ProductFeedbackSettings>
 {

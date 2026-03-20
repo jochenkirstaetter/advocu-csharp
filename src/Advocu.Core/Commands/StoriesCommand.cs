@@ -1,9 +1,8 @@
-using Advocu.NuGet.Settings;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Net.Http;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class StoriesCommand : ActivityCommand<StoriesSettings>
 {
@@ -24,7 +23,8 @@ internal sealed class StoriesCommand : ActivityCommand<StoriesSettings>
             SignificanceType = settings.SignificanceType,
             Impact = settings.Impact,
             AdditionalInfo = settings.AdditionalInfo,
-            Private = settings.Private
+            Private = settings.Private,
+            ActivityUrl = string.Empty
         };
 
         ValidateRequest(request);

@@ -1,9 +1,9 @@
-using Advocu.NuGet.Settings;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Reflection;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class RootCommand : AsyncCommand<AdvocuSettings>
 {

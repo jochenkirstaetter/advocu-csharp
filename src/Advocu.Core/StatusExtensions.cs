@@ -1,6 +1,6 @@
 using Spectre.Console;
 
-namespace Advocu.NuGet;
+namespace Advocu.Core;
 
 internal static class StatusExtensions
 {

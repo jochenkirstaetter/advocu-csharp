@@ -1,15 +1,15 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Advocu.NuGet.Models;
+using Advocu.Core.Models;
 
-namespace Advocu.NuGet.Mappers;
+namespace Advocu.Core.Mappers;
 
 /// <summary>
 /// Maps ActivityDraft objects to specific ActivityRequest objects.
 /// </summary>
 internal sealed class DraftMapper
 {
-    public ActivityRequest Map(ActivityDraft draft)
+    public static ActivityRequest Map(ActivityDraft draft)
     {
         return draft.ActivityType switch
         {
@@ -18,7 +18,7 @@ internal sealed class DraftMapper
                 Title = draft.Title!,
                 Description = draft.Description!,
                 ActivityDate = draft.ActivityDate!.Value.ToString("yyyy-MM-dd"),
-                ActivityUrl = draft.ActivityUrl,
+                ActivityUrl = draft.ActivityUrl!,
                 AdditionalInfo = draft.AdditionalInfo,
                 Private = draft.Private ?? false,
                 Tags = ParseTags(draft.Tags),
@@ -106,12 +106,17 @@ internal sealed class DraftMapper
         };
     }
 
-    private List<AdvocuTag> ParseTags(List<string> tags)
+    private static List<AdvocuTag> ParseTags(List<string> tags)
     {
-        return tags.Select(ParseEnum<AdvocuTag>).ToList();
+        return [
+            .. tags
+                .Select(ParseEnum<AdvocuTag>)
+                .Distinct()
+                .OrderBy(t => t)
+        ];
     }
 
-    private T ParseEnum<T>(string displayName) where T : struct, Enum
+    private static T ParseEnum<T>(string displayName) where T : struct, Enum
     {
         // Reverse lookup
         foreach (var value in Enum.GetValues<T>())
@@ -121,7 +126,7 @@ internal sealed class DraftMapper
         return Enum.Parse<T>(displayName); // Fallback
     }
 
-    private string GetEnumDisplayName<T>(T value) where T : struct, Enum
+    private static string GetEnumDisplayName<T>(T value) where T : struct, Enum
     {
         var memberInfo = typeof(T).GetMember(value.ToString()).FirstOrDefault();
         if (memberInfo != null)

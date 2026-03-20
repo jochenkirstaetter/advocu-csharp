@@ -2,9 +2,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Spectre.Console;
 
-namespace Advocu.NuGet.Parsing;
+namespace Advocu.Core.Parsing;
 
 internal static class AdvocuEnumParser
 {

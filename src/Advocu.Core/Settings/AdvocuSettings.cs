@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Spectre.Console.Cli;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class AdvocuSettings : CommandSettings
 {

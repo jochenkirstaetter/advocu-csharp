@@ -1,8 +1,8 @@
+using Advocu.Core.Parsing;
 using System.ComponentModel;
 using Spectre.Console.Cli;
-using Advocu;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class MentoringSettings : AdvocuSettings
 {
@@ -25,7 +25,7 @@ internal class MentoringSettings : AdvocuSettings
     [CommandOption("--format <FORMAT>")]
     [Description("Event format (InPerson, Virtual, Hybrid).")]
     [DefaultValue(AdvocuEventFormat.InPerson)]
-    [TypeConverter(typeof(Advocu.NuGet.Parsing.AdvocuEnumConverter<AdvocuEventFormat>))]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuEventFormat>))]
     public AdvocuEventFormat EventFormat { get; set; }
 
     [CommandOption("--date <DATE>")]

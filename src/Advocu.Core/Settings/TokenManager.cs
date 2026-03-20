@@ -2,13 +2,14 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Spectre.Console;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 /// <summary>
 /// Manages the retrieval and storage of the Advocu API token.
 /// </summary>
 internal sealed class TokenManager
 {
+    private static readonly JsonSerializerOptions _jsonSerializerOptions = new() { WriteIndented = true };
     private readonly string _tokenFilePath;
 
     /// <summary>
@@ -74,7 +75,7 @@ internal sealed class TokenManager
         return newToken;
     }
 
-    private string? GetTokenFromDotEnv()
+    private static string? GetTokenFromDotEnv()
     {
         try 
         {
@@ -83,7 +84,7 @@ internal sealed class TokenManager
 
             foreach (var line in File.ReadAllLines(envPath))
             {
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith('#')) continue;
 
                 var parts = line.Split('=', 2);
                 if (parts.Length != 2) continue;
@@ -140,7 +141,7 @@ internal sealed class TokenManager
     public void SaveToken(string token)
     {
         var data = new TokenData { AdvocuApiToken = token };
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(data, _jsonSerializerOptions);
         File.WriteAllText(_tokenFilePath, json);
     }
 }

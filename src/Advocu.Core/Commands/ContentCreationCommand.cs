@@ -1,9 +1,8 @@
-using Advocu.NuGet.Settings;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Net.Http;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class ContentCreationCommand : ActivityCommand<ContentCreationSettings>
 {
@@ -23,7 +22,7 @@ internal sealed class ContentCreationCommand : ActivityCommand<ContentCreationSe
             Tags = ParseTags(settings.Tags),
             Readers = settings.Readers,
             ActivityDate = settings.ActivityDate ?? DateTime.UtcNow.ToString("yyyy-MM-dd"),
-            ActivityUrl = settings.ActivityUrl,
+            ActivityUrl = settings.ActivityUrl ?? "",
             AdditionalInfo = settings.AdditionalInfo,
             Private = settings.Private
         };

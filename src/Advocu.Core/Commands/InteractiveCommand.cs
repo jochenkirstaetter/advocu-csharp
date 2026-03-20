@@ -1,26 +1,23 @@
-using Advocu.NuGet.Models;
-using Advocu.NuGet.Settings;
+using Advocu.Core.Mappers;
+using Advocu.Core.Models;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Reflection;
 using System.Text.Json.Serialization;
-using Advocu.NuGet.Mappers;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
 {
     private readonly DraftManager _draftManager;
     private readonly IHttpClientFactory _httpClientFactory;
 
-    private readonly DraftMapper _draftMapper;
-
-    public InteractiveCommand(DraftManager draftManager, IHttpClientFactory httpClientFactory, TokenManager tokenManager, DraftMapper draftMapper)
+    public InteractiveCommand(DraftManager draftManager, IHttpClientFactory httpClientFactory, TokenManager tokenManager)
     {
         _draftManager = draftManager;
         _httpClientFactory = httpClientFactory;
         _tokenManager = tokenManager;
-        _draftMapper = draftMapper;
     }
 
     // InteractiveCommand does not inherit from ActivityCommand, so it needs its own _tokenManager field and logic update.
@@ -171,7 +168,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         return 0;
     }
 
-    private void AddRow(Table table, string name, string? value)
+    private static void AddRow(Table table, string name, string? value)
     {
         if (!string.IsNullOrEmpty(value))
         {
@@ -186,7 +183,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
             var client = CreateClient(settings);
             
             // Map Draft to Request using Mapper
-            var request = _draftMapper.Map(draft);
+            var request = DraftMapper.Map(draft);
 
             dynamic response = request switch
             {
@@ -308,7 +305,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
     }
 
     // Helpers
-    private string Ask(string prompt, string? current, bool optional = false, int minLength = 0, int maxLength = int.MaxValue)
+    private static string Ask(string prompt, string? current, bool optional = false, int minLength = 0, int maxLength = int.MaxValue)
     {
         var p = new TextPrompt<string>($"{prompt}:");
         if (current != null) p.DefaultValue(current);
@@ -325,7 +322,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         return AnsiConsole.Prompt(p);
     }
 
-    private DateTime? AskDate(string prompt, DateTime? current)
+    private static DateTime? AskDate(string prompt, DateTime? current)
     {
         var p = new TextPrompt<string>($"{prompt} [gray](yyyy-MM-dd)[/]:");
         if (current.HasValue) p.DefaultValue(current.Value.ToString("yyyy-MM-dd"));
@@ -343,7 +340,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         return DateTime.ParseExact(result, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
     }
 
-    private int? AskInt(string prompt, int? current, int min = 0, int max = int.MaxValue)
+    private static int? AskInt(string prompt, int? current, int min = 0, int max = int.MaxValue)
     {
         var p = new TextPrompt<int>($"{prompt}:");
         if (current.HasValue) p.DefaultValue(current.Value);
@@ -358,7 +355,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         return AnsiConsole.Prompt(p);
     }
 
-    private string AskEnum<T>(string prompt, string? current) where T : struct, Enum
+    private static string AskEnum<T>(string prompt, string? current) where T : struct, Enum
     {
         var choices = Enum.GetValues<T>().Select(GetEnumDisplayName).ToList();
         var p = new SelectionPrompt<string>()
@@ -369,11 +366,15 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         // SelectionPrompt doesn't have DefaultValue in same way, but we can highlight?
         // Spectre Console SelectionPrompt doesn't easily support 'start on this item' in all versions, 
         // but we can try just showing it.
-        
+        if (current != null)
+        {
+            //p.DefaultValue(current);
+        }
+       
         return AnsiConsole.Prompt(p);
     }
 
-    private List<string> AskMultiSelectEnum<T>(string prompt, List<string> current) where T : struct, Enum
+    private static List<string> AskMultiSelectEnum<T>(string prompt, List<string> current) where T : struct, Enum
     {
         var choices = Enum.GetValues<T>().Select(GetEnumDisplayName).ToList();
         var p = new MultiSelectionPrompt<string>()
@@ -396,7 +397,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         return AnsiConsole.Prompt(p);
     }
 
-    private string GetEnumDisplayName<T>(T value) where T : struct, Enum
+    private static string GetEnumDisplayName<T>(T value) where T : struct, Enum
     {
         var memberInfo = typeof(T).GetMember(value.ToString()).FirstOrDefault();
         if (memberInfo != null)
@@ -406,8 +407,6 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         }
         return value.ToString();
     }
-
-
 
     private AdvocuApiClient CreateClient(InteractiveSettings settings)
     {

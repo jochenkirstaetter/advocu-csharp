@@ -1,8 +1,8 @@
+using Advocu.Core.Parsing;
 using System.ComponentModel;
 using Spectre.Console.Cli;
-using Advocu;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class ContentCreationSettings : AdvocuSettings
 {
@@ -17,7 +17,7 @@ internal class ContentCreationSettings : AdvocuSettings
     [CommandOption("--content-type <TYPE>")]
     [Description("Type of content (e.g., Articles, Videos, etc.).")]
     [DefaultValue(AdvocuActivityContentType.Articles)]
-    [TypeConverter(typeof(Advocu.NuGet.Parsing.AdvocuEnumConverter<AdvocuActivityContentType>))]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuActivityContentType>))]
     public AdvocuActivityContentType ContentType { get; set; }
 
     [CommandOption("--tags <TAGS>")]

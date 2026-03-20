@@ -1,9 +1,8 @@
-using Advocu.NuGet.Settings;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Net.Http;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class WorkshopCommand : ActivityCommand<WorkshopSettings>
 {
@@ -25,7 +24,7 @@ internal sealed class WorkshopCommand : ActivityCommand<WorkshopSettings>
             Country = settings.Country,
             InPersonAttendees = settings.InPersonAttendees,
             ActivityDate = settings.ActivityDate ?? DateTime.UtcNow.ToString("yyyy-MM-dd"),
-            ActivityUrl = settings.ActivityUrl,
+            ActivityUrl = settings.ActivityUrl ?? "",
             AdditionalInfo = settings.AdditionalInfo,
             Private = settings.Private
         };

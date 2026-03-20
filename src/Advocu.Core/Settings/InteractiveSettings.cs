@@ -1,6 +1,4 @@
-using Advocu.NuGet.Commands;
-
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class InteractiveSettings : AdvocuSettings
 {

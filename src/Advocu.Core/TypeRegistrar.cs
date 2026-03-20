@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
-namespace Advocu.NuGet;
+namespace Advocu.Core;
 
 internal sealed class TypeRegistrar : ITypeRegistrar
 {

@@ -1,7 +1,6 @@
 using System.Text.Json;
-using Advocu.NuGet.Commands;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 /// <summary>
 /// Manages the persistence of activity drafts.

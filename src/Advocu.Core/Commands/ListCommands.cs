@@ -1,11 +1,9 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Advocu;
-using System.ComponentModel;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal sealed class ListSettings : CommandSettings
 {

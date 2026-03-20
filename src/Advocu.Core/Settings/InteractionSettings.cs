@@ -1,8 +1,8 @@
+using Advocu.Core.Parsing;
 using System.ComponentModel;
 using Spectre.Console.Cli;
-using Advocu;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class InteractionSettings : AdvocuSettings
 {
@@ -25,13 +25,13 @@ internal class InteractionSettings : AdvocuSettings
     [CommandOption("--format <FORMAT>")]
     [Description("Interaction format.")]
     [DefaultValue(AdvocuFormat.Other)]
-    [TypeConverter(typeof(Advocu.NuGet.Parsing.AdvocuEnumConverter<AdvocuFormat>))]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuFormat>))]
     public AdvocuFormat Format { get; set; }
     
     [CommandOption("--type <TYPE>")]
     [Description("Interaction type.")]
     [DefaultValue(AdvocuInteractionType.OtherInteractionsWithGoogleProductTeams)]
-    [TypeConverter(typeof(Advocu.NuGet.Parsing.AdvocuEnumConverter<AdvocuInteractionType>))]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuInteractionType>))]
     public AdvocuInteractionType InteractionType { get; set; }
 
     [CommandOption("--date <DATE>")]

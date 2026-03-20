@@ -1,11 +1,10 @@
-using System.Reflection;
-using Advocu.NuGet.Commands;
+using Advocu.Core.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Advocu.NuGet.Mappers;
+using System.Reflection;
 
-namespace Advocu.NuGet;
+namespace Advocu.Core;
 
 internal static class Program
 {
@@ -97,9 +96,8 @@ internal static class Program
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddHttpClient();
-        services.AddSingleton<Advocu.NuGet.Settings.DraftManager>();
-        services.AddSingleton<Advocu.NuGet.Settings.TokenManager>();
-        services.AddSingleton<DraftMapper>();
+        services.AddSingleton<Settings.DraftManager>();
+        services.AddSingleton<Settings.TokenManager>();
         services.AddScoped<AdvocuApiClient>(provider =>
         {
             var httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();

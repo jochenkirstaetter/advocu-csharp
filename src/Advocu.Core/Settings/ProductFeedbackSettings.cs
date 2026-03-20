@@ -1,8 +1,8 @@
+using Advocu.Core.Parsing;
 using System.ComponentModel;
 using Spectre.Console.Cli;
-using Advocu;
 
-namespace Advocu.NuGet.Settings;
+namespace Advocu.Core.Settings;
 
 internal class ProductFeedbackSettings : AdvocuSettings
 {
@@ -21,7 +21,7 @@ internal class ProductFeedbackSettings : AdvocuSettings
     [CommandOption("--content-type <TYPE>")]
     [Description("Content type.")]
     [DefaultValue(AdvocuActivityContentType.EarlyAccessProgram)]
-    [TypeConverter(typeof(Advocu.NuGet.Parsing.AdvocuEnumConverter<AdvocuActivityContentType>))]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuActivityContentType>))]
     public AdvocuActivityContentType ContentType { get; set; }
     
     [CommandOption("--product-desc <DESC>")]

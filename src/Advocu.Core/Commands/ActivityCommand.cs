@@ -1,10 +1,9 @@
-using Advocu.NuGet.Settings;
+using Advocu.Core.Settings;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using DA = System.ComponentModel.DataAnnotations;
-using System.Net.Http;
 
-namespace Advocu.NuGet.Commands;
+namespace Advocu.Core.Commands;
 
 internal abstract class ActivityCommand<TSettings> : AsyncCommand<TSettings> where TSettings : AdvocuSettings
 {
@@ -31,18 +30,21 @@ internal abstract class ActivityCommand<TSettings> : AsyncCommand<TSettings> whe
         return new AdvocuApiClient(client, token);
     }
 
-    protected List<AdvocuTag> ParseTags(string[] tags)
+    protected static List<AdvocuTag> ParseTags(string[] tags)
     {
-        return tags
-            .SelectMany(t => t.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
-            .Select(Parsing.AdvocuEnumParser.Parse<AdvocuTag>)
-            .ToList();
+        return [
+            .. tags
+                .SelectMany(t => t.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries))
+                .Select(Parsing.AdvocuEnumParser.Parse<AdvocuTag>)
+                .Distinct()
+                .OrderBy(t => t)
+        ];
     }
 
-    protected void ValidateRequest(object request)
+    protected static void ValidateRequest(object request)
     {
         var context = new DA.ValidationContext(request, serviceProvider: null, items: null);
-        var results = new List<DA.ValidationResult>();
+        List<DA.ValidationResult> results = [];
 
         if (!DA.Validator.TryValidateObject(request, context, results, validateAllProperties: true))
         {

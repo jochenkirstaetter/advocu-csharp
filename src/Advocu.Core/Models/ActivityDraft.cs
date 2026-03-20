@@ -1,4 +1,4 @@
-namespace Advocu.NuGet.Models;
+namespace Advocu.Core.Models;
 
 /// <summary>
 /// Represents a draft of an activity to be submitted to Advocu.
