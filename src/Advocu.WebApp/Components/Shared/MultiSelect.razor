@@ -16,8 +16,8 @@
 </div>
 
 @code {
-    [Parameter] public List<TItem> DataSource { get; set; }
-    [Parameter] public List<TItem> SelectedItems { get; set; }
+    [Parameter] public List<TItem> DataSource { get; set; } = default!;
+    [Parameter] public List<TItem> SelectedItems { get; set; } = default!;
     [Parameter] public EventCallback<List<TItem>> SelectedItemsChanged { get; set; }
     [Parameter] public Func<TItem, string>? LabelFunc { get; set; }
 

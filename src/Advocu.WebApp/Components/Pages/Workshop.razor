@@ -87,10 +87,10 @@
 </EditForm>
 
 @code {
-    [Inject] private AdvocuDataService AdvocuDataService { get; set; }
+    [Inject] private AdvocuDataService AdvocuDataService { get; set; } = default!;
     private CreateWorkshopActivityRequest request = new() { Title = "", Description = "", ActivityUrl = "", ActivityDate = DateTime.Now.ToString("yyyy-MM-dd") };
     private DateTime activityDate = DateTime.Now;
-    private List<AdvocuTag> tags;
+    private List<AdvocuTag> tags = default!;
     private bool isPrivate;
 
     protected override void OnInitialized()

@@ -65,9 +65,9 @@
 </EditForm>
 
 @code {
-    [Inject] private AdvocuDataService AdvocuDataService { get; set; }
+    [Inject] private AdvocuDataService AdvocuDataService { get; set; } = default!;
     private CreateStoriesActivityRequest request = new() { Title = "", Description = "", WhyIsSignificant = "", ActivityUrl = "" };
-    private List<AdvocuTag> tags;
+    private List<AdvocuTag> tags = default!;
     private bool isPrivate;
 
     protected override void OnInitialized()
