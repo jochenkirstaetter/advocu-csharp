@@ -8,6 +8,9 @@ using System.Text.Json.Serialization;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command that initiates an interactive experience to create drafts.
+/// </summary>
 internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
 {
     private readonly DraftManager _draftManager;
@@ -26,6 +29,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
     
     private readonly TokenManager _tokenManager;
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, InteractiveSettings settings, CancellationToken cancellationToken)
     {
         var draft = _draftManager.LoadDraft<ActivityDraft>();

@@ -4,6 +4,9 @@ using ModelContextProtocol;
 
 namespace Advocu.Mcp.SSE;
 
+/// <summary>
+/// JSON serializer context for the Advocu MCP server.
+/// </summary>
 [JsonSerializable(typeof(CreateContentCreationActivityRequest))]
 [JsonSerializable(typeof(CreateInteractionWithGooglersActivityRequest))]
 [JsonSerializable(typeof(CreateMentoringActivityRequest))]

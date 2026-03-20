@@ -13,6 +13,12 @@ using OpenTelemetry.Trace;
 
 namespace Advocu;
 
+/// <summary>
+/// A class representing work in progress for the MCP server.
+/// </summary>
+/// <remarks>
+/// This class currently contains commented out initialization code for the MCP server.
+/// </remarks>
 public class WorkInProgress
 {
 // var builder = Host.CreateApplicationBuilder(args);

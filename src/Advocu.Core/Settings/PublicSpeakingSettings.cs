@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the public speaking command.
+/// </summary>
 internal class PublicSpeakingSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]

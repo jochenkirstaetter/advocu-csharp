@@ -157,11 +157,11 @@ namespace Advocu
         }
  
         /// <summary>
-        /// 
+        /// Validates the given request object using data annotations.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="request">The request object to validate.</param>
         /// <exception cref="ValidationException"></exception>
-        private void ValidateRequest(object request)
+        private static void ValidateRequest(object request)
         {
             // Client-side validation before sending the request
             var validationContext = new ValidationContext(request, serviceProvider: null, items: null);
@@ -182,6 +182,12 @@ namespace Advocu
         /// <summary>
         /// Generic helper method to post JSON data and deserialize the response.
         /// </summary>
+        /// <typeparam name="TRequest">The type of the request payload.</typeparam>
+        /// <typeparam name="TResponse">The type of the response to deserialize.</typeparam>
+        /// <param name="endpoint">The API endpoint to post to.</param>
+        /// <param name="requestPayload">The payload to send in the request body.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>The deserialized response object.</returns>
         private async Task<TResponse> PostJsonAsync<TRequest, TResponse>(string endpoint, TRequest requestPayload, CancellationToken cancellationToken = default)
         {
             var jsonRequest = JsonSerializer.Serialize(requestPayload, _jsonSerializerWriteOptions);

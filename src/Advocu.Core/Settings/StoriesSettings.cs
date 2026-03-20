@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the stories command.
+/// </summary>
 internal class StoriesSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]

@@ -4,12 +4,16 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create a content creation activity draft.
+/// </summary>
 internal sealed class ContentCreationCommand : ActivityCommand<ContentCreationSettings>
 {
     public ContentCreationCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, ContentCreationSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

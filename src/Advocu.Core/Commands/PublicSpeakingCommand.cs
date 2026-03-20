@@ -4,12 +4,16 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create a public speaking activity draft.
+/// </summary>
 internal sealed class PublicSpeakingCommand : ActivityCommand<PublicSpeakingSettings>
 {
     public PublicSpeakingCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, PublicSpeakingSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

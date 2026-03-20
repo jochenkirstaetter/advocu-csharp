@@ -4,12 +4,16 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create a product feedback activity draft.
+/// </summary>
 internal sealed class ProductFeedbackCommand : ActivityCommand<ProductFeedbackSettings>
 {
     public ProductFeedbackCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, ProductFeedbackSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

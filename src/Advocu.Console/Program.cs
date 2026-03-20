@@ -6,10 +6,24 @@ using Microsoft.Extensions.Hosting;
 // Your client namespace
 namespace Advocu;
 
+/// <summary>
+/// The main entry point for the Advocu console application.
+/// </summary>
+/// <remarks>
+/// Contains setup and execution logic for testing the Advocu API client functionality manually.
+/// </remarks>
 public class Program
 {
     private const string ApiBaseUrl = "https://api.advocu.com/personal-api/v1/gde/";
 
+    /// <summary>
+    /// The main entry point method.
+    /// </summary>
+    /// <param name="args">Command-line arguments passed to the application.</param>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <remarks>
+    /// Runs a set of test scenarios configuring requests and submitting drafts through the <see cref="AdvocuApiClient"/>.
+    /// </remarks>
     public static async Task Main(string[] args)
     {
         var host = CreateHostBuilder(args).Build();
@@ -20,7 +34,7 @@ public class Program
             try
             {
                 var client = services.GetRequiredService<AdvocuApiClient>();
-                ActivityResponse response = new ActivityResponse { Id = "0" };
+                ActivityResponse response = new() { Id = "0" };
 
                 Console.WriteLine("\n--- Posting Content Creation Activity Draft ---");
                 var request = new CreateContentCreationActivityRequest
@@ -184,6 +198,14 @@ public class Program
         await host.RunAsync(); // Keep the application running if it's a web app/service
     }
 
+    /// <summary>
+    /// Creates and configures the host builder for the application.
+    /// </summary>
+    /// <param name="args">Command line arguments passed to the host.</param>
+    /// <returns>An <see cref="IHostBuilder"/> configured with settings and dependency injection for the API client.</returns>
+    /// <remarks>
+    /// Configures application settings, environment variables, and HTTP client factory integration.
+    /// </remarks>
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, config) =>

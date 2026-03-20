@@ -4,12 +4,16 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create a workshop activity draft.
+/// </summary>
 internal sealed class WorkshopCommand : ActivityCommand<WorkshopSettings>
 {
     public WorkshopCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, WorkshopSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

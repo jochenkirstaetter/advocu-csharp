@@ -5,13 +5,20 @@ using System.Reflection;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// The root command executed when the CLI runs without arguments.
+/// </summary>
 internal sealed class RootCommand : AsyncCommand<AdvocuSettings>
 {
+    /// <summary>
+    /// Executes the root command synchronously mapping to async execution.
+    /// </summary>
     public Task<int> ExecuteAsync(CommandContext context, AdvocuSettings settings)
     {
         return ExecuteAsync(context, settings, default);
     }
 
+    /// <inheritdoc />
     public override Task<int> ExecuteAsync(CommandContext context, AdvocuSettings settings, CancellationToken cancellationToken)
     {
         var versionString = Assembly.GetEntryAssembly()?

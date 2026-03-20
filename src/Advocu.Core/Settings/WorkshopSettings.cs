@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the workshop command.
+/// </summary>
 internal class WorkshopSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]

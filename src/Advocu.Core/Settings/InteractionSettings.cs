@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the interaction command.
+/// </summary>
 internal class InteractionSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]

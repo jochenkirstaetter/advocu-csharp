@@ -75,6 +75,10 @@ internal sealed class TokenManager
         return newToken;
     }
 
+    /// <summary>
+    /// Attempts to read the access token from a local .env file.
+    /// </summary>
+    /// <returns>The token if found, otherwise null.</returns>
     private static string? GetTokenFromDotEnv()
     {
         try 
@@ -105,6 +109,9 @@ internal sealed class TokenManager
         return null;
     }
 
+    /// <summary>
+    /// Represents the data structure for storing the token.
+    /// </summary>
     private class TokenData
     {
         [JsonPropertyName("AdvocuApiToken")]

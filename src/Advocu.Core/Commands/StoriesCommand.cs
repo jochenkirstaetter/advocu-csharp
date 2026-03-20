@@ -4,12 +4,16 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create a stories activity draft.
+/// </summary>
 internal sealed class StoriesCommand : ActivityCommand<StoriesSettings>
 {
     public StoriesCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, StoriesSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

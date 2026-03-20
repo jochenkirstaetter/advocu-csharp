@@ -5,12 +5,16 @@ using System.Net.Http;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create an interaction with Googlers activity draft.
+/// </summary>
 internal sealed class InteractionCommand : ActivityCommand<InteractionSettings>
 {
     public InteractionCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, InteractionSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

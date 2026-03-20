@@ -5,8 +5,19 @@ using System.Text.Json.Serialization;
 
 namespace Advocu.Core.Parsing;
 
+/// <summary>
+/// Provides utility methods for parsing Advocu enums.
+/// </summary>
 internal static class AdvocuEnumParser
 {
+    /// <summary>
+    /// Parses a string input into the specified enum type.
+    /// </summary>
+    /// <typeparam name="T">The enum type to parse into.</typeparam>
+    /// <param name="input">The string input to parse.</param>
+    /// <returns>The parsed enum value.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the input is null or whitespace.</exception>
+    /// <exception cref="ArgumentException">Thrown if the input cannot be parsed or matched.</exception>
     public static T Parse<T>(string input) where T : struct, Enum
     {
         if (string.IsNullOrWhiteSpace(input))
@@ -103,6 +114,10 @@ internal static class AdvocuEnumParser
     }
 }
 
+/// <summary>
+/// A type converter for converting strings to Advocu enum types.
+/// </summary>
+/// <typeparam name="T">The enum type to convert to.</typeparam>
 internal class AdvocuEnumConverter<T> : TypeConverter where T : struct, Enum
 {
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)

@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the mentoring command.
+/// </summary>
 internal class MentoringSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]

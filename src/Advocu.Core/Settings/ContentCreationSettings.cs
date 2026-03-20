@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the content creation command.
+/// </summary>
 internal class ContentCreationSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]

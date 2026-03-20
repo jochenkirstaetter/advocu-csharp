@@ -9,6 +9,9 @@ internal sealed class ListSettings : CommandSettings
 {
 }
 
+/// <summary>
+/// Command to list available tags.
+/// </summary>
 internal sealed class ListTagsCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
@@ -17,6 +20,9 @@ internal sealed class ListTagsCommand : Command<ListSettings>
     }
 }
 
+/// <summary>
+/// Command to list available content types.
+/// </summary>
 internal sealed class ListContentTypesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
@@ -25,6 +31,9 @@ internal sealed class ListContentTypesCommand : Command<ListSettings>
     }
 }
 
+/// <summary>
+/// Command to list available countries.
+/// </summary>
 internal sealed class ListCountriesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
@@ -33,6 +42,9 @@ internal sealed class ListCountriesCommand : Command<ListSettings>
     }
 }
 
+/// <summary>
+/// Command to list available event formats.
+/// </summary>
 internal sealed class ListEventFormatsCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
@@ -41,6 +53,9 @@ internal sealed class ListEventFormatsCommand : Command<ListSettings>
     }
 }
 
+/// <summary>
+/// Command to list available interaction types.
+/// </summary>
 internal sealed class ListInteractionTypesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
@@ -49,6 +64,9 @@ internal sealed class ListInteractionTypesCommand : Command<ListSettings>
     }
 }
 
+/// <summary>
+/// Command to list available significance types.
+/// </summary>
 internal sealed class ListSignificanceTypesCommand : Command<ListSettings>
 {
     public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
@@ -60,6 +78,9 @@ internal sealed class ListSignificanceTypesCommand : Command<ListSettings>
 // Extension to use static helper from main ListTagsCommand (or move helper to separate class)
 // For simplicity in this file, I'll make the helper internal static in a shared class or just duplicate/refactor.
 // Refactoring for cleanliness:
+/// <summary>
+/// Helper class for listing enum values.
+/// </summary>
 internal static class EnumLister
 {
     public static int List<T>(string title) where T : struct, Enum

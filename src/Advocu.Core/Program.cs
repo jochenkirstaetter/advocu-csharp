@@ -6,10 +6,21 @@ using System.Reflection;
 
 namespace Advocu.Core;
 
+/// <summary>
+/// The main entry point class for the Advocu CLI application.
+/// </summary>
+/// <remarks>
+/// Configures Spectre.Console.Cli commands and dependency injection.
+/// </remarks>
 internal static class Program
 {
     private const string ApiBaseUrl = "https://api.advocu.com/personal-api/v1/gde/";
 
+    /// <summary>
+    /// The main entry point method for the application.
+    /// </summary>
+    /// <param name="args">Command-line arguments passed to the application.</param>
+    /// <returns>The exit code of the CLI execution.</returns>
     public static async Task<int> Main(string[] args)
     {
         if (args.Length == 0)
@@ -93,6 +104,10 @@ internal static class Program
         return await app.RunAsync(args);
     }
 
+    /// <summary>
+    /// Configures the dependency injection services used by the application.
+    /// </summary>
+    /// <param name="services">The service collection to add services to.</param>
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddHttpClient();

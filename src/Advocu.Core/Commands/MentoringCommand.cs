@@ -4,12 +4,16 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Commands;
 
+/// <summary>
+/// Command to create a mentoring activity draft.
+/// </summary>
 internal sealed class MentoringCommand : ActivityCommand<MentoringSettings>
 {
     public MentoringCommand(IHttpClientFactory httpClientFactory, TokenManager tokenManager) : base(httpClientFactory, tokenManager)
     {
     }
 
+    /// <inheritdoc />
     public override async Task<int> ExecuteAsync(CommandContext context, MentoringSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);

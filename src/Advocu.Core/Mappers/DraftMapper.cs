@@ -9,6 +9,12 @@ namespace Advocu.Core.Mappers;
 /// </summary>
 internal sealed class DraftMapper
 {
+    /// <summary>
+    /// Maps an <see cref="ActivityDraft"/> to its corresponding <see cref="ActivityRequest"/>.
+    /// </summary>
+    /// <param name="draft">The draft to map.</param>
+    /// <returns>The mapped activity request.</returns>
+    /// <exception cref="NotImplementedException">Thrown when the activity type mapping is not implemented.</exception>
     public static ActivityRequest Map(ActivityDraft draft)
     {
         return draft.ActivityType switch

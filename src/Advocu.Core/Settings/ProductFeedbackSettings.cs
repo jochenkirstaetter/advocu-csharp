@@ -4,6 +4,9 @@ using Spectre.Console.Cli;
 
 namespace Advocu.Core.Settings;
 
+/// <summary>
+/// Settings for the product feedback command.
+/// </summary>
 internal class ProductFeedbackSettings : AdvocuSettings
 {
     [CommandOption("-t|--title <TITLE>")]
