@@ -1,19 +1,13 @@
-# Release Notes 0.3.0
+# Release Notes 0.4.0
 
-## 🔍 Detailed Activity Review
+## 🚀 Enhancements & Validation
 
-We've enhanced the `advocu interactive` experience!
+We've improved the underlying Core library and models!
 
-### 📝 Comprehensive Summary
-When reviewing your draft before submission, the CLI now displays **all** the specific details you entered for your activity type.
+### ✨ Better Request Validation
+The activity request models now include more robust validation. Also, `ActivityDate` and `ActivityUrl` fields are explicitly initialized in various activity creation requests to prevent nullable property errors when using the library programmatically.
 
-- **Content Creation**: See your Content Type and Reader count.
-- **Public Speaking**: Verify Country, City, Event Format, and Attendee count.
-- **And more**: Improvements for Workshop, Mentoring, Product Feedback, Interaction, and Stories.
-
-### 🛠️ Fixes
-- **Multiple Tags**: proper support for selecting and saving multiple tags for an activity.
-
-This ensures you can double-check everything is perfect before hitting that submit button.
+### 🛠️ Core Namespace Update
+We've streamlined our internal project namespaces, renaming them from `Advocu.NuGet` to `Advocu.Core` to better reflect the library's purpose and ensure consistency.
 
 Happy Reporting! 🚀
