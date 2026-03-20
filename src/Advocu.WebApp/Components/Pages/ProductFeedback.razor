@@ -66,7 +66,7 @@
 
 @code {
     [Inject] private AdvocuDataService AdvocuDataService { get; set; }
-    private CreateProductFeedbackActivityRequest request = new() { Title = "", Description = "", ProductDescription = "" };
+    private CreateProductFeedbackActivityRequest request = new() { Title = "", Description = "", ProductDescription = "", ActivityDate = DateTime.Now.ToString("yyyy-MM-dd") };
     private DateTime activityDate = DateTime.Now;
     private List<AdvocuTag> tags;
     private bool isPrivate;

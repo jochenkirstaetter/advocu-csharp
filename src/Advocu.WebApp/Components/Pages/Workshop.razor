@@ -88,7 +88,7 @@
 
 @code {
     [Inject] private AdvocuDataService AdvocuDataService { get; set; }
-    private CreateWorkshopActivityRequest request = new() { Title = "", Description = "", ActivityUrl = "" };
+    private CreateWorkshopActivityRequest request = new() { Title = "", Description = "", ActivityUrl = "", ActivityDate = DateTime.Now.ToString("yyyy-MM-dd") };
     private DateTime activityDate = DateTime.Now;
     private List<AdvocuTag> tags;
     private bool isPrivate;

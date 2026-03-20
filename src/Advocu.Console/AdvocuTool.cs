@@ -16,7 +16,9 @@ public sealed class AdvocuTool
             new CreateContentCreationActivityRequest
             {
                 Title = "",
-                Description = ""
+                Description = "",
+                ActivityDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                ActivityUrl = ""
             });
 
         return response.Id;

@@ -153,6 +153,7 @@ public class Program
                     SignificanceType = AdvocuSignificanceType.TechnologyOpenSource,
                     Tags = [],
                     Impact = 100,
+                    ActivityUrl = "",
                     AdditionalInfo = "",
                     Private = false
                 };
