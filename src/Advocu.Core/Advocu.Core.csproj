@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -35,11 +35,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Json" Version="10.0.5"/>
-        <PackageReference Include="Spectre.Console" Version="0.54.0"/>
-        <PackageReference Include="Spectre.Console.Cli" Version="0.53.1"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5"/>
+        <PackageReference Include="System.Text.Json" Version="10.0.11"/>
+        <PackageReference Include="Spectre.Console" Version="0.57.2"/>
+        <PackageReference Include="Spectre.Console.Cli" Version="0.55.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.11"/>
     </ItemGroup>
 
     <Target Name="InjectPackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec" Condition="Exists('RELEASE_NOTES.md')">
