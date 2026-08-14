@@ -2,21 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
 <!--        <PublishAot>true</PublishAot>-->
         <Description>Draft your activities for the Advocu platform.</Description>
-        <Authors>Jochen Kirstätter</Authors>
-        <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
 <!--        <PackageReadmeFile>README.md</PackageReadmeFile>-->
         <PackageIcon>Advocu-Csharp.png</PackageIcon>
-        <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.2.0"/>
+        <PackageReference Include="ModelContextProtocol.AspNetCore" />
     </ItemGroup>
 
     <ItemGroup>

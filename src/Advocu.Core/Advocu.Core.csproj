@@ -3,8 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <NoWarn>$(NoWarn);IDE0290</NoWarn>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>advocu</ToolCommandName>
@@ -15,18 +13,10 @@
         <PackageTags>Advocu GDE</PackageTags>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <Authors>Jochen Kirstätter</Authors>
-        <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>Advocu-Csharp.png</PackageIcon>
-        <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
         <PackageReleaseNotes>(Package release notes are in CHANGELOG.md)</PackageReleaseNotes>
-        <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,11 +25,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Text.Json" Version="10.0.11"/>
-        <PackageReference Include="Spectre.Console" Version="0.57.2"/>
-        <PackageReference Include="Spectre.Console.Cli" Version="0.55.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.11"/>
+        <PackageReference Include="System.Text.Json" />
+        <PackageReference Include="Spectre.Console" />
+        <PackageReference Include="Spectre.Console.Cli" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference Include="Microsoft.Extensions.Http" />
     </ItemGroup>
 
     <Target Name="InjectPackageReleaseNotesFromFile" BeforeTargets="GenerateNuspec" Condition="Exists('RELEASE_NOTES.md')">

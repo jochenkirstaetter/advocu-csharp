@@ -3,9 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>advocu</ToolCommandName>
         <PackageId>Advocu-MCP</PackageId>
@@ -13,20 +10,13 @@
         <Product>Advocu MCP</Product>
         <Description>Draft your activities for the Advocu platform.</Description>
         <PackageTags>Advocu GDE</PackageTags>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <IsPackable>false</IsPackable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <Authors>Jochen Kirstätter</Authors>
-        <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>Advocu-Csharp.png</PackageIcon>
-        <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
         <PackageReleaseNotes>(Package release notes are in CHANGELOG.md)</PackageReleaseNotes>
-        <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../VERSION"))</Version>
     </PropertyGroup>
 
     <ItemGroup>
@@ -55,12 +45,12 @@
 <!--    </PropertyGroup>-->
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.11"/>
-        <PackageReference Include="ModelContextProtocol" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" />
+        <PackageReference Include="ModelContextProtocol" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Advocu.Mcp.Shared\Advocu.Mcp.Shared.csproj" />
+      <ProjectReference Include="..\Advocu.Mcp.Shared\Advocu.Mcp.Shared.csproj" />
     </ItemGroup>
 
 </Project>

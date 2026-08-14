@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <Version>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)VERSION").Trim())</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- Shared Package Metadata -->
+    <Authors>Jochen Kirstätter</Authors>
+    <Company>Jochen Kirstätter</Company>
+    <Copyright>Copyright (c) Jochen Kirstätter</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/jochenkirstaetter/advocu-csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jochenkirstaetter/advocu-csharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+</Project>
