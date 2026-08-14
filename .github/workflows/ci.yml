@@ -34,6 +34,8 @@ jobs:
 
     - name: Check-out latest sources
       uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v6
@@ -47,6 +49,14 @@ jobs:
         VERSION=${GITHUB_REF#refs/tags/v}
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         echo "Releasing version: $VERSION"
+
+    - name: Get previous tag
+      id: previous_tag
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        PREVIOUS_TAG=$(git tag --sort=-v:refname | awk 'NR==2 {print $0}')
+        echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+        echo "Previous tag: ${PREVIOUS_TAG:-none}"
 
     - name: Restore dependencies
       run: dotnet restore Advocu.slnx
@@ -83,11 +93,28 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
       run: dotnet nuget push "nupkgs/*.nupkg" --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
+    - name: Generate changelog
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
+      run: |
+        {
+          echo "## What's changed"
+          echo ""
+          if [ -n "${{ steps.previous_tag.outputs.PREVIOUS_TAG }}" ]; then
+            echo "### Commits since ${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"
+            echo ""
+            git log "${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"..HEAD --pretty=format:"- %s (%h)"
+            echo ""
+            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.previous_tag.outputs.PREVIOUS_TAG }}...${{ github.ref_name }}"
+          else
+            echo "- Initial release"
+          fi
+        } > release-notes.md
+
     - name: Create GitHub Release
       if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
       uses: softprops/action-gh-release@v3
       with:
+        body_path: ./release-notes.md
         files: ./nupkgs/*.nupkg
-        generate_release_notes: true
         draft: false
         prerelease: ${{ contains(steps.version.outputs.VERSION, '-') }}
