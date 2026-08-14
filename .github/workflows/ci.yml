@@ -2,24 +2,17 @@ name: CI/CD
 
 on:
   push:
-    branches: [ "main" ]
-    tags: [ "v*" ]
-  pull_request:
-    branches: [ "main" ]
-  release:
-    types: [published]
+    tags:
+      - "v*"
 
 jobs:
-  build-and-deploy:
+  build-test:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        dotnet-version: ['10.x']
-    runs-on: ${{ matrix.os }}
-    permissions:
-      id-token: write
-      packages: write
-      contents: read
 
     env:
       DOTNET_NOLOGO: true
@@ -28,93 +21,118 @@ jobs:
       NUGET_XMLDOC_MODE: skip
 
     steps:
-    - name: enable windows longpaths
-      run: |
-        git config --global core.longpaths true
+      - name: Check-out latest sources
+        uses: actions/checkout@v7
 
-    - name: Check-out latest sources
-      uses: actions/checkout@v7
-      with:
-        fetch-depth: 0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.x'
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v6
-      with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Enable long paths on Windows
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: git config --system core.longpaths true
 
-    - name: Extract version from tag
-      id: version
-      if: startsWith(github.ref, 'refs/tags/v')
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/v}
-        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-        echo "Releasing version: $VERSION"
+      - name: Restore dependencies
+        run: dotnet restore Advocu.slnx
 
-    - name: Get previous tag
-      id: previous_tag
-      if: startsWith(github.ref, 'refs/tags/v')
-      run: |
-        PREVIOUS_TAG=$(git tag --sort=-v:refname | awk 'NR==2 {print $0}')
-        echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
-        echo "Previous tag: ${PREVIOUS_TAG:-none}"
+      - name: Build
+        run: dotnet build Advocu.slnx --configuration Release --no-restore
 
-    - name: Restore dependencies
-      run: dotnet restore Advocu.slnx
+      - name: Test
+        run: dotnet test Advocu.slnx --configuration Release --no-build --verbosity normal
 
-    - name: Build
-      run: dotnet build Advocu.slnx --configuration Release --no-restore
+  release:
+    name: Pack and deploy (ubuntu only)
+    needs: build-test
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
 
-    - name: Test
-      run: dotnet test Advocu.slnx --configuration Release --no-build --verbosity normal
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      NUGET_XMLDOC_MODE: skip
 
-    - name: Pack NuGet package
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --no-build --output nupkgs -p:Version=${{ steps.version.outputs.VERSION }}
+    steps:
+      - name: Check-out latest sources
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
-    - name: NuGet Trusted Publishing
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      id: login
-      uses: NuGet/login@v1
-      with:
-        user: ${{ secrets.NUGET_USER }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.x'
 
-    - name: Push to NuGet.org
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Releasing version: $VERSION"
 
-    - name: Upload NuGet artifacts
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      uses: actions/upload-artifact@v7
-      with:
-        name: nuget-packages
-        path: nupkgs/*.nupkg
+      - name: Get previous tag
+        id: previous_tag
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-v:refname | awk 'NR==2 {print $0}')
+          echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+          echo "Previous tag: ${PREVIOUS_TAG:-none}"
 
-    - name: Push to GitHub Packages
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      run: dotnet nuget push "nupkgs/*.nupkg" --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+      - name: Restore dependencies
+        run: dotnet restore Advocu.slnx
 
-    - name: Generate changelog
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      run: |
-        {
-          echo "## What's changed"
-          echo ""
-          if [ -n "${{ steps.previous_tag.outputs.PREVIOUS_TAG }}" ]; then
-            echo "### Commits since ${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"
+      - name: Build
+        run: dotnet build Advocu.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test Advocu.slnx --configuration Release --no-build --verbosity normal
+
+      - name: Pack NuGet package
+        run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --no-build --output nupkgs -p:Version=${{ steps.version.outputs.VERSION }}
+
+      - name: NuGet Trusted Publishing
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push to NuGet.org
+        run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
+
+      - name: Upload NuGet artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages
+          path: nupkgs/*.nupkg
+
+      - name: Push to GitHub Packages
+        run: dotnet nuget push "nupkgs/*.nupkg" --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+      - name: Generate changelog
+        run: |
+          {
+            echo "## What's changed"
             echo ""
-            git log "${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"..HEAD --pretty=format:"- %s (%h)"
-            echo ""
-            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.previous_tag.outputs.PREVIOUS_TAG }}...${{ github.ref_name }}"
-          else
-            echo "- Initial release"
-          fi
-        } > release-notes.md
+            if [ -n "${{ steps.previous_tag.outputs.PREVIOUS_TAG }}" ]; then
+              echo "### Commits since ${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"
+              echo ""
+              git log "${{ steps.previous_tag.outputs.PREVIOUS_TAG }}"..HEAD --pretty=format:"- %s (%h)"
+              echo ""
+              echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.previous_tag.outputs.PREVIOUS_TAG }}...${{ github.ref_name }}"
+            else
+              echo "- Initial release"
+            fi
+          } > release-notes.md
 
-    - name: Create GitHub Release
-      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
-      uses: softprops/action-gh-release@v3
-      with:
-        body_path: ./release-notes.md
-        files: ./nupkgs/*.nupkg
-        draft: false
-        prerelease: ${{ contains(steps.version.outputs.VERSION, '-') }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: ./release-notes.md
+          files: ./nupkgs/*.nupkg
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.VERSION, '-') }}
