@@ -14,7 +14,7 @@ internal sealed class ListSettings : CommandSettings
 /// </summary>
 internal sealed class ListTagsCommand : Command<ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuTag>("Tags");
     }
@@ -25,7 +25,7 @@ internal sealed class ListTagsCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListContentTypesCommand : Command<ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuActivityContentType>("Content Types");
     }
@@ -36,7 +36,7 @@ internal sealed class ListContentTypesCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListCountriesCommand : Command<ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuCountry>("Countries");
     }
@@ -47,7 +47,7 @@ internal sealed class ListCountriesCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListEventFormatsCommand : Command<ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuEventFormat>("Event Formats");
     }
@@ -58,7 +58,7 @@ internal sealed class ListEventFormatsCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListInteractionTypesCommand : Command<ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuInteractionType>("Interaction Types");
     }
@@ -69,7 +69,7 @@ internal sealed class ListInteractionTypesCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListSignificanceTypesCommand : Command<ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuSignificanceType>("Significance Types");
     }

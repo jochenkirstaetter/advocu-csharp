@@ -14,7 +14,7 @@ internal sealed class StoriesCommand : ActivityCommand<StoriesSettings>
     }
 
     /// <inheritdoc />
-    public override async Task<int> ExecuteAsync(CommandContext context, StoriesSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, StoriesSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);
 

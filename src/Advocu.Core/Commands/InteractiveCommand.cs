@@ -30,7 +30,7 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
     private readonly TokenManager _tokenManager;
 
     /// <inheritdoc />
-    public override async Task<int> ExecuteAsync(CommandContext context, InteractiveSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, InteractiveSettings settings, CancellationToken cancellationToken)
     {
         var draft = _draftManager.LoadDraft<ActivityDraft>();
         

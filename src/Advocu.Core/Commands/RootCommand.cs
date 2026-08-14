@@ -19,7 +19,7 @@ internal sealed class RootCommand : AsyncCommand<AdvocuSettings>
     }
 
     /// <inheritdoc />
-    public override Task<int> ExecuteAsync(CommandContext context, AdvocuSettings settings, CancellationToken cancellationToken)
+    protected override Task<int> ExecuteAsync(CommandContext context, AdvocuSettings settings, CancellationToken cancellationToken)
     {
         var versionString = Assembly.GetEntryAssembly()?
                             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?

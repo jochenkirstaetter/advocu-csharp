@@ -14,7 +14,7 @@ internal sealed class ContentCreationCommand : ActivityCommand<ContentCreationSe
     }
 
     /// <inheritdoc />
-    public override async Task<int> ExecuteAsync(CommandContext context, ContentCreationSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, ContentCreationSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);
 

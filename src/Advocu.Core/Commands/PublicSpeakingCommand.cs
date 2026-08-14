@@ -14,7 +14,7 @@ internal sealed class PublicSpeakingCommand : ActivityCommand<PublicSpeakingSett
     }
 
     /// <inheritdoc />
-    public override async Task<int> ExecuteAsync(CommandContext context, PublicSpeakingSettings settings, System.Threading.CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, PublicSpeakingSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);
 
