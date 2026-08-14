@@ -8,13 +8,6 @@ on:
     branches: [ "main" ]
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Package Version (e.g. 1.0.1)'
-        required: true
-        default: '1.0.1'
-        type: string
 
 jobs:
   build-and-deploy:
@@ -24,9 +17,10 @@ jobs:
         dotnet-version: ['10.x']
     runs-on: ${{ matrix.os }}
     permissions:
+      id-token: write
       packages: write
       contents: read
-    
+
     env:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -38,13 +32,21 @@ jobs:
       run: |
         git config --global core.longpaths true
 
-    - name: Check-out latest sources 
-      uses: actions/checkout@v4
+    - name: Check-out latest sources
+      uses: actions/checkout@v7
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: Extract version from tag
+      id: version
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "Releasing version: $VERSION"
 
     - name: Restore dependencies
       run: dotnet restore Advocu.slnx
@@ -55,18 +57,37 @@ jobs:
     - name: Test
       run: dotnet test Advocu.slnx --configuration Release --no-build --verbosity normal
 
-    - name: Pack
-      if: matrix.os == 'ubuntu-latest' && github.event_name != 'workflow_dispatch'
-      run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --no-build --output nupkgs
+    - name: Pack NuGet package
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
+      run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --no-build --output nupkgs -p:Version=${{ steps.version.outputs.VERSION }}
 
-    - name: Pack (Manual)
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'workflow_dispatch'
-      run: dotnet pack src/Advocu.Core/Advocu.Core.csproj --configuration Release --output nupkgs /p:Version=${{ github.event.inputs.version }}
+    - name: NuGet Trusted Publishing
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
+      id: login
+      uses: NuGet/login@v1
+      with:
+        user: ${{ secrets.NUGET_USER }}
 
     - name: Push to NuGet.org
-      if: matrix.os == 'ubuntu-latest' && (github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
-      run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
+      run: dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
+
+    - name: Upload NuGet artifacts
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
+      uses: actions/upload-artifact@v7
+      with:
+        name: nuget-packages
+        path: nupkgs/*.nupkg
 
     - name: Push to GitHub Packages
-      if: matrix.os == 'ubuntu-latest' && (github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch')
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
       run: dotnet nuget push "nupkgs/*.nupkg" --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+    - name: Create GitHub Release
+      if: matrix.os == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v3
+      with:
+        files: ./nupkgs/*.nupkg
+        generate_release_notes: true
+        draft: false
+        prerelease: ${{ contains(steps.version.outputs.VERSION, '-') }}
