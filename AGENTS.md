@@ -48,3 +48,14 @@ To build and run this project, you will need the .NET SDK installed on your mach
 *   **Validation:** Client-side validation is performed using `System.ComponentModel.DataAnnotations` to ensure that data is valid before being sent to the API.
 *   **Error Handling:** The API client includes error handling for HTTP request exceptions, including a specific check for rate limiting (HTTP 429).
 *   **IDE:** The presence of a `.idea` directory suggests that the project is being developed using a JetBrains IDE, such as Rider or Visual Studio with ReSharper.
+
+---
+
+## Git & Branch Protection Rules
+
+1. **Protected Default Branch (`main` / `master`)**:
+   - Direct pushes and force-pushes to the default branch are blocked by repository rulesets.
+   - **Never** push directly to `main` or `master`. Always work on a feature/fix branch and open a Pull Request (`gh pr create`).
+2. **Mandatory Commit Sign-Off (`-s` / DCO)**:
+   - Every commit **must** be signed off using `git commit -s` so that it includes a `Signed-off-by: Name <email>` trailer. Commits without this trailer are rejected by the repository ruleset.
+
