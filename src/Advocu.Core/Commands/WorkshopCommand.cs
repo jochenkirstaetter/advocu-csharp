@@ -14,7 +14,7 @@ internal sealed class WorkshopCommand : ActivityCommand<WorkshopSettings>
     }
 
     /// <inheritdoc />
-    protected override async Task<int> ExecuteAsync(CommandContext context, WorkshopSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override async Task<int> ExecuteAsync(CommandContext context, WorkshopSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);
 

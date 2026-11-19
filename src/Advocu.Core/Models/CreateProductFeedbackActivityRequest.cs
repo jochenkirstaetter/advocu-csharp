@@ -38,12 +38,18 @@ public sealed class CreateProductFeedbackActivityRequest : ActivityRequest, IVal
     /// Gets or sets the date of the activity in YYYY-MM-DD format.
     /// </summary>
     [Required]
+    [RegularExpression(@"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", ErrorMessage = "ActivityDate must match YYYY-MM-DD format.")]
     [JsonPropertyName("activityDate")]
     public required string ActivityDate { get; set; } // "Participation Date", Pattern YYYY-MM-DD
 
     /// <inheritdoc />
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        return [];
+        if (ContentType is not (AdvocuActivityContentType.EarlyAccessProgram or AdvocuActivityContentType.ProductFeedbackSession))
+        {
+            yield return new ValidationResult(
+                $"ContentType '{ContentType}' is not valid for Product Feedback activities. Use EarlyAccessProgram or ProductFeedbackSession.",
+                [nameof(ContentType)]);
+        }
     }
 }

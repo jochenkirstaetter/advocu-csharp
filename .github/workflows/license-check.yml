@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main", "master" ]
 
+permissions:
+  contents: read
+
 jobs:
   check-license:
     runs-on: ubuntu-latest
@@ -14,7 +17,9 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }}
 
       - name: Add/Check License Headers
         id: license_check
@@ -48,8 +53,8 @@ jobs:
 
       # Option A: Commit the changes back automatically
       - name: Commit and Push Changes
-        if: steps.git-check.outputs.changes_detected == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.git-check.outputs.changes_detected == 'true' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
           commit_message: "chore: Add missing license headers"
-          branch: ${{ github.head_ref }}
+          branch: ${{ github.head_ref || github.ref_name }}

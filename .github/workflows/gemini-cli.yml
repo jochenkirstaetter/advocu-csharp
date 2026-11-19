@@ -112,8 +112,11 @@ jobs:
           # Clean up user request
           USER_REQUEST=$(echo "${USER_REQUEST}" | sed 's/.*@gemini-cli//' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
           {
-            echo "user_request=${USER_REQUEST}"
+            echo "user_request<<${EOF_MARKER}"
+            echo "${USER_REQUEST}"
+            echo "${EOF_MARKER}"
             echo "issue_number=${ISSUE_NUMBER}"
             echo "is_pr=${IS_PR}"
           } >> "${GITHUB_OUTPUT}"
@@ -171,10 +174,11 @@ jobs:
           else
             DESCRIPTION=$(gh issue view "${ISSUE_NUMBER}" --json body --template '{{.body}}')
           fi
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
           {
-            echo "description<<EOF"
+            echo "description<<${EOF_MARKER}"
             echo "${DESCRIPTION}"
-            echo "EOF"
+            echo "${EOF_MARKER}"
           } >> "${GITHUB_OUTPUT}"
 
       - name: 'Get comments'
@@ -190,19 +194,22 @@ jobs:
           else
             COMMENTS=$(gh issue view "${ISSUE_NUMBER}" --json comments --template '{{range .comments}}{{.author.login}}: {{.body}}{{"\n"}}{{end}}')
           fi
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
           {
-            echo "comments<<EOF"
+            echo "comments<<${EOF_MARKER}"
             echo "${COMMENTS}"
-            echo "EOF"
+            echo "${EOF_MARKER}"
           } >> "${GITHUB_OUTPUT}"
 
       - name: 'Run Gemini'
         id: 'run_gemini'
-        uses: 'google-github-actions/run-gemini-cli@v0'
+        uses: 'google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489' # ratchet:google-github-actions/run-gemini-cli@v0
         env:
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           REPOSITORY: '${{ github.repository }}'
           USER_REQUEST: '${{ steps.get_context.outputs.user_request }}'
+          DESCRIPTION: '${{ steps.get_description.outputs.description }}'
+          COMMENTS: '${{ steps.get_comments.outputs.comments }}'
           ISSUE_NUMBER: '${{ steps.get_context.outputs.issue_number }}'
           IS_PR: '${{ steps.get_context.outputs.is_pr }}'
         with:
@@ -233,15 +240,12 @@ jobs:
             - **Triggering Event**: `${{ github.event_name }}`
             - **Issue/PR Number**: `${{ steps.get_context.outputs.issue_number }}`
             - **Is this a PR?**: `${{ steps.get_context.outputs.is_pr }}`
-            - **Issue/PR Description**:
-            `${{ steps.get_description.outputs.description }}`
-            - **Comments**:
-            `${{ steps.get_comments.outputs.comments }}`
+            - **Issue/PR Description**: Provided in the `"${DESCRIPTION}"` environment variable.
+            - **Comments**: Provided in the `"${COMMENTS}"` environment variable.
 
             ## User Request
 
-            The user has sent the following request:
-            `${{ steps.get_context.outputs.user_request }}`
+            The user request is provided in the `"${USER_REQUEST}"` environment variable.
 
             ## How to Respond to Issues, PR Comments, and Questions
 

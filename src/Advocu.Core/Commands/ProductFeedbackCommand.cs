@@ -14,7 +14,7 @@ internal sealed class ProductFeedbackCommand : ActivityCommand<ProductFeedbackSe
     }
 
     /// <inheritdoc />
-    protected override async Task<int> ExecuteAsync(CommandContext context, ProductFeedbackSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override async Task<int> ExecuteAsync(CommandContext context, ProductFeedbackSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);
 

@@ -15,6 +15,10 @@ namespace Advocu.Mcp.SSE;
 [JsonSerializable(typeof(CreateStoriesActivityRequest))]
 [JsonSerializable(typeof(CreateWorkshopActivityRequest))]
 [JsonSerializable(typeof(ActivityResponse))]
+[JsonSerializable(typeof(ActivitiesResponse))]
+[JsonSerializable(typeof(ActivityItem))]
+[JsonSerializable(typeof(PatchActivityRequest))]
+[JsonSerializable(typeof(AdvocuEnumsSnapshot))]
 internal sealed partial class AdvocuMcpContext : JsonSerializerContext
 {
     public static JsonSerializerOptions DefaultOptions => CreateDefaultOptions();

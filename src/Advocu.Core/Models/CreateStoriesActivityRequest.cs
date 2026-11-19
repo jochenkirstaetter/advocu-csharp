@@ -22,6 +22,7 @@ public sealed class CreateStoriesActivityRequest : ActivityRequest, IValidatable
     /// <summary>
     /// Gets or sets the explanation of why this activity is significant.
     /// </summary>
+    [Required]
     [MaxLength(2000)]
     [JsonPropertyName("whyIsSignificant")]
     public required string WhyIsSignificant { get; set; } // "Tell us more about it and why it is significant"
@@ -39,8 +40,9 @@ public sealed class CreateStoriesActivityRequest : ActivityRequest, IValidatable
     /// </summary>
     [Required]
     [MaxLength(500)]
+    [RegularExpression(@"^https?:\/\/(www\.)?.*$", ErrorMessage = "ActivityUrl must be a valid HTTP/HTTPS URL.")]
     [JsonPropertyName("activityUrl")]
-    [Url] // Basic URL validation; the pattern is 'https?:\\/\\/(www\\.)?.*$'
+    [Url]
     public required string ActivityUrl { get; set; } // "Link"
 
     /// <inheritdoc />

@@ -31,6 +31,7 @@ public sealed class CreateContentCreationActivityRequest : ActivityRequest, IVal
     /// Gets or sets the date of the activity in YYYY-MM-DD format.
     /// </summary>
     [Required]
+    [RegularExpression(@"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", ErrorMessage = "ActivityDate must match YYYY-MM-DD format.")]
     [JsonPropertyName("activityDate")]
     public required string ActivityDate { get; set; } // Pattern yyyy-MM-dd, will format DateTime to this string
 
@@ -39,13 +40,19 @@ public sealed class CreateContentCreationActivityRequest : ActivityRequest, IVal
     /// </summary>
     [Required]
     [MaxLength(500)]
+    [RegularExpression(@"^https?:\/\/(www\.)?.*$", ErrorMessage = "ActivityUrl must be a valid HTTP/HTTPS URL.")]
     [JsonPropertyName("activityUrl")]
-    [Url] // Basic URL validation
+    [Url]
     public required string ActivityUrl { get; set; }
 
     /// <inheritdoc />
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        return [];
+        if (ContentType is AdvocuActivityContentType.EarlyAccessProgram or AdvocuActivityContentType.ProductFeedbackSession)
+        {
+            yield return new ValidationResult(
+                $"ContentType '{ContentType}' is only valid for Product Feedback activities, not Content Creation.",
+                [nameof(ContentType)]);
+        }
     }
 }

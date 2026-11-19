@@ -38,12 +38,14 @@ public sealed class CreatePublicSpeakingActivityRequest : ActivityRequest, IVali
     /// <summary>
     /// Gets or sets the city where the event took place.
     /// </summary>
+    [StringLength(100, MinimumLength = 1)]
     [JsonPropertyName("city")]
     public string? City { get; set; }
     
     /// <summary>
     /// Gets or sets the Place ID of the city.
     /// </summary>
+    [StringLength(500, MinimumLength = 1)]
     [JsonPropertyName("cityPlaceId")]
     public string? CityPlaceId { get; set; }
     
@@ -59,6 +61,7 @@ public sealed class CreatePublicSpeakingActivityRequest : ActivityRequest, IVali
     /// Gets or sets the date of the activity in YYYY-MM-DD format.
     /// </summary>
     [Required]
+    [RegularExpression(@"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", ErrorMessage = "ActivityDate must match YYYY-MM-DD format.")]
     [JsonPropertyName("activityDate")]
     public required string ActivityDate { get; set; } // Pattern YYYY-MM-DD, will format DateTime to this string
 
@@ -67,8 +70,9 @@ public sealed class CreatePublicSpeakingActivityRequest : ActivityRequest, IVali
     /// </summary>
     [Required]
     [MaxLength(500)]
+    [RegularExpression(@"^https?:\/\/(www\.)?.*$", ErrorMessage = "ActivityUrl must be a valid HTTP/HTTPS URL.")]
     [JsonPropertyName("activityUrl")]
-    [Url] // Basic URL validation, regex in image is more specific but UrlAttribute is a good start
+    [Url]
     public required string ActivityUrl { get; set; }
 
     /// <summary>

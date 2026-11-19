@@ -45,7 +45,7 @@ public class Program
                         "This article explores the transformative impact of artificial intelligence on modern software development practices, including AI-powered code generation, testing, and deployment. It delves into various tools and methodologies that are emerging in the AI-driven development landscape.",
                     Tags =
                     [
-                        AdvocuTag.BuildWithAi, AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.Ai
+                        AdvocuTag.BuildWithAi, AdvocuTag.GoogleCloud, AdvocuTag.AiGemini, AdvocuTag.Ai
                     ],
                     Readers = 500,
                     ActivityDate = DateTime.UtcNow.ToString("yyyy-MM-dd"), // Format date as required
@@ -63,7 +63,7 @@ public class Program
                         "Delivered a remote talk on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
                     Tags =
                     [
-                        AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini, AdvocuTag.AiGenerativeAi,
+                        AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini,
                         AdvocuTag.Ai
                     ],
                     Attendees = 50,
@@ -85,7 +85,7 @@ public class Program
                         "Delivered a workshop on Gemini CLI during DevFest season. Explaining the features of Gemini CLI and demoing some use cases - both local and in GitHub Actions. Showing the use of tools, commands, MCP servers, and integration with Jules agent.",
                     Tags =
                     [
-                        AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini, AdvocuTag.AiGenerativeAi,
+                        AdvocuTag.BuildWithAi, AdvocuTag.DevFest, AdvocuTag.AiGemini,
                         AdvocuTag.Ai
                     ],
                     Attendees = 150,
@@ -106,7 +106,7 @@ public class Program
                     Description = "1:1 mentoring session with ",
                     Tags =
                     [
-                        AdvocuTag.GoogleCloud, AdvocuTag.AiGenerativeAi, AdvocuTag.AiKeras, AdvocuTag.AiVertexAi,
+                        AdvocuTag.GoogleCloud, AdvocuTag.AiGemini, AdvocuTag.AiKeras,
                         AdvocuTag.Ai
                     ],
                     Attendees = 1,
@@ -140,7 +140,7 @@ public class Program
                     // Title = "Gemini 3 Feedback Roundtable - EMEA/AMER",
                     // Tags = new List<string> { "AI", "AI - AI Studio", "AI - Gemini", "AI - Generative AI", "AI - Vertex AI" },
                     Title = "Global Cloud GDE Hangout (Monthly)",
-                    Tags = [AdvocuTag.CloudData, AdvocuTag.GoogleCloud],
+                    Tags = [AdvocuTag.CloudBigQuery, AdvocuTag.GoogleCloud],
                     // Title = "Cloud GDE Infra Hangout",
                     // Tags = new List<string> { "Cloud - Compute, Networking, Storage", "Google Cloud" },
                     // Title = "SIG Keras Community Meeting",

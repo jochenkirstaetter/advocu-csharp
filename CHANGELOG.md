@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-11-19
+
+### Added
+- Support for `GET /activities` (`GetActivitiesAsync`) and `PATCH /activities/{activityId}` (`PatchActivityAsync`) in `Advocu.Core`, the CLI (`advocu activities`, `advocu patch`), and the MCP server (`GetActivities`, `PatchActivity`).
+- Consolidated enumerations snapshot (`AdvocuEnumsSnapshot`) exposed as an MCP resource (`advocumcp://advocu/enums`), MCP tool (`GetAdvocuEnums`), and CLI command (`advocu list all`).
+- Multi-targeting for `.NET 10` and `.NET 11` (`net10.0;net11.0`) across all projects.
+
+### Changed
+- Upgraded NuGet packages to latest versions (`Microsoft.Extensions.*` and `System.Text.Json` `11.0.0`, `ModelContextProtocol` `2.4.0`, `OpenTelemetry.*` `1.21.0`, `Spectre.Console.Cli` `0.57.2`).
+- Synced `AdvocuTag` (86 active tags) and `AdvocuActivityContentType` (9 content types) with the live Advocu Personal API.
+- Tightened `POST /activity-drafts/*` request validation (`Title` max length 200, `ActivityDate` and `ActivityUrl` regex patterns, `City`/`CityPlaceId` length bounds, `WhyIsSignificant` required, and `ContentType` cross-type validation).
+- Dropped `net8.0` and `net9.0` target frameworks.
+
+## [0.5.1] - 2026-08-14
+
+### Changed
+- Updated CI/CD workflow.
+
+## [0.5.0] - 2026-08-14
+
+### Changed
+- Converted solution to Central Package Management (CPM) with `Directory.Packages.props`.
+- Moved NuGet publishing to NuGet Trusted Publishing (OIDC) and enhanced CI/CD changelog generation.
+- Upgraded NuGet packages.
+
 ## [0.4.0] - 2026-03-20
 
 ### Added
