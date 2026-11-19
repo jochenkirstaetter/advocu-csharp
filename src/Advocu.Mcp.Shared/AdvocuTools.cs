@@ -315,7 +315,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
     /// <summary>
     /// Partially updates an existing editable Advocu activity.
     /// </summary>
-    [McpServerTool(Name = "update_activity", ReadOnly = false, Idempotent = true, Destructive = false, OpenWorld = true)]
+    [McpServerTool(Name = "update_activity", ReadOnly = false, Idempotent = true, Destructive = true, OpenWorld = true)]
     [Description("Partially update an existing editable Advocu activity by activityId (PATCH /activities/{activityId}). Only supplied non-null fields are updated. Supports fuzzy enum/tag matching and dryRun=true validation.")]
     public async Task<UpdateActivityResult> UpdateActivityAsync(
         [Description("The activityId of the activity to update.")] string activityId,
@@ -508,6 +508,23 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         }
     }
 
+    private static int ValidateRequiredPositiveMetric(int? value, string fieldName, List<string> errors)
+    {
+        if (!value.HasValue)
+        {
+            errors.Add($"{fieldName} is required and must be at least 1.");
+            return 1;
+        }
+
+        if (value.Value < 1)
+        {
+            errors.Add($"{fieldName} must be at least 1 (received {value.Value}).");
+            return 1;
+        }
+
+        return value.Value;
+    }
+
     private static CreateContentCreationActivityRequest BuildContentCreation(
         string title, string description, List<AdvocuTag> tags, string? activityDate, string? activityUrl,
         string? contentType, int? readers, string? additionalInfo, bool? isPrivate, List<string> errors) => new()
@@ -518,7 +535,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         ContentType = ParseRequiredEnum<AdvocuActivityContentType>(contentType, nameof(contentType), errors),
         ActivityDate = activityDate ?? string.Empty,
         ActivityUrl = activityUrl ?? string.Empty,
-        Readers = readers ?? 1,
+        Readers = ValidateRequiredPositiveMetric(readers, nameof(readers), errors),
         AdditionalInfo = additionalInfo,
         Private = isPrivate
     };
@@ -533,9 +550,9 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         Tags = tags,
         EventFormat = ParseRequiredEnum<AdvocuEventFormat>(eventFormat, nameof(eventFormat), errors),
         Country = ParseOptionalEnum<AdvocuCountry>(country, nameof(country), errors),
-        City = city,
-        CityPlaceId = cityPlaceId,
-        Attendees = attendees ?? 1,
+        City = string.IsNullOrWhiteSpace(city) ? null : city,
+        CityPlaceId = string.IsNullOrWhiteSpace(cityPlaceId) ? null : cityPlaceId,
+        Attendees = ValidateRequiredPositiveMetric(attendees, nameof(attendees), errors),
         InPersonAttendees = inPersonAttendees,
         ActivityDate = activityDate ?? string.Empty,
         ActivityUrl = activityUrl ?? string.Empty,
@@ -553,7 +570,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         Tags = tags,
         EventFormat = ParseRequiredEnum<AdvocuEventFormat>(eventFormat, nameof(eventFormat), errors),
         Country = ParseOptionalEnum<AdvocuCountry>(country, nameof(country), errors),
-        Attendees = attendees ?? 1,
+        Attendees = ValidateRequiredPositiveMetric(attendees, nameof(attendees), errors),
         InPersonAttendees = inPersonAttendees,
         ActivityDate = activityDate ?? string.Empty,
         ActivityUrl = activityUrl ?? string.Empty,
@@ -571,7 +588,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         Tags = tags,
         EventFormat = ParseRequiredEnum<AdvocuEventFormat>(eventFormat, nameof(eventFormat), errors),
         Country = ParseOptionalEnum<AdvocuCountry>(country, nameof(country), errors),
-        Attendees = attendees ?? 1,
+        Attendees = ValidateRequiredPositiveMetric(attendees, nameof(attendees), errors),
         InPersonAttendees = inPersonAttendees,
         ActivityDate = activityDate ?? string.Empty,
         ActivityUrl = activityUrl ?? string.Empty,
@@ -588,7 +605,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         Tags = tags,
         ContentType = ParseRequiredEnum<AdvocuActivityContentType>(contentType, nameof(contentType), errors),
         ProductDescription = productDescription,
-        TimeSpent = timeSpent ?? 1,
+        TimeSpent = ValidateRequiredPositiveMetric(timeSpent, nameof(timeSpent), errors),
         ActivityDate = activityDate ?? string.Empty,
         AdditionalInfo = additionalInfo,
         Private = isPrivate
@@ -603,7 +620,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         Tags = tags,
         Format = ParseRequiredEnum<AdvocuFormat>(format, nameof(format), errors),
         InteractionType = ParseRequiredEnum<AdvocuInteractionType>(interactionType, nameof(interactionType), errors),
-        TimeSpent = timeSpent ?? 1,
+        TimeSpent = ValidateRequiredPositiveMetric(timeSpent, nameof(timeSpent), errors),
         ActivityDate = activityDate ?? string.Empty,
         AdditionalInfo = additionalInfo,
         AdditionalLinks = additionalLinks,
@@ -620,7 +637,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         WhyIsSignificant = whyIsSignificant ?? string.Empty,
         SignificanceType = ParseRequiredEnum<AdvocuSignificanceType>(significanceType, nameof(significanceType), errors),
         ActivityUrl = activityUrl ?? string.Empty,
-        Impact = impact ?? 1,
+        Impact = ValidateRequiredPositiveMetric(impact, nameof(impact), errors),
         AdditionalInfo = additionalInfo,
         Private = isPrivate
     };

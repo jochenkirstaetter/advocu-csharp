@@ -54,7 +54,7 @@ public sealed class PatchActivityRequest
 /// Represents optional fields that can be updated via <c>PATCH /activities/{activityId}</c>.
 /// Only non-null properties are serialized.
 /// </summary>
-public sealed class PatchActivityData
+public sealed class PatchActivityData : IValidatableObject
 {
     /// <summary>
     /// Gets or sets the activity title (3 to 200 characters).
@@ -173,4 +173,33 @@ public sealed class PatchActivityData
     /// </summary>
     [JsonPropertyName("private")]
     public bool? Private { get; set; }
+
+    /// <summary>
+    /// Validates cross-field constraints when <see cref="EventFormat"/> is explicitly provided.
+    /// </summary>
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (EventFormat == AdvocuEventFormat.Virtual)
+        {
+            if (Country.HasValue)
+            {
+                yield return new ValidationResult(
+                    $"Country cannot be provided when EventFormat is {AdvocuEventFormat.Virtual}.",
+                    [nameof(Country)]);
+            }
+
+            if (InPersonAttendees.HasValue)
+            {
+                yield return new ValidationResult(
+                    $"InPersonAttendees cannot be provided when EventFormat is {AdvocuEventFormat.Virtual}.",
+                    [nameof(InPersonAttendees)]);
+            }
+        }
+        else if (EventFormat == AdvocuEventFormat.InPerson && InPersonAttendees.HasValue)
+        {
+            yield return new ValidationResult(
+                $"InPersonAttendees is only accepted for Hybrid events. It cannot be provided when EventFormat is {AdvocuEventFormat.InPerson}.",
+                [nameof(InPersonAttendees)]);
+        }
+    }
 }

@@ -96,14 +96,35 @@ public sealed class CreatePublicSpeakingActivityRequest : ActivityRequest, IVali
                     [nameof(InPersonAttendees)]);
             }
         }
-        // The image implies 'inPersonAttendees' is only accepted if eventFormat is 'Hybrid'.
-        // If it's In-Person, inPersonAttendees should likely also be valid/required, but the image explicitly states "Hybrid" for that restriction.
-        // If the API clarifies that In-Person also accepts it, you might adjust this logic.
-        else if (EventFormat == AdvocuEventFormat.InPerson && InPersonAttendees.HasValue)
+        else if (EventFormat == AdvocuEventFormat.InPerson)
         {
-            yield return new ValidationResult(
-                $"InPersonAttendees is only accepted for Hybrid events. It cannot be provided when EventFormat is {AdvocuEventFormat.InPerson}.",
-                [nameof(InPersonAttendees)]);
+            if (!Country.HasValue)
+            {
+                yield return new ValidationResult(
+                    $"Country is required when EventFormat is {AdvocuEventFormat.InPerson}.",
+                    [nameof(Country)]);
+            }
+            if (InPersonAttendees.HasValue)
+            {
+                yield return new ValidationResult(
+                    $"InPersonAttendees is only accepted for Hybrid events. It cannot be provided when EventFormat is {AdvocuEventFormat.InPerson}.",
+                    [nameof(InPersonAttendees)]);
+            }
+        }
+        else if (EventFormat == AdvocuEventFormat.Hybrid)
+        {
+            if (!Country.HasValue)
+            {
+                yield return new ValidationResult(
+                    $"Country is required when EventFormat is {AdvocuEventFormat.Hybrid}.",
+                    [nameof(Country)]);
+            }
+            if (!InPersonAttendees.HasValue)
+            {
+                yield return new ValidationResult(
+                    $"InPersonAttendees is required when EventFormat is {AdvocuEventFormat.Hybrid}.",
+                    [nameof(InPersonAttendees)]);
+            }
         }
     }
 }

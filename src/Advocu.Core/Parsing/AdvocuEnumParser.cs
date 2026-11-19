@@ -25,8 +25,8 @@ public static class AdvocuEnumParser
             throw new ArgumentNullException(nameof(input));
         }
 
-        // 1. Try direct Enum parsing (case-insensitive)
-        if (Enum.TryParse<T>(input, true, out var result))
+        // 1. Try direct Enum parsing (case-insensitive) and reject undefined numeric values
+        if (Enum.TryParse<T>(input, true, out var result) && Enum.IsDefined(result))
         {
             return result;
         }

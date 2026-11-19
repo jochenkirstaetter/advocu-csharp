@@ -42,10 +42,14 @@ jobs:
         run: git config --system core.longpaths true
 
       - name: Restore dependencies
-        run: dotnet restore Advocu.slnx
+        run: |
+          dotnet restore Advocu.slnx
+          dotnet restore Advocu.Mcp.slnx
 
       - name: Build
-        run: dotnet build Advocu.slnx --configuration Release --no-restore
+        run: |
+          dotnet build Advocu.slnx --configuration Release --no-restore
+          dotnet build Advocu.Mcp.slnx --configuration Release --no-restore
 
       - name: Test
         run: dotnet test Advocu.slnx --configuration Release --no-build --verbosity normal
