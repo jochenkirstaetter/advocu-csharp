@@ -76,6 +76,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Verify tagged commit is on main
+        run: |
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::Tag ${GITHUB_REF_NAME} ($(git rev-parse --short HEAD)) is not reachable from origin/main. Refusing to publish."
+            exit 1
+          fi
+
       - name: Setup .NET
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
