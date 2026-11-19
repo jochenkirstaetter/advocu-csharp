@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -7,7 +9,7 @@ namespace Advocu;
 /// <summary>
 /// Specifies the tags associated with an activity.
 /// </summary>
-[JsonConverter(typeof(JsonStringEnumConverter<AdvocuTag>))]
+[JsonConverter(typeof(AdvocuTagJsonConverter))]
 public enum AdvocuTag
 {
     [JsonStringEnumMemberName("AI")]
@@ -184,4 +186,65 @@ public enum AdvocuTag
     WorkspaceGoogleAppsScript,
     [JsonStringEnumMemberName("Workspace - Google Workspace (REST) APIs")]
     WorkspaceGoogleWorkspaceRestApIs
+}
+
+/// <summary>
+/// Custom JSON converter for <see cref="AdvocuTag"/> that preserves exact upstream wire values
+/// (including trailing whitespace required by Advocu's Personal API schema on certain tags)
+/// while still accepting trimmed or enum-name values on deserialization.
+/// </summary>
+public sealed class AdvocuTagJsonConverter : JsonConverter<AdvocuTag>
+{
+    private static readonly Dictionary<AdvocuTag, string> ToWire = BuildToWire();
+    private static readonly Dictionary<string, AdvocuTag> FromWire = BuildFromWire();
+
+    private static Dictionary<AdvocuTag, string> BuildToWire()
+    {
+        var map = new Dictionary<AdvocuTag, string>();
+        foreach (var field in typeof(AdvocuTag).GetFields(BindingFlags.Public | BindingFlags.Static))
+        {
+            var value = (AdvocuTag)field.GetValue(null)!;
+            var wire = field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()?.Name ?? field.Name;
+            map[value] = wire;
+        }
+        return map;
+    }
+
+    private static Dictionary<string, AdvocuTag> BuildFromWire()
+    {
+        var map = new Dictionary<string, AdvocuTag>(StringComparer.OrdinalIgnoreCase);
+        foreach (var field in typeof(AdvocuTag).GetFields(BindingFlags.Public | BindingFlags.Static))
+        {
+            var value = (AdvocuTag)field.GetValue(null)!;
+            map[field.Name] = value;
+            var wire = field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()?.Name;
+            if (!string.IsNullOrEmpty(wire))
+            {
+                map[wire] = value;
+                map[wire.Trim()] = value;
+            }
+        }
+        return map;
+    }
+
+    public override AdvocuTag Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.String)
+        {
+            throw new JsonException($"Expected string token for {nameof(AdvocuTag)}.");
+        }
+
+        var raw = reader.GetString();
+        if (raw is not null && (FromWire.TryGetValue(raw, out var tag) || FromWire.TryGetValue(raw.Trim(), out tag)))
+        {
+            return tag;
+        }
+
+        throw new JsonException($"Unknown {nameof(AdvocuTag)} value: '{raw}'.");
+    }
+
+    public override void Write(Utf8JsonWriter writer, AdvocuTag value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(ToWire.TryGetValue(value, out var wire) ? wire : value.ToString());
+    }
 }
