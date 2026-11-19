@@ -225,10 +225,10 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
         [Description("Activity HTTP/HTTPS URL (required for content-creation, public-speaking, workshop, mentoring, stories).")] string? activityUrl = null,
         [Description("Content type (required for content-creation and product-feedback-given).")] string? contentType = null,
         [Description("Event format: In-Person, Virtual, or Hybrid (required for public-speaking, workshop, mentoring).")] string? eventFormat = null,
-        [Description("Country name (only for In-Person or Hybrid events).")] string? country = null,
+        [Description("Country name (required for In-Person and Hybrid events; forbidden for Virtual).")] string? country = null,
         [Description("City name (optional, public-speaking).")] string? city = null,
         [Description("City Place ID (optional, public-speaking).")] string? cityPlaceId = null,
-        [Description("Number of in-person attendees (only for Hybrid events).")] int? inPersonAttendees = null,
+        [Description("Number of in-person attendees >= 0 (required for Hybrid events; forbidden for In-Person and Virtual).")] int? inPersonAttendees = null,
         [Description("Interaction format (required for interaction-with-googlers).")] string? format = null,
         [Description("Interaction type (required for interaction-with-googlers).")] string? interactionType = null,
         [Description("Product description, max 500 chars (optional, product-feedback-given).")] string? productDescription = null,
@@ -262,7 +262,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
             _ => AddError(errors, $"Unsupported activityType '{activityType}'. Valid draftable types: content-creation, public-speaking, workshop, mentoring, product-feedback-given, interaction-with-googlers, stories.")
         };
 
-        if (request is not null)
+        if (request is not null && errors.Count == 0)
         {
             CollectValidationErrors(request, errors);
             CollectValidationErrors(request.Metrics, errors);

@@ -159,8 +159,8 @@ public static class AdvocuActivitySchemas
 
     private static List<string> EventFormatRules() =>
     [
-        "country is only accepted when eventFormat is In-Person or Hybrid.",
-        "inPersonAttendees (>= 0) is only accepted when eventFormat is Hybrid.",
+        "country is required for In-Person and Hybrid drafts, and forbidden when eventFormat is Virtual.",
+        "inPersonAttendees (>= 0) is required for Hybrid drafts, and forbidden when eventFormat is In-Person or Virtual.",
         "When eventFormat is Virtual, neither country nor inPersonAttendees may be provided."
     ];
 

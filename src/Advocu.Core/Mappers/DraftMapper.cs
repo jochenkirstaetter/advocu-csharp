@@ -44,7 +44,7 @@ internal sealed class DraftMapper
                 City = string.IsNullOrWhiteSpace(draft.City) ? null : draft.City,
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
                 Attendees = draft.Attendees ?? 0,
-                InPersonAttendees = draft.EventFormat == "Hybrid" ? (draft.InPersonAttendees ?? draft.Attendees ?? 0) : null
+                InPersonAttendees = draft.EventFormat == "Hybrid" ? draft.InPersonAttendees : null
             },
             "Workshop" => new CreateWorkshopActivityRequest
             {
@@ -58,7 +58,7 @@ internal sealed class DraftMapper
                 Country = draft.EventFormat == "Virtual" ? null : ParseEnum<AdvocuCountry>(draft.Country!),
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
                 Attendees = draft.Attendees ?? 0,
-                InPersonAttendees = draft.EventFormat == "Hybrid" ? (draft.InPersonAttendees ?? draft.Attendees ?? 0) : null
+                InPersonAttendees = draft.EventFormat == "Hybrid" ? draft.InPersonAttendees : null
             },
             "Mentoring" => new CreateMentoringActivityRequest
             {
@@ -72,7 +72,7 @@ internal sealed class DraftMapper
                 Attendees = draft.Mentees ?? 0,
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
                 Country = draft.EventFormat == "Virtual" ? null : ParseEnum<AdvocuCountry>(draft.Country!),
-                InPersonAttendees = draft.EventFormat == "Hybrid" ? (draft.InPersonAttendees ?? draft.Mentees ?? 0) : null
+                InPersonAttendees = draft.EventFormat == "Hybrid" ? draft.InPersonAttendees : null
             },
             "Product Feedback" => new CreateProductFeedbackActivityRequest
             {
