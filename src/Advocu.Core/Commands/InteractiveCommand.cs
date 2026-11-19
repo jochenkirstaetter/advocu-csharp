@@ -133,16 +133,19 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
                 AddRow(table, "City", draft.City);
                 AddRow(table, "Event Format", draft.EventFormat);
                 AddRow(table, "Attendees", draft.Attendees?.ToString());
+                if (draft.EventFormat == "Hybrid") AddRow(table, "In-Person Attendees", draft.InPersonAttendees?.ToString());
                 break;
             case "Workshop":
                 AddRow(table, "Country", draft.Country);
                 AddRow(table, "Event Format", draft.EventFormat);
                 AddRow(table, "Attendees", draft.Attendees?.ToString());
+                if (draft.EventFormat == "Hybrid") AddRow(table, "In-Person Attendees", draft.InPersonAttendees?.ToString());
                 break;
             case "Mentoring":
                 AddRow(table, "Event Format", draft.EventFormat);
                 AddRow(table, "Country", draft.Country);
                 AddRow(table, "Mentees", draft.Mentees?.ToString());
+                if (draft.EventFormat == "Hybrid") AddRow(table, "In-Person Attendees", draft.InPersonAttendees?.ToString());
                 break;
             case "Product Feedback":
                 AddRow(table, "Content Type", draft.ContentType);
@@ -236,6 +239,12 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         
         draft.Attendees = AskInt("Attendees", draft.Attendees, min: 0);
         _draftManager.SaveDraft(draft);
+
+        if (draft.EventFormat == "Hybrid")
+        {
+            draft.InPersonAttendees = AskInt("In-Person Attendees", draft.InPersonAttendees, min: 0);
+            _draftManager.SaveDraft(draft);
+        }
         return Task.CompletedTask;
     }
     
@@ -250,6 +259,12 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
         
         draft.Attendees = AskInt("Attendees", draft.Attendees, min: 0);
         _draftManager.SaveDraft(draft);
+
+        if (draft.EventFormat == "Hybrid")
+        {
+            draft.InPersonAttendees = AskInt("In-Person Attendees", draft.InPersonAttendees, min: 0);
+            _draftManager.SaveDraft(draft);
+        }
         return Task.CompletedTask;
     }
 
@@ -266,6 +281,12 @@ internal sealed class InteractiveCommand : AsyncCommand<InteractiveSettings>
 
         draft.Mentees = AskInt("Mentees", draft.Mentees, min: 0);
         _draftManager.SaveDraft(draft);
+
+        if (draft.EventFormat == "Hybrid")
+        {
+            draft.InPersonAttendees = AskInt("In-Person Attendees", draft.InPersonAttendees, min: 0);
+            _draftManager.SaveDraft(draft);
+        }
         return Task.CompletedTask;
     }
 

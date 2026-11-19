@@ -35,6 +35,10 @@ internal class StoriesSettings : AdvocuSettings
     [Description("Impact count.")]
     public int Impact { get; set; }
 
+    [CommandOption("--url <URL>")]
+    [Description("URL associated with the story.")]
+    public string? ActivityUrl { get; set; }
+
     [CommandOption("--info <INFO>")]
     [Description("Additional info.")]
     public string? AdditionalInfo { get; set; }

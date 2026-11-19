@@ -25,6 +25,8 @@ internal sealed class MentoringCommand : ActivityCommand<MentoringSettings>
             Tags = ParseTags(settings.Tags),
             Attendees = settings.Attendees,
             EventFormat = settings.EventFormat,
+            Country = settings.Country,
+            InPersonAttendees = settings.InPersonAttendees,
             ActivityDate = settings.ActivityDate ?? DateTime.UtcNow.ToString("yyyy-MM-dd"),
             ActivityUrl = settings.ActivityUrl ?? "",
             AdditionalInfo = settings.AdditionalInfo,

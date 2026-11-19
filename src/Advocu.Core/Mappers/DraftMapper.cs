@@ -40,10 +40,11 @@ internal sealed class DraftMapper
                 AdditionalInfo = draft.AdditionalInfo,
                 Private = draft.Private ?? false,
                 Tags = ParseTags(draft.Tags),
-                Country = ParseEnum<AdvocuCountry>(draft.Country!),
+                Country = draft.EventFormat == "Virtual" ? null : ParseEnum<AdvocuCountry>(draft.Country!),
                 City = string.IsNullOrWhiteSpace(draft.City) ? null : draft.City,
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
-                Attendees = draft.Attendees ?? 0
+                Attendees = draft.Attendees ?? 0,
+                InPersonAttendees = draft.EventFormat == "Hybrid" ? draft.InPersonAttendees : null
             },
             "Workshop" => new CreateWorkshopActivityRequest
             {
@@ -54,9 +55,10 @@ internal sealed class DraftMapper
                 AdditionalInfo = draft.AdditionalInfo,
                 Private = draft.Private ?? false,
                 Tags = ParseTags(draft.Tags),
-                Country = ParseEnum<AdvocuCountry>(draft.Country!),
+                Country = draft.EventFormat == "Virtual" ? null : ParseEnum<AdvocuCountry>(draft.Country!),
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
-                Attendees = draft.Attendees ?? 0
+                Attendees = draft.Attendees ?? 0,
+                InPersonAttendees = draft.EventFormat == "Hybrid" ? draft.InPersonAttendees : null
             },
             "Mentoring" => new CreateMentoringActivityRequest
             {
@@ -69,7 +71,8 @@ internal sealed class DraftMapper
                 Tags = ParseTags(draft.Tags),
                 Attendees = draft.Mentees ?? 0,
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
-                Country = draft.EventFormat == "Virtual" ? null : ParseEnum<AdvocuCountry>(draft.Country!)
+                Country = draft.EventFormat == "Virtual" ? null : ParseEnum<AdvocuCountry>(draft.Country!),
+                InPersonAttendees = draft.EventFormat == "Hybrid" ? draft.InPersonAttendees : null
             },
             "Product Feedback" => new CreateProductFeedbackActivityRequest
             {

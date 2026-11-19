@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-11-19
+
+### Added
+- **MCP-Native Server Redesign** (`Advocu.Mcp.Shared`, `Advocu.McpServer`, `Advocu.Mcp.SSE`):
+  - **Server Instructions (`options.ServerInstructions`):** Shared host guidance for enum discovery, duplicate checks, dry-run validation, and partial updates.
+  - **Resources:** Added `advocumcp://advocu/schemas` (machine-readable field constraints and conditional rules for all 9 activity types), `advocumcp://advocu/activities/recent` (compact summaries for duplicate checking), and `advocumcp://advocu/activities/{activityId}` (resource template for single-activity lookup), alongside `advocumcp://advocu/enums`.
+  - **Prompts:** Replaced stub prompts with 4 parameterized workflow templates (`draft_activity_guided`, `update_activity_guided`, `impact_report`, `batch_draft_activities`).
+  - **Workflow Tools:** Replaced 10 thin REST wrappers with 4 annotated MCP tools (`get_enums`, `search_activities`, unified `draft_activity`, and `update_activity`) featuring `ReadOnly` / `Idempotent` / `Destructive` / `OpenWorld` annotations, fuzzy enum/tag matching with suggestions, compact summary output, and `dryRun: true` validation before posting.
+- Made `AdvocuEnumParser` public in `Advocu.Core` for reuse by MCP tools and library consumers.
+
 ## [0.6.0] - 2026-11-19
 
 ### Added

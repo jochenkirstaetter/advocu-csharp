@@ -8,7 +8,7 @@ namespace Advocu.Core.Parsing;
 /// <summary>
 /// Provides utility methods for parsing Advocu enums.
 /// </summary>
-internal static class AdvocuEnumParser
+public static class AdvocuEnumParser
 {
     /// <summary>
     /// Parses a string input into the specified enum type.
@@ -25,18 +25,21 @@ internal static class AdvocuEnumParser
             throw new ArgumentNullException(nameof(input));
         }
 
-        // 1. Try direct Enum parsing (case-insensitive)
-        if (Enum.TryParse<T>(input, true, out var result))
+        var trimmedInput = input.Trim();
+
+        // 1. Try direct Enum parsing (case-insensitive) and reject undefined numeric values
+        if (Enum.TryParse<T>(trimmedInput, true, out var result) && Enum.IsDefined(result))
         {
             return result;
         }
 
-        // 2. Try matching JsonStringEnumMemberNameAttribute
+        // 2. Try matching JsonStringEnumMemberNameAttribute (exact or trimmed, to handle upstream schema whitespace)
         var fields = typeof(T).GetFields();
         foreach (var field in fields)
         {
             var attr = field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>();
-            if (attr != null && string.Equals(attr.Name, input, StringComparison.OrdinalIgnoreCase))
+            if (attr != null && (string.Equals(attr.Name, input, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(attr.Name.Trim(), trimmedInput, StringComparison.OrdinalIgnoreCase)))
             {
                 return (T)field.GetValue(null)!;
             }

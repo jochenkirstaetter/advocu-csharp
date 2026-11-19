@@ -262,9 +262,19 @@ advocu list all
 
 ## 🤖 MCP Server (`Advocu.McpServer` & `Advocu.Mcp.SSE`)
 
-The repository also includes Model Context Protocol (MCP) servers (stdio and HTTP/SSE) exposing:
-- **Resource:** `advocumcp://advocu/enums` (`application/json`) returning all Advocu API enumerations in a single JSON payload.
-- **Tools:** `GetAdvocuEnums`, `GetActivities`, `PatchActivity`, and the 7 activity draft tools (`DraftContentCreationActivity`, `DraftPublicSpeakingActivity`, `DraftWorkshopActivity`, `DraftMentoringActivity`, `DraftProductFeedbackActivity`, `DraftInteractionWithGooglerActivity`, `DraftStoriesActivity`).
+The repository includes Model Context Protocol (MCP) servers for both **stdio** (`Advocu.McpServer`) and **HTTP/SSE** (`Advocu.Mcp.SSE`) built around native MCP resources, prompts, server instructions, and 4 annotated workflow tools:
+
+- **Resources (`application/json`):**
+  - `advocumcp://advocu/enums` - All allowed Advocu API enumerations in one JSON payload.
+  - `advocumcp://advocu/schemas` - Required/optional fields, metrics, length limits, regexes, and conditional rules for all 9 activity types.
+  - `advocumcp://advocu/activities/recent` - Compact summaries of recent submitted activities for duplicate checking.
+  - `advocumcp://advocu/activities/{activityId}` - Resource template for inspecting a single activity by ID.
+- **Prompts:** `draft_activity_guided`, `update_activity_guided`, `impact_report`, and `batch_draft_activities`.
+- **Tools (with `ReadOnly` / `Idempotent` / `Destructive` / `OpenWorld` annotations):**
+  - `get_enums` - Tool fallback returning all allowed API enumerations.
+  - `search_activities` - Search and filter activities by date, type, tag, or keyword with compact summary mode.
+  - `draft_activity` - Unified draft tool for all 7 draftable activity types with fuzzy enum/tag matching and `dryRun: true` validation.
+  - `update_activity` - Safe partial update (`PATCH /activities/{activityId}`) with fuzzy enum/tag matching and `dryRun: true` validation.
 
 ---
 

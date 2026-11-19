@@ -28,7 +28,7 @@ internal sealed class StoriesCommand : ActivityCommand<StoriesSettings>
             Impact = settings.Impact,
             AdditionalInfo = settings.AdditionalInfo,
             Private = settings.Private,
-            ActivityUrl = string.Empty
+            ActivityUrl = settings.ActivityUrl ?? string.Empty
         };
 
         ValidateRequest(request);

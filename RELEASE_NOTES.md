@@ -1,14 +1,23 @@
-# Release Notes 0.6.0
+# Release Notes 0.7.0
 
-## New Endpoints, Enum Sync, and .NET 10 / .NET 11 Support
+## MCP-Native Server Redesign (4 Resources, 4 Prompts, 4 Tools)
 
-### New Personal API Endpoints
-- Added `GET /activities` (`GetActivitiesAsync`) and `PATCH /activities/{activityId}` (`PatchActivityAsync`) across `Advocu.Core`, the CLI (`advocu activities`, `advocu patch`), and the MCP server (`GetActivities`, `PatchActivity`).
+We rebuilt the Advocu MCP server (`Advocu.Mcp.Shared`, `Advocu.McpServer`, and `Advocu.Mcp.SSE`) from scratch around native Model Context Protocol capabilities instead of thin 1:1 REST wrappers:
 
-### Consolidated Enumerations JSON
-- Added `AdvocuEnumsSnapshot` so all Advocu API enumerations can be fetched in a single JSON payload via the `advocumcp://advocu/enums` MCP resource, the `GetAdvocuEnums` MCP tool, or `advocu list all`.
+### Server Instructions
+- Both stdio (`Advocu.McpServer`) and HTTP/SSE (`Advocu.Mcp.SSE`) hosts now advertise `ServerInstructions` guiding MCP clients through enum discovery, duplicate checks, dry-run validation, and safe partial updates.
 
-### Synced Enums, Validation & Dependencies
-- Synced `AdvocuTag` (86 active tags) and `AdvocuActivityContentType` with the live Advocu Personal API.
-- Aligned `POST /activity-drafts/*` client-side validation with current API length limits, regex patterns, and content-type rules.
-- Upgraded all NuGet dependencies and updated all projects to multi-target `net10.0;net11.0`.
+### Resources
+- `advocumcp://advocu/enums` - All allowed API enumerations in one JSON document.
+- `advocumcp://advocu/schemas` - Field rules, length limits, regexes, metrics, and conditional constraints for all 9 activity types.
+- `advocumcp://advocu/activities/recent` - Compact summaries of recent activities for duplicate checking.
+- `advocumcp://advocu/activities/{activityId}` - Resource template for single-activity lookup.
+
+### Parameterized Workflow Prompts
+- `draft_activity_guided`, `update_activity_guided`, `impact_report`, and `batch_draft_activities`.
+
+### 4 Annotated Workflow Tools
+- `get_enums` (`ReadOnly`, `Idempotent`) - Tool fallback for hosts that do not read resources directly.
+- `search_activities` (`ReadOnly`, `Idempotent`) - Date, type, tag, and keyword filtering with compact summary output by default.
+- `draft_activity` - Unified draft tool across all 7 draftable activity types with fuzzy enum/tag matching and `dryRun: true` validation.
+- `update_activity` (`Idempotent`) - Partial update tool with fuzzy enum/tag matching and `dryRun: true` validation.

@@ -1,14 +1,28 @@
 # Advocu.McpServer
 
-This project is a **Model Context Protocol (MCP)** server for the Advocu platform, utilizing **Standard I/O (stdio)** for message transport. 
+This project is a **Model Context Protocol (MCP)** server for the Advocu Personal API, using **Standard I/O (stdio)** transport (an HTTP/SSE host is also available in `Advocu.Mcp.SSE`).
 
-## Purpose
-The standard I/O MCP server bridges standard, local AI assistants and LLM tools (like the Anthropic Desktop App, Claude CLI, or other desktop-based AI environments) with the Advocu API. It establishes secure and performant communication over standard streams.
+## Capabilities
 
-## Features
-- Transports generic JSON-RPC messages from MCP clients into strongly-typed `Advocu.Mcp.Shared` tool invocations.
-- Easily connects AI environments directly to an `ADVOCU_API_TOKEN` environment, making requests securely.
-- Streamlined configuration via `Microsoft.Extensions.Hosting`.
+- **Server Instructions:** Advertises recommended workflows via `ServerInstructions` (read enums, check schemas and recent activities for duplicates, validate with `dryRun: true` before submitting).
+- **Resources (`application/json`):**
+  - `advocumcp://advocu/enums` - All allowed API enumerations in one JSON payload.
+  - `advocumcp://advocu/schemas` - Field rules, length limits, regex patterns, metrics, and conditional constraints for all 9 activity types.
+  - `advocumcp://advocu/activities/recent` - Compact summaries of recent submitted activities.
+  - `advocumcp://advocu/activities/{activityId}` - Resource template for single-activity inspection.
+- **Prompts:** `draft_activity_guided`, `update_activity_guided`, `impact_report`, and `batch_draft_activities`.
+- **Tools:**
+  - `get_enums` (`ReadOnly`, `Idempotent`)
+  - `search_activities` (`ReadOnly`, `Idempotent`)
+  - `draft_activity` (unified across all 7 draftable types, with fuzzy enum/tag matching and `dryRun: true` validation)
+  - `update_activity` (`Idempotent`, partial updates with fuzzy enum/tag matching and `dryRun: true` validation)
 
 ## Usage
-Add this server as a Local Application/Command via your LLM's MCP settings using standard arguments, for example configuring the command as `dotnet run --project src/Advocu.McpServer`. Make sure `ADVOCU_API_TOKEN` is present in your environment variables.
+
+Configure the server as a local stdio MCP server in your MCP host (for example Antigravity, Claude Desktop, or VS Code):
+
+```bash
+dotnet run --project src/Advocu.McpServer --framework net10.0
+```
+
+Set `ADVOCU_API_TOKEN` in the server's environment variables (and optionally `ADVOCU_URL` to override the default Personal API base URL).
