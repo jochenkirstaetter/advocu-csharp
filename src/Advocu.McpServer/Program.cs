@@ -45,6 +45,7 @@ builder.Services
             Description = "Advocu MCP Server",
             Version = version
         };
+        options.ServerInstructions = AdvocuMcpInstructions.Text;
     })
     .WithStdioServerTransport()
     .WithPrompts<AdvocuPrompts>()

@@ -8,7 +8,7 @@ namespace Advocu.Core.Parsing;
 /// <summary>
 /// Provides utility methods for parsing Advocu enums.
 /// </summary>
-internal static class AdvocuEnumParser
+public static class AdvocuEnumParser
 {
     /// <summary>
     /// Parses a string input into the specified enum type.

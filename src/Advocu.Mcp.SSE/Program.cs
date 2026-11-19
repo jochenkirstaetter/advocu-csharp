@@ -35,6 +35,7 @@ builder.Services
             Description = "Advocu MCP Server for SSE",
             Version = version
         };
+        options.ServerInstructions = AdvocuMcpInstructions.Text;
     })
     .WithHttpTransport()
     .WithPrompts<AdvocuPrompts>()

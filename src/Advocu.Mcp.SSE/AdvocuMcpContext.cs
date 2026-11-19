@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Advocu.Mcp.Shared;
 using ModelContextProtocol;
 
 namespace Advocu.Mcp.SSE;
@@ -19,6 +20,11 @@ namespace Advocu.Mcp.SSE;
 [JsonSerializable(typeof(ActivityItem))]
 [JsonSerializable(typeof(PatchActivityRequest))]
 [JsonSerializable(typeof(AdvocuEnumsSnapshot))]
+[JsonSerializable(typeof(List<AdvocuActivitySchemaInfo>))]
+[JsonSerializable(typeof(List<ActivitySummary>))]
+[JsonSerializable(typeof(ActivitySearchResult))]
+[JsonSerializable(typeof(DraftActivityResult))]
+[JsonSerializable(typeof(UpdateActivityResult))]
 internal sealed partial class AdvocuMcpContext : JsonSerializerContext
 {
     public static JsonSerializerOptions DefaultOptions => CreateDefaultOptions();
