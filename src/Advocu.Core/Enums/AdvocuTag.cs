@@ -68,7 +68,8 @@ public enum AdvocuTag
     CloudAgentSubstrate,
     [JsonStringEnumMemberName("Cloud - AlloyDB")]
     CloudAlloyDb,
-    [JsonStringEnumMemberName("Cloud - BigQuery")]
+    // Advocu's Personal API schema requires a literal trailing space on this tag value.
+    [JsonStringEnumMemberName("Cloud - BigQuery ")]
     CloudBigQuery,
     [JsonStringEnumMemberName("Cloud - Cloud Developer Agent Plugin")]
     CloudCloudDeveloperAgentPlugin,
@@ -80,7 +81,8 @@ public enum AdvocuTag
     CloudCloudSql,
     [JsonStringEnumMemberName("Cloud - CodeMender")]
     CloudCodeMender,
-    [JsonStringEnumMemberName("Cloud - Conversational Data Analytics")]
+    // Advocu's Personal API schema requires a literal trailing space on this tag value.
+    [JsonStringEnumMemberName("Cloud - Conversational Data Analytics ")]
     CloudConversationalDataAnalytics,
     [JsonStringEnumMemberName("Cloud - Data Agent Kit")]
     CloudDataAgentKit,
