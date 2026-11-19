@@ -47,6 +47,7 @@ public sealed class CreateWorkshopActivityRequest : ActivityRequest, IValidatabl
     /// Gets or sets the date of the workshop in YYYY-MM-DD format.
     /// </summary>
     [Required]
+    [RegularExpression(@"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", ErrorMessage = "ActivityDate must match YYYY-MM-DD format.")]
     [JsonPropertyName("activityDate")]
     public required string ActivityDate { get; set; } // "Date of your workshop", Pattern YYYY-MM-DD
 
@@ -55,8 +56,9 @@ public sealed class CreateWorkshopActivityRequest : ActivityRequest, IValidatabl
     /// </summary>
     [Required]
     [MaxLength(500)]
+    [RegularExpression(@"^https?:\/\/(www\.)?.*$", ErrorMessage = "ActivityUrl must be a valid HTTP/HTTPS URL.")]
     [JsonPropertyName("activityUrl")]
-    [Url] // Basic URL validation, regex in image is more specific but UrlAttribute is a good start
+    [Url]
     public required string ActivityUrl { get; set; } // "Share the event link (if it's a GDG event, the gdg.community.dev event URL) or any other relevant link"
 
     /// <summary>

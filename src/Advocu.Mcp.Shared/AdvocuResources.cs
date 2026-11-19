@@ -10,22 +10,18 @@ namespace Advocu.Mcp.Shared;
 [McpServerResourceType]
 public class AdvocuResources
 {
-    private readonly AdvocuApiClient _apiClient;
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = true
+    };
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AdvocuResources"/> class.
+    /// Returns all Advocu API enumerations and their exact allowed values in a single JSON document.
     /// </summary>
-    /// <param name="apiClient">The Advocu API client.</param>
-    public AdvocuResources(AdvocuApiClient apiClient)
+    [McpServerResource(UriTemplate = "advocumcp://advocu/enums", Name = "AdvocuEnums", MimeType = "application/json")]
+    [Description("Get all Advocu API enumerations (tags, content types, event formats, interaction formats, interaction types, significance types, activity types, and countries) in a single JSON payload.")]
+    public static string GetAllEnums()
     {
-        _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+        return JsonSerializer.Serialize(AdvocuEnumsSnapshot.Create(), SerializerOptions);
     }
-
-    // [McpServerResource(UriTemplate = "advocumcp://advocu/tags", Name = "AdvocuTags", MimeType = "application/json")]
-    // [Description("Get a list of allowed activity tags")]
-    // public async Task<string> AllowedTags()
-    // {
-    //     var tags = await _apiClient.GetAllowedTags() ?? throw new Exception("No tags available");
-    //     return JsonSerializer.Serialize(tags);
-    // }
 }

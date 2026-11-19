@@ -13,7 +13,7 @@ public abstract class ActivityRequest
     /// Gets or sets the title of the activity.
     /// </summary>
     [Required]
-    [MinLength(3)]
+    [StringLength(200, MinimumLength = 3)]
     [JsonPropertyName("title")]
     public required string Title { get; set; }
 

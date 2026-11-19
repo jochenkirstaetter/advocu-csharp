@@ -14,7 +14,7 @@ internal sealed class MentoringCommand : ActivityCommand<MentoringSettings>
     }
 
     /// <inheritdoc />
-    protected override async Task<int> ExecuteAsync(CommandContext context, MentoringSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override async Task<int> ExecuteAsync(CommandContext context, MentoringSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         var client = CreateClient(settings);
 

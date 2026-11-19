@@ -22,11 +22,6 @@ public enum AdvocuActivityContentType
     [JsonStringEnumMemberName("Code contribution")]
     CodeContribution,
     /// <summary>
-    /// Console projects content.
-    /// </summary>
-    [JsonStringEnumMemberName("Console Projects")]
-    ConsoleProjects,
-    /// <summary>
     /// Demos content.
     /// </summary>
     Demos,
@@ -42,11 +37,6 @@ public enum AdvocuActivityContentType
     /// Videos content.
     /// </summary>
     Videos,
-    /// <summary>
-    /// Reusable GCP presentations content.
-    /// </summary>
-    [JsonStringEnumMemberName("Reusable GCP presentations")]
-    ReusableGcpPresentations,
     /// <summary>
     /// Early access program content.
     /// </summary>
