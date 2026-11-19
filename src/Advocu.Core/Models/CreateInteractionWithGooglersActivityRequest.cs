@@ -39,6 +39,7 @@ public sealed class CreateInteractionWithGooglersActivityRequest : ActivityReque
     /// Gets or sets the date of the interaction in YYYY-MM-DD format.
     /// </summary>
     [Required]
+    [RegularExpression(@"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", ErrorMessage = "ActivityDate must match YYYY-MM-DD format.")]
     [JsonPropertyName("activityDate")]
     public required string ActivityDate { get; set; } // "Interaction Date", Pattern YYYY-MM-DD
 

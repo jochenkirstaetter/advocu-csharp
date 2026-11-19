@@ -77,6 +77,8 @@ jobs:
     steps:
       - name: 'Checkout PR code'
         uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: 'Generate GitHub App Token'
         id: 'generate_token'
@@ -92,6 +94,7 @@ jobs:
         if: |-
           ${{ github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' }}
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           EVENT_NAME: '${{ github.event_name }}'
           WORKFLOW_PR_NUMBER: '${{ github.event.inputs.pr_number }}'
@@ -109,14 +112,20 @@ jobs:
 
           # Get PR details
           PR_DATA="$(gh pr view "${PR_NUMBER}" --json title,body,additions,deletions,changedFiles,baseRefName,headRefName)"
-          echo "pr_data=${PR_DATA}" >> "${GITHUB_OUTPUT}"
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
+          {
+            echo "pr_data<<${EOF_MARKER}"
+            echo "${PR_DATA}"
+            echo "${EOF_MARKER}"
+          } >> "${GITHUB_OUTPUT}"
 
           # Get file changes
           CHANGED_FILES="$(gh pr diff "${PR_NUMBER}" --name-only)"
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
           {
-            echo "changed_files<<EOF"
+            echo "changed_files<<${EOF_MARKER}"
             echo "${CHANGED_FILES}"
-            echo "EOF"
+            echo "${EOF_MARKER}"
           } >> "${GITHUB_OUTPUT}"
 
 
@@ -125,6 +134,7 @@ jobs:
         if: |-
           ${{ github.event_name == 'issue_comment' || github.event_name == 'pull_request_review' || github.event_name == 'pull_request_review_comment' }}
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           COMMENT_BODY: '${{ github.event.comment.body || github.event.review.body }}'
           PR_NUMBER: '${{ github.event.issue.number || github.event.pull_request.number }}'
@@ -137,24 +147,36 @@ jobs:
           ADDITIONAL_INSTRUCTIONS="$(
             echo "${COMMENT_BODY}" | sed 's/.*@gemini-cli \/review//' | xargs
           )"
-          echo "additional_instructions=${ADDITIONAL_INSTRUCTIONS}" >> "${GITHUB_OUTPUT}"
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
+          {
+            echo "additional_instructions<<${EOF_MARKER}"
+            echo "${ADDITIONAL_INSTRUCTIONS}"
+            echo "${EOF_MARKER}"
+          } >> "${GITHUB_OUTPUT}"
 
           # Get PR details
           PR_DATA="$(gh pr view "${PR_NUMBER}" --json title,body,additions,deletions,changedFiles,baseRefName,headRefName)"
-          echo "pr_data=${PR_DATA}" >> "${GITHUB_OUTPUT}"
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
+          {
+            echo "pr_data<<${EOF_MARKER}"
+            echo "${PR_DATA}"
+            echo "${EOF_MARKER}"
+          } >> "${GITHUB_OUTPUT}"
 
           # Get file changes
           CHANGED_FILES="$(gh pr diff "${PR_NUMBER}" --name-only)"
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
           {
-            echo "changed_files<<EOF"
+            echo "changed_files<<${EOF_MARKER}"
             echo "${CHANGED_FILES}"
-            echo "EOF"
+            echo "${EOF_MARKER}"
           } >> "${GITHUB_OUTPUT}"
 
       - name: 'Run Gemini PR Review'
-        uses: 'google-github-actions/run-gemini-cli@v0'
+        uses: 'google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489' # ratchet:google-github-actions/run-gemini-cli@v0
         id: 'gemini_pr_review'
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           PR_NUMBER: '${{ steps.get_pr.outputs.pr_number || steps.get_pr_comment.outputs.pr_number }}'
           PR_DATA: '${{ steps.get_pr.outputs.pr_data || steps.get_pr_comment.outputs.pr_data }}'
@@ -456,13 +478,16 @@ jobs:
       - name: 'Post PR review failure comment'
         if: |-
           ${{ failure() && steps.gemini_pr_review.outcome == 'failure' }}
+        env:
+          PR_NUMBER: '${{ steps.get_pr.outputs.pr_number || steps.get_pr_comment.outputs.pr_number }}'
+          RUN_URL: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
         uses: 'actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea'
         with:
           github-token: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           script: |-
             github.rest.issues.createComment({
-              owner: '${{ github.repository }}'.split('/')[0],
-              repo: '${{ github.repository }}'.split('/')[1],
-              issue_number: '${{ steps.get_pr.outputs.pr_number || steps.get_pr_comment.outputs.pr_number }}',
-              body: 'There is a problem with the Gemini CLI PR review. Please check the [action logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.'
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(process.env.PR_NUMBER, 10),
+              body: `There is a problem with the Gemini CLI PR review. Please check the [action logs](${process.env.RUN_URL}) for details.`
             })

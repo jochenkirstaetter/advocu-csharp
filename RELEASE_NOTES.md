@@ -1,13 +1,14 @@
-# Release Notes 0.4.0
+# Release Notes 0.6.0
 
-## 🚀 Enhancements & Validation
+## New Endpoints, Enum Sync, and .NET 10 / .NET 11 Support
 
-We've improved the underlying Core library and models!
+### New Personal API Endpoints
+- Added `GET /activities` (`GetActivitiesAsync`) and `PATCH /activities/{activityId}` (`PatchActivityAsync`) across `Advocu.Core`, the CLI (`advocu activities`, `advocu patch`), and the MCP server (`GetActivities`, `PatchActivity`).
 
-### ✨ Better Request Validation
-The activity request models now include more robust validation. Also, `ActivityDate` and `ActivityUrl` fields are explicitly initialized in various activity creation requests to prevent nullable property errors when using the library programmatically.
+### Consolidated Enumerations JSON
+- Added `AdvocuEnumsSnapshot` so all Advocu API enumerations can be fetched in a single JSON payload via the `advocumcp://advocu/enums` MCP resource, the `GetAdvocuEnums` MCP tool, or `advocu list all`.
 
-### 🛠️ Core Namespace Update
-We've streamlined our internal project namespaces, renaming them from `Advocu.NuGet` to `Advocu.Core` to better reflect the library's purpose and ensure consistency.
-
-Happy Reporting! 🚀
+### Synced Enums, Validation & Dependencies
+- Synced `AdvocuTag` (86 active tags) and `AdvocuActivityContentType` with the live Advocu Personal API.
+- Aligned `POST /activity-drafts/*` client-side validation with current API length limits, regex patterns, and content-type rules.
+- Upgraded all NuGet dependencies and updated all projects to multi-target `net10.0;net11.0`.

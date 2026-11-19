@@ -1,6 +1,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Advocu.Core.Commands;
@@ -10,11 +11,25 @@ internal sealed class ListSettings : CommandSettings
 }
 
 /// <summary>
+/// Command to output all Advocu enumerations as a single JSON document.
+/// </summary>
+internal sealed class ListAllEnumsCommand : Command<ListSettings>
+{
+    private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
+
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    {
+        Console.WriteLine(JsonSerializer.Serialize(AdvocuEnumsSnapshot.Create(), IndentedJson));
+        return 0;
+    }
+}
+
+/// <summary>
 /// Command to list available tags.
 /// </summary>
 internal sealed class ListTagsCommand : Command<ListSettings>
 {
-    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuTag>("Tags");
     }
@@ -25,7 +40,7 @@ internal sealed class ListTagsCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListContentTypesCommand : Command<ListSettings>
 {
-    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuActivityContentType>("Content Types");
     }
@@ -36,7 +51,7 @@ internal sealed class ListContentTypesCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListCountriesCommand : Command<ListSettings>
 {
-    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuCountry>("Countries");
     }
@@ -47,7 +62,7 @@ internal sealed class ListCountriesCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListEventFormatsCommand : Command<ListSettings>
 {
-    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuEventFormat>("Event Formats");
     }
@@ -58,7 +73,7 @@ internal sealed class ListEventFormatsCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListInteractionTypesCommand : Command<ListSettings>
 {
-    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuInteractionType>("Interaction Types");
     }
@@ -69,7 +84,7 @@ internal sealed class ListInteractionTypesCommand : Command<ListSettings>
 /// </summary>
 internal sealed class ListSignificanceTypesCommand : Command<ListSettings>
 {
-    protected override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, ListSettings settings, System.Threading.CancellationToken cancellationToken)
     {
         return EnumLister.List<AdvocuSignificanceType>("Significance Types");
     }

@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: 'Checkout repository'
         uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: 'Generate GitHub App Token'
         id: 'generate_token'
@@ -57,7 +59,12 @@ jobs:
           ISSUES="$(echo "${NO_LABEL_ISSUES}" "${NEED_TRIAGE_ISSUES}" | jq -c -s 'add | unique_by(.number)')"
 
           echo '📝 Setting output for GitHub Actions...'
-          echo "issues_to_triage=${ISSUES}" >> "${GITHUB_OUTPUT}"
+          EOF_MARKER="EOF_$(dd if=/dev/urandom bs=15 count=1 status=none | base64)"
+          {
+            echo "issues_to_triage<<${EOF_MARKER}"
+            echo "${ISSUES}"
+            echo "${EOF_MARKER}"
+          } >> "${GITHUB_OUTPUT}"
 
           ISSUE_COUNT="$(echo "${ISSUES}" | jq 'length')"
           echo "✅ Found ${ISSUE_COUNT} issues to triage! 🎯"
@@ -80,9 +87,10 @@ jobs:
       - name: 'Run Gemini Issue Analysis'
         if: |-
           ${{ steps.find_issues.outputs.issues_to_triage != '[]' }}
-        uses: 'google-github-actions/run-gemini-cli@v0'
+        uses: 'google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489' # ratchet:google-github-actions/run-gemini-cli@v0
         id: 'gemini_issue_analysis'
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '' # Do not pass any auth token here since this runs on untrusted inputs
           ISSUES_TO_TRIAGE: '${{ steps.find_issues.outputs.issues_to_triage }}'
           REPOSITORY: '${{ github.repository }}'

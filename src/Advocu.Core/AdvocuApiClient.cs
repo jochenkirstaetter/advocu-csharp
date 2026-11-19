@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -13,6 +14,7 @@ namespace Advocu
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonSerializerWriteOptions;
+        private readonly JsonSerializerOptions _jsonSerializerPatchOptions;
         private readonly JsonSerializerOptions _jsonSerializerReadOptions;
 
         // Base URL from the image
@@ -41,6 +43,10 @@ namespace Advocu
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            _jsonSerializerPatchOptions = new JsonSerializerOptions(_jsonSerializerWriteOptions)
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             _jsonSerializerReadOptions = options ?? new JsonSerializerOptions
             {
@@ -155,6 +161,85 @@ namespace Advocu
             ValidateRequest(request);
             return await PostJsonAsync<CreateStoriesActivityRequest, ActivityResponse>(endpoint, request, cancellationToken);
         }
+
+        /// <summary>
+        /// Retrieves a paginated list of activities sorted by submission date in ascending order.
+        /// </summary>
+        /// <param name="query">Optional query parameters for filtering and pagination.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>A paginated response containing the matching activities.</returns>
+        /// <exception cref="HttpRequestException">Thrown if the API call fails or returns a non-success status code.</exception>
+        /// <exception cref="ValidationException">Thrown if query validation fails.</exception>
+        public async Task<ActivitiesResponse> GetActivitiesAsync(GetActivitiesQuery? query = null, CancellationToken cancellationToken = default)
+        {
+            var endpoint = "activities";
+
+            if (query is not null)
+            {
+                ValidateRequest(query);
+
+                var queryParts = new List<string>();
+                if (query.From.HasValue)
+                {
+                    queryParts.Add($"from={Uri.EscapeDataString(query.From.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))}");
+                }
+                if (query.To.HasValue)
+                {
+                    queryParts.Add($"to={Uri.EscapeDataString(query.To.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))}");
+                }
+                if (query.UpdatedAfter.HasValue)
+                {
+                    queryParts.Add($"updatedAfter={Uri.EscapeDataString(query.UpdatedAfter.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))}");
+                }
+                if (query.Page.HasValue)
+                {
+                    queryParts.Add($"page={query.Page.Value}");
+                }
+                if (query.Size.HasValue)
+                {
+                    queryParts.Add($"size={query.Size.Value}");
+                }
+
+                if (queryParts.Count > 0)
+                {
+                    endpoint = $"{endpoint}?{string.Join("&", queryParts)}";
+                }
+            }
+
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Get, endpoint);
+            return await SendJsonAsync<ActivitiesResponse>(requestMessage, cancellationToken);
+        }
+
+        /// <summary>
+        /// Partially updates an existing activity on the Advocu platform.
+        /// </summary>
+        /// <param name="activityId">The identifier of the activity to update.</param>
+        /// <param name="request">The partial update request payload.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>The updated activity.</returns>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="activityId"/> is null or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="request"/> is null.</exception>
+        /// <exception cref="HttpRequestException">Thrown if the API call fails or returns a non-success status code.</exception>
+        /// <exception cref="ValidationException">Thrown if client-side validation fails.</exception>
+        public async Task<ActivityItem> PatchActivityAsync(string activityId, PatchActivityRequest request, CancellationToken cancellationToken = default)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(activityId);
+            ArgumentNullException.ThrowIfNull(request);
+
+            ValidateRequest(request);
+            ValidateRequest(request.Data);
+            if (request.Data.Metrics is not null)
+            {
+                ValidateRequest(request.Data.Metrics);
+            }
+
+            var endpoint = $"activities/{Uri.EscapeDataString(activityId)}";
+            var jsonRequest = JsonSerializer.Serialize(request, _jsonSerializerPatchOptions);
+            using var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Patch, endpoint) { Content = content };
+
+            return await SendJsonAsync<ActivityItem>(requestMessage, cancellationToken);
+        }
  
         /// <summary>
         /// Validates the given request object using data annotations.
@@ -191,10 +276,14 @@ namespace Advocu
         private async Task<TResponse> PostJsonAsync<TRequest, TResponse>(string endpoint, TRequest requestPayload, CancellationToken cancellationToken = default)
         {
             var jsonRequest = JsonSerializer.Serialize(requestPayload, _jsonSerializerWriteOptions);
+            using var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpoint) { Content = content };
+            return await SendJsonAsync<TResponse>(requestMessage, cancellationToken);
+        }
 
-            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
+        private async Task<TResponse> SendJsonAsync<TResponse>(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default)
+        {
+            using HttpResponseMessage response = await _httpClient.SendAsync(requestMessage, cancellationToken);
 
             if (response.IsSuccessStatusCode)
             {

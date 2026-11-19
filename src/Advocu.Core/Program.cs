@@ -77,9 +77,18 @@ internal static class Program
             config.AddCommand<InteractiveCommand>("interactive")
                 .WithDescription("Starts an interactive session to create an activity draft.");
 
+            config.AddCommand<GetActivitiesCommand>("activities")
+                .WithDescription("Retrieves submitted activities (GET /activities).");
+
+            config.AddCommand<PatchActivityCommand>("patch")
+                .WithDescription("Partially updates an existing activity (PATCH /activities/{activityId}).");
+
             config.AddBranch("list", list =>
             {
                 list.SetDescription("Lists available options for enumerations.");
+
+                list.AddCommand<ListAllEnumsCommand>("all")
+                    .WithDescription("Outputs all enumerations and their API values as a single JSON document.");
                 
                 list.AddCommand<ListTagsCommand>("tags")
                     .WithDescription("Lists available Tags.");

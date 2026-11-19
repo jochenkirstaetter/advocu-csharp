@@ -41,7 +41,7 @@ internal sealed class DraftMapper
                 Private = draft.Private ?? false,
                 Tags = ParseTags(draft.Tags),
                 Country = ParseEnum<AdvocuCountry>(draft.Country!),
-                City = draft.City,
+                City = string.IsNullOrWhiteSpace(draft.City) ? null : draft.City,
                 EventFormat = ParseEnum<AdvocuEventFormat>(draft.EventFormat!),
                 Attendees = draft.Attendees ?? 0
             },
