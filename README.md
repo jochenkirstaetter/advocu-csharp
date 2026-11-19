@@ -10,7 +10,7 @@ Reporting your awesome community work shouldn't be a chore. Whether you want to 
 
 Get your Advocu Personal API token from [Advocu](https://app.advocu.com/settings/integrations/personal-api) and store it in an environment variable `ADVOCU_API_TOKEN`. Alternatively, you can pass it as a command-line argument `--api-token` to the CLI tool.
 
-### Ad hoc without installation (.NET 10)
+### Ad hoc without installation (.NET 10 / .NET 11)
 
 Run the `dnx` command to use the Advocu CLI tool:
 
@@ -21,16 +21,16 @@ dnx advocu -y
 Or pass arguments directly using the double-dash `--`:
 
 ```bash
-dnx advocu -y -- content -t "Creating Advocu C# using Antigravity"-d "This blog article describes..." ... 
+dnx advocu -y -- content -t "Creating Advocu C# using Antigravity" -d "This blog article describes..." ...
 ```
 
-Or use the new interactive mode:
+Or use the interactive mode:
 
 ```bash
 dnx advocu -y -- interactive
 ```
 
-### CLI Tool (.NET 10 and earlier)
+### CLI Tool (.NET 10 / .NET 11)
 
 Install the `advocu` global tool to use it from anywhere:
 
@@ -38,7 +38,7 @@ Install the `advocu` global tool to use it from anywhere:
 dotnet tool install --global Advocu
 ```
 
-### Library (.NET 10 and earlier)
+### Library (.NET 10 / .NET 11)
 
 Add the client library to your .NET project:
 
@@ -67,14 +67,16 @@ OPTIONS:
 
 COMMANDS:
     interactive    Start the interactive wizard mode (New! ✨)
-    content        Creates a new Content Creation Activity draft         
-    public         Creates a new Public Speaking Activity draft          
-    workshop       Creates a new Workshop Activity draft                 
-    mentoring      Creates a new Mentoring Activity draft                
-    feedback       Creates a new Product Feedback Activity draft         
+    content        Creates a new Content Creation Activity draft
+    public         Creates a new Public Speaking Activity draft
+    workshop       Creates a new Workshop Activity draft
+    mentoring      Creates a new Mentoring Activity draft
+    feedback       Creates a new Product Feedback Activity draft
     interaction    Creates a new Interaction with Googlers Activity draft
-    stories        Creates a new Stories Activity draft                  
-    list           Lists available options for enums 
+    stories        Creates a new Stories Activity draft
+    activities     Retrieves submitted activities (GET /activities)
+    patch          Partially updates an existing activity (PATCH /activities/{activityId})
+    list           Lists available options for enumerations (including `list all` JSON output)
 ```
 
 Each command has their own help information and provides details regarding the activity details.
@@ -139,6 +141,35 @@ public async Task ReportWorkshop(AdvocuApiClient client)
 }
 ```
 
+### Example: Listing and Updating Activities
+
+You can query submitted activities (`GET /activities`), partially update an editable activity (`PATCH /activities/{activityId}`), or retrieve all API enumerations in a single object:
+
+```csharp
+using Advocu;
+
+// Retrieve paginated activities
+var activities = await client.GetActivitiesAsync(new GetActivitiesQuery
+{
+    From = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero),
+    Page = 0,
+    Size = 20
+});
+
+// Partially update an existing activity
+var updated = await client.PatchActivityAsync("activity-id", new PatchActivityRequest
+{
+    Data = new PatchActivityData
+    {
+        Title = "Updated Workshop Title",
+        Tags = ["AI", "AI - Gemini", "Google Cloud"]
+    }
+});
+
+// Get all API enumerations and their exact values in one object
+var enums = AdvocuEnumsSnapshot.Create();
+```
+
 Check out the `Advocu.Console` and `Advocu.WebApp` projects in this repository for more complete examples!
 
 ---
@@ -194,6 +225,27 @@ advocu mentoring \
   --tags "GoogleCloud" "Startup"
 ```
 
+### Listing & Updating Activities
+
+Retrieve submitted activities with optional date filters and pagination:
+
+```bash
+advocu activities --from 2026-01-01T00:00:00Z --page 0 --size 20
+advocu activities --updated-after 2026-06-01T00:00:00Z --json
+```
+
+Partially update an existing activity by ID:
+
+```bash
+advocu patch <ACTIVITY_ID> --title "Updated Title" --tags "AI,AI - Gemini,Google Cloud" --set-private false
+```
+
+Output all enumerations and their exact API values as a single JSON document:
+
+```bash
+advocu list all
+```
+
 ### Available Commands
 - `content` - Articles, videos, etc.
 - `public` - Public speaking.
@@ -202,7 +254,17 @@ advocu mentoring \
 - `feedback` - Product feedback.
 - `interaction` - Interaction with Googlers.
 - `stories` - Success stories.
-- `list` - Discover available tags, countries, and types.
+- `activities` - Retrieve submitted activities (`GET /activities`).
+- `patch` - Partially update an existing activity (`PATCH /activities/{activityId}`).
+- `list` - Discover available tags, countries, and types (`list all` outputs all enums as JSON).
+
+---
+
+## 🤖 MCP Server (`Advocu.McpServer` & `Advocu.Mcp.SSE`)
+
+The repository also includes Model Context Protocol (MCP) servers (stdio and HTTP/SSE) exposing:
+- **Resource:** `advocumcp://advocu/enums` (`application/json`) returning all Advocu API enumerations in a single JSON payload.
+- **Tools:** `GetAdvocuEnums`, `GetActivities`, `PatchActivity`, and the 7 activity draft tools (`DraftContentCreationActivity`, `DraftPublicSpeakingActivity`, `DraftWorkshopActivity`, `DraftMentoringActivity`, `DraftProductFeedbackActivity`, `DraftInteractionWithGooglerActivity`, `DraftStoriesActivity`).
 
 ---
 
