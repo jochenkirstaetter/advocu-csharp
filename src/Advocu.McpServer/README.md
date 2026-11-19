@@ -22,7 +22,7 @@ This project is a **Model Context Protocol (MCP)** server for the Advocu Persona
 Configure the server as a local stdio MCP server in your MCP host (for example Antigravity, Claude Desktop, or VS Code):
 
 ```bash
-dotnet run --project src/Advocu.McpServer
+dotnet run --project src/Advocu.McpServer --framework net10.0
 ```
 
 Set `ADVOCU_API_TOKEN` in the server's environment variables (and optionally `ADVOCU_URL` to override the default Personal API base URL).

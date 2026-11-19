@@ -22,6 +22,7 @@ namespace Advocu.Mcp.SSE;
 [JsonSerializable(typeof(AdvocuEnumsSnapshot))]
 [JsonSerializable(typeof(List<AdvocuActivitySchemaInfo>))]
 [JsonSerializable(typeof(List<ActivitySummary>))]
+[JsonSerializable(typeof(RecentActivitiesResult))]
 [JsonSerializable(typeof(ActivitySearchResult))]
 [JsonSerializable(typeof(DraftActivityResult))]
 [JsonSerializable(typeof(UpdateActivityResult))]

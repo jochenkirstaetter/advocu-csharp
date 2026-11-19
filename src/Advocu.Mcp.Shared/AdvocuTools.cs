@@ -151,7 +151,7 @@ public sealed class AdvocuTools(AdvocuApiClient apiClient)
     /// Searches and filters submitted Advocu activities.
     /// </summary>
     [McpServerTool(Name = "search_activities", ReadOnly = true, Idempotent = true, Destructive = false, OpenWorld = true)]
-    [Description("Search and list submitted Advocu activities (GET /activities) with optional date range, type, tag, and keyword filters. Returns compact summaries by default (set summaryOnly=false for full payloads).")]
+    [Description("Search and list submitted Advocu activities (GET /activities, sorted oldest-first by submissionDate). Note: `type`, `tag`, and `keyword` filters apply locally to the fetched API page (`page`/`size`); use `from`/`to` date bounds to narrow results on large accounts. Returns compact summaries by default (set summaryOnly=false for full payloads).")]
     public async Task<ActivitySearchResult> SearchActivitiesAsync(
         [Description("Optional inclusive lower bound for submission date (ISO-8601 UTC, e.g. 2026-01-01T00:00:00Z).")] DateTimeOffset? from = null,
         [Description("Optional exclusive upper bound for submission date (ISO-8601 UTC, e.g. 2026-12-31T23:59:59Z).")] DateTimeOffset? to = null,

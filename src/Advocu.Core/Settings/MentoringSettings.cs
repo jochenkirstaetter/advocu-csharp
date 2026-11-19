@@ -31,6 +31,15 @@ internal class MentoringSettings : AdvocuSettings
     [TypeConverter(typeof(AdvocuEnumConverter<AdvocuEventFormat>))]
     public AdvocuEventFormat EventFormat { get; set; }
 
+    [CommandOption("--country <COUNTRY>")]
+    [Description("Country (required for In-Person and Hybrid events).")]
+    [TypeConverter(typeof(AdvocuEnumConverter<AdvocuCountry>))]
+    public AdvocuCountry? Country { get; set; }
+
+    [CommandOption("--in-person-attendees <COUNT>")]
+    [Description("Number of in-person attendees (required for Hybrid events).")]
+    public int? InPersonAttendees { get; set; }
+
     [CommandOption("--date <DATE>")]
     [Description("Date of activity (YYYY-MM-DD). Defaults to today.")]
     public string? ActivityDate { get; set; }

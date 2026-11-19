@@ -82,6 +82,11 @@ internal sealed class ActivityDraft
     /// Gets or sets the number of attendees.
     /// </summary>
     public int? Attendees { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of in-person attendees (for Hybrid events).
+    /// </summary>
+    public int? InPersonAttendees { get; set; }
     
     // Specific fields (Mentoring)
     /// <summary>
