@@ -70,7 +70,18 @@ public sealed class AdvocuEnumsSnapshot
         InteractionFormats = GetApiValues<AdvocuFormat>(),
         InteractionTypes = GetApiValues<AdvocuInteractionType>(),
         SignificanceTypes = GetApiValues<AdvocuSignificanceType>(),
-        ActivityTypes = GetApiValues<AdvocuSlug>(),
+        ActivityTypes =
+        [
+            "content-creation",
+            "github-repository",
+            "interaction-with-googlers",
+            "mentoring",
+            "product-feedback-given",
+            "public-speaking",
+            "stories",
+            "workshop",
+            "youtube-video"
+        ],
         Countries = GetApiValues<AdvocuCountry>()
     };
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -13,6 +14,7 @@ namespace Advocu
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonSerializerWriteOptions;
+        private readonly JsonSerializerOptions _jsonSerializerPatchOptions;
         private readonly JsonSerializerOptions _jsonSerializerReadOptions;
 
         // Base URL from the image
@@ -41,6 +43,10 @@ namespace Advocu
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            _jsonSerializerPatchOptions = new JsonSerializerOptions(_jsonSerializerWriteOptions)
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             _jsonSerializerReadOptions = options ?? new JsonSerializerOptions
             {
@@ -175,15 +181,15 @@ namespace Advocu
                 var queryParts = new List<string>();
                 if (query.From.HasValue)
                 {
-                    queryParts.Add($"from={Uri.EscapeDataString(query.From.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))}");
+                    queryParts.Add($"from={Uri.EscapeDataString(query.From.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))}");
                 }
                 if (query.To.HasValue)
                 {
-                    queryParts.Add($"to={Uri.EscapeDataString(query.To.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))}");
+                    queryParts.Add($"to={Uri.EscapeDataString(query.To.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))}");
                 }
                 if (query.UpdatedAfter.HasValue)
                 {
-                    queryParts.Add($"updatedAfter={Uri.EscapeDataString(query.UpdatedAfter.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"))}");
+                    queryParts.Add($"updatedAfter={Uri.EscapeDataString(query.UpdatedAfter.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))}");
                 }
                 if (query.Page.HasValue)
                 {
@@ -228,7 +234,7 @@ namespace Advocu
             }
 
             var endpoint = $"activities/{Uri.EscapeDataString(activityId)}";
-            var jsonRequest = JsonSerializer.Serialize(request, _jsonSerializerWriteOptions);
+            var jsonRequest = JsonSerializer.Serialize(request, _jsonSerializerPatchOptions);
             using var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
             using var requestMessage = new HttpRequestMessage(HttpMethod.Patch, endpoint) { Content = content };
 

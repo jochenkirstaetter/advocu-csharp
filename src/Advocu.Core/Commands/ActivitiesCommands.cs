@@ -136,7 +136,7 @@ internal sealed class PatchActivityCommand(IHttpClientFactory httpClientFactory,
                     ActivityUrl = settings.ActivityUrl,
                     AdditionalInfo = settings.AdditionalInfo,
                     AdditionalLinks = settings.AdditionalLinks,
-                    Private = settings.SetPrivate
+                    Private = settings.SetPrivate ?? (settings.Private ? true : null)
                 }
             };
 

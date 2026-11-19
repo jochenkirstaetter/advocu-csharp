@@ -2,19 +2,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 
-# Copy csproj and restore
+# Copy props and csproj and restore
+COPY Directory.Build.props Directory.Packages.props ./
 COPY src/Advocu.McpServer/Advocu.McpServer.csproj src/Advocu.McpServer/
 COPY src/Advocu.Mcp.Shared/Advocu.Mcp.Shared.csproj src/Advocu.Mcp.Shared/
 COPY src/Advocu.Core/Advocu.Core.csproj src/Advocu.Core/
 
-RUN dotnet restore src/Advocu.McpServer/Advocu.McpServer.csproj
+RUN dotnet restore src/Advocu.McpServer/Advocu.McpServer.csproj -p:TargetFrameworks=net10.0
 
 # Copy everything else and build
 COPY src/Advocu.McpServer/. src/Advocu.McpServer/
 COPY src/Advocu.Mcp.Shared/. src/Advocu.Mcp.Shared/
 COPY src/Advocu.Core/. src/Advocu.Core/
 WORKDIR /app/src/Advocu.McpServer
-RUN dotnet publish -c Release -o /app/out -f net10.0
+RUN dotnet publish -c Release -o /app/out -f net10.0 -p:TargetFrameworks=net10.0
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/runtime:10.0
