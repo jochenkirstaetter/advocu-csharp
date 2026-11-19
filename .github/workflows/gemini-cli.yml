@@ -164,6 +164,7 @@ jobs:
       - name: 'Get description'
         id: 'get_description'
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           IS_PR: '${{ steps.get_context.outputs.is_pr }}'
           ISSUE_NUMBER: '${{ steps.get_context.outputs.issue_number }}'
@@ -184,6 +185,7 @@ jobs:
       - name: 'Get comments'
         id: 'get_comments'
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           IS_PR: '${{ steps.get_context.outputs.is_pr }}'
           ISSUE_NUMBER: '${{ steps.get_context.outputs.issue_number }}'
@@ -205,6 +207,7 @@ jobs:
         id: 'run_gemini'
         uses: 'google-github-actions/run-gemini-cli@f77273f4c914e4bf38440cf36a0369cb64a37489' # ratchet:google-github-actions/run-gemini-cli@v0
         env:
+          GEMINI_CLI_TRUST_WORKSPACE: '${{ vars.GEMINI_CLI_TRUST_WORKSPACE || ''true'' }}'
           GITHUB_TOKEN: '${{ steps.generate_token.outputs.token || secrets.GITHUB_TOKEN }}'
           REPOSITORY: '${{ github.repository }}'
           USER_REQUEST: '${{ steps.get_context.outputs.user_request }}'
